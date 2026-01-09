@@ -106,7 +106,8 @@ Private Sub cmdLogin_Click()
     If Not rs.EOF Then
         MsgBox "Login realizado com sucesso!", vbInformation
         Unload Me
-        frmPrincipal.Show
+        Load MDIFrmPrincipal
+        MDIFrmPrincipal.Show
     Else
         MsgBox "Usuário ou senha inválidos.", vbCritical
     End If
