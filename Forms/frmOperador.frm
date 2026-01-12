@@ -22,7 +22,7 @@ Begin VB.Form frmOperador
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   7
+         NumListImages   =   9
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmOperador.frx":0000
             Key             =   ""
@@ -48,7 +48,15 @@ Begin VB.Form frmOperador
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmOperador.frx":4D1C
+            Picture         =   "frmOperador.frx":461E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmOperador.frx":52F8
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmOperador.frx":5FD2
             Key             =   ""
          EndProperty
       EndProperty
@@ -67,7 +75,7 @@ Begin VB.Form frmOperador
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   7
+         NumButtons      =   9
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "novo"
             ImageIndex      =   1
@@ -89,13 +97,23 @@ Begin VB.Form frmOperador
             ImageIndex      =   5
          EndProperty
          BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "primeiro"
             ImageIndex      =   6
          EndProperty
          BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "anterior"
             ImageIndex      =   7
          EndProperty
+         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "proximo"
+            ImageIndex      =   8
+         EndProperty
+         BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "ultimo"
+            ImageIndex      =   9
+         EndProperty
       EndProperty
-      MouseIcon       =   "frmOperador.frx":59F6
+      MouseIcon       =   "frmOperador.frx":65A4
    End
    Begin VB.TextBox txtSenha 
       BeginProperty Font 
@@ -111,7 +129,7 @@ Begin VB.Form frmOperador
       Left            =   1680
       TabIndex        =   8
       Top             =   1770
-      Width           =   2235
+      Width           =   1965
    End
    Begin VB.TextBox txtNome 
       BeginProperty Font 
@@ -127,7 +145,7 @@ Begin VB.Form frmOperador
       Left            =   1680
       TabIndex        =   7
       Top             =   1260
-      Width           =   2235
+      Width           =   4005
    End
    Begin VB.CommandButton cmdListaOperador 
       Caption         =   "..."
@@ -165,7 +183,7 @@ Begin VB.Form frmOperador
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   570
+      Left            =   1680
       TabIndex        =   2
       Top             =   2790
       Width           =   1335
@@ -182,7 +200,7 @@ Begin VB.Form frmOperador
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   570
+      Left            =   1680
       TabIndex        =   1
       Top             =   2280
       Width           =   1875
@@ -249,5 +267,120 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 Private Sub Form_Load()
+    
+    AbrirConexao
+    CarregarOperadores
+
+    If Not RsOperador.EOF Then
+        RsOperador.MoveFirst
+        PreencherCampos
+    End If
+
+    ModoConsulta
+    
+End Sub
+
+Private Sub ModoAlteracao()
+    Toolbar1.Buttons("novo").Enabled = False
+    Toolbar1.Buttons("salvar").Enabled = True
+    Toolbar1.Buttons("excluir").Enabled = False
+    Toolbar1.Buttons("desfazer").Enabled = True
+    Toolbar1.Buttons("primeiro").Enabled = False
+    Toolbar1.Buttons("anterior").Enabled = False
+    Toolbar1.Buttons("proximo").Enabled = False
+    Toolbar1.Buttons("ultimo").Enabled = False
+    txtCodigo.Enabled = False
+    txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
+    cmdListaOperador.Enabled = False
+    txtNome.Enabled = True
+    txtNome.BackColor = vbWindowBackground
+    txtSenha.Enabled = True
+    txtSenha.BackColor = vbWindowBackground
+    chkAdm.Enabled = True
+    chkInativo.Enabled = True
+End Sub
+
+Private Sub ModoConsulta()
+    Toolbar1.Buttons("novo").Enabled = True
+    Toolbar1.Buttons("salvar").Enabled = False
+    Toolbar1.Buttons("excluir").Enabled = True
+    Toolbar1.Buttons("desfazer").Enabled = False
+    Toolbar1.Buttons("primeiro").Enabled = True
+    Toolbar1.Buttons("anterior").Enabled = True
+    Toolbar1.Buttons("proximo").Enabled = True
+    Toolbar1.Buttons("ultimo").Enabled = True
+    txtCodigo.Enabled = True
+    txtCodigo.BackColor = vbWindowBackground
+    cmdListaOperador.Enabled = True
+    txtNome.Enabled = False
+    txtNome.BackColor = &H8000000F   ' cor cinza padrão do sistema
+    txtSenha.Enabled = False
+    txtSenha.BackColor = &H8000000F   ' cor cinza padrão do sistema
+    chkAdm.Enabled = False
+    chkInativo.Enabled = False
+End Sub
+
+Public Sub CarregarOperadores()
+
+    Set RsOperador = New ADODB.Recordset
+
+    RsOperador.CursorLocation = adUseClient
+    RsOperador.Open _
+        "SELECT Codigo, Nome, Senha, Admin, Inativo FROM Operador ORDER BY Codigo", _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
+Private Sub PreencherCampos()
+
+    If RsOperador.EOF Or RsOperador.BOF Then Exit Sub
+
+    txtCodigo.Text = RsOperador!Codigo
+    txtNome.Text = RsOperador!Nome
+    txtSenha.Text = RsOperador!Senha
+    chkAdm.Value = IIf(RsOperador!Admin = 1, vbChecked, vbUnchecked)
+    chkInativo.Value = IIf(RsOperador!Inativo = 1, vbChecked, vbUnchecked)
+
+End Sub
+
+
+Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+
+    Select Case Button.Key
+
+        Case "novo"
+            ModoAlteracao
+
+        Case "salvar"
+            ModoConsulta
+            
+        Case "alterar"
+            MsgBox "Alterar"
+
+        Case "excluir"
+            MsgBox "Excluir"
+
+        Case "desfazer"
+            MsgBox "Desfazer"
+        
+        Case "primeiro"
+            RsOperador.MoveFirst
+            PreencherCampos
+        
+        Case "anterior"
+            If Not RsOperador.BOF Then RsOperador.MovePrevious
+            If RsOperador.BOF Then RsOperador.MoveFirst
+            PreencherCampos
+        
+        Case "proximo"
+            If Not RsOperador.EOF Then RsOperador.MoveNext
+            If RsOperador.EOF Then RsOperador.MoveLast
+            PreencherCampos
+        
+        Case "ultimo"
+            RsOperador.MoveLast
+            PreencherCampos
+        
+    End Select
 
 End Sub

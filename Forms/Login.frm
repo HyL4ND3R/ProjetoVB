@@ -19,8 +19,11 @@ Begin VB.Form frmLogin
    End
    Begin VB.TextBox txtSenha 
       Height          =   315
+      IMEMode         =   3  'DISABLE
       Left            =   810
+      PasswordChar    =   "*"
       TabIndex        =   1
+      Text            =   "123"
       Top             =   1680
       Width           =   1425
    End
@@ -28,6 +31,7 @@ Begin VB.Form frmLogin
       Height          =   315
       Left            =   810
       TabIndex        =   0
+      Text            =   "1"
       Top             =   1110
       Width           =   1455
    End
@@ -104,7 +108,6 @@ Private Sub cmdLogin_Click()
     rs.Open sql, Conn, adOpenForwardOnly, adLockReadOnly
 
     If Not rs.EOF Then
-        MsgBox "Login realizado com sucesso!", vbInformation
         Unload Me
         Load MDIFrmPrincipal
         MDIFrmPrincipal.Show
