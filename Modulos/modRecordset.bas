@@ -11,3 +11,14 @@ Public Sub CarregarOperadores()
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
+
+Public Function BuscarRS(rs As ADODB.Recordset, _
+                         ByVal campo As String, _
+                         ByVal valor As Variant) As Boolean
+
+    rs.MoveFirst
+    rs.Find campo & " = " & valor
+    BuscarRS = Not rs.EOF
+
+End Function
+

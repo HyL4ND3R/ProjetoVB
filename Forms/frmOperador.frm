@@ -63,13 +63,13 @@ Begin VB.Form frmOperador
    End
    Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
-      Height          =   630
+      Height          =   660
       Left            =   0
       TabIndex        =   9
       Top             =   0
       Width           =   18120
       _ExtentX        =   31962
-      _ExtentY        =   1111
+      _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       ImageList       =   "ImageList1"
@@ -113,6 +113,7 @@ Begin VB.Form frmOperador
             ImageIndex      =   9
          EndProperty
       EndProperty
+      BorderStyle     =   1
       MouseIcon       =   "frmOperador.frx":65A4
    End
    Begin VB.TextBox txtSenha 
@@ -394,11 +395,12 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         Case "excluir"
             
             If rsOperador.EOF Or rsOperador.BOF Then Exit Sub
-
+            
+            'Mensagem de confirmação, se clicar no Não, cai fora da sub
             If MsgBox("Deseja realmente excluir este operador?", _
                       vbQuestion + vbYesNo, _
                       "Confirmação") = vbNo Then Exit Sub
-        
+
             Dim codigoExcluir As Long
             codigoExcluir = CLng(txtCodigo.Text)
         
@@ -451,3 +453,29 @@ Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o reco
         Set rsOperador = Nothing 'Seta como nada
     End If
 End Sub
+
+Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
+        KeyAscii = 0   ' evita o bip
+        
+        Dim codigoBusca As Long
+
+        If Trim(txtCodigo.Text) = "" Then Exit Sub
+        If Not IsNumeric(txtCodigo.Text) Then
+            MsgBox "Código inválido.", vbExclamation
+            txtCodigo.SetFocus
+            Exit Sub
+        End If
+    
+        codigoBusca = CLng(txtCodigo.Text)
+        
+        If BuscarRS(rsOperador, "Codigo", codigoBusca) Then
+            PreencherCampos
+        Else
+            MsgBox "Não encontrado"
+        End If
+    End If
+    
+End Sub
+
