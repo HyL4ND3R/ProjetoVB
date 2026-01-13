@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
 Begin VB.Form frmOperador 
    Caption         =   "Cadastro de Operadores"
    ClientHeight    =   7935
@@ -268,11 +268,10 @@ Attribute VB_Exposed = False
 
 Private Sub Form_Load()
     
-    AbrirConexao
     CarregarOperadores
 
     If Not RsOperador.EOF Then
-        RsOperador.MoveFirst
+        RsOperador.MoveLast
         PreencherCampos
     End If
 
@@ -283,6 +282,7 @@ End Sub
 Private Sub ModoAlteracao()
     Toolbar1.Buttons("novo").Enabled = False
     Toolbar1.Buttons("salvar").Enabled = True
+    Toolbar1.Buttons("alterar").Enabled = False
     Toolbar1.Buttons("excluir").Enabled = False
     Toolbar1.Buttons("desfazer").Enabled = True
     Toolbar1.Buttons("primeiro").Enabled = False
@@ -304,6 +304,7 @@ Private Sub ModoConsulta()
     Toolbar1.Buttons("novo").Enabled = True
     Toolbar1.Buttons("salvar").Enabled = False
     Toolbar1.Buttons("excluir").Enabled = True
+    Toolbar1.Buttons("alterar").Enabled = True
     Toolbar1.Buttons("desfazer").Enabled = False
     Toolbar1.Buttons("primeiro").Enabled = True
     Toolbar1.Buttons("anterior").Enabled = True
@@ -349,20 +350,82 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
     Select Case Button.Key
 
         Case "novo"
+            txtCodigo.Text = ""
+            txtNome.Text = ""
+            txtSenha.Text = ""
+            chkAdm.Value = vbUnchecked
+            chkInativo.Value = vbUnchecked
             ModoAlteracao
 
         Case "salvar"
-            ModoConsulta
+            Dim sql As String
+            Dim codigoAtual As Long
+            Dim alteracao As Boolean
+            alteracao = (Trim(txtCodigo.Text) <> "")
+
+            If alteracao Then
+                codigoAtual = CLng(txtCodigo.Text)
+                sql = "UPDATE Operador set Nome = " & "'" & txtNome.Text & "', " & _
+                    "Senha = " & "'" & txtSenha.Text & "', " & _
+                    "Admin = " & IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
+                    "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & _
+                    "WHERE Codigo = " & txtCodigo.Text
+            Else
+                sql = "INSERT INTO Operador (Nome, Senha, Admin, Inativo) VALUES (" & _
+                    "'" & txtNome.Text & "', " & _
+                    "'" & txtSenha.Text & "', " & _
+                    IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
+                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+            End If
+
+            Conn.Execute sql
             
+            CarregarOperadores
+            
+            If alteracao Then
+                RsOperador.Find "Codigo = " & codigoAtual
+            Else
+                If Not RsOperador.EOF Then RsOperador.MoveFirst
+            End If
+            
+            PreencherCampos
+            ModoConsulta
+
         Case "alterar"
-            MsgBox "Alterar"
+        
+            If RsOperador.EOF Or RsOperador.BOF Then Exit Sub
+            
+            PreencherCampos
+            ModoAlteracao
 
         Case "excluir"
-            MsgBox "Excluir"
+            
+            If RsOperador.EOF Or RsOperador.BOF Then Exit Sub
+
+            If MsgBox("Deseja realmente excluir este operador?", _
+                      vbQuestion + vbYesNo, _
+                      "Confirmação") = vbNo Then Exit Sub
+        
+            Dim codigoExcluir As Long
+            codigoExcluir = CLng(txtCodigo.Text)
+        
+            Conn.Execute "DELETE FROM Operador WHERE Codigo = " & codigoExcluir
+        
+            CarregarOperadores
+        
+            ' Reposicionar após excluir
+            If Not RsOperador.EOF Then
+                RsOperador.Find "Codigo > " & codigoExcluir
+                If RsOperador.EOF Then RsOperador.MoveLast
+            End If
+        
+            PreencherCampos
+            ModoConsulta
 
         Case "desfazer"
-            MsgBox "Desfazer"
-        
+            ModoConsulta
+            PreencherCampos
+
         Case "primeiro"
             RsOperador.MoveFirst
             PreencherCampos
@@ -383,4 +446,11 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         
     End Select
 
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    If Not RsOperador Is Nothing Then
+        If RsOperador.State = adStateOpen Then RsOperador.Close
+        Set RsOperador = Nothing
+    End If
 End Sub

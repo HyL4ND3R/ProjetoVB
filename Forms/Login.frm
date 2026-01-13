@@ -75,39 +75,25 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-Public Conn As ADODB.Connection
-
-Public Sub Conectar()
-    Set Conn = New ADODB.Connection
-    Conn.ConnectionString = _
-        "Provider=SQLOLEDB;" & _
-        "Data Source=JEAN-PC;" & _
-        "Initial Catalog=PROJETOVB;" & _
-        "User ID=sa;" & _
-        "Password=sae;"
-    Conn.Open
-End Sub
-
-
 Private Sub cmdLogin_Click()
-    Dim rs As ADODB.Recordset
-    Dim sql As String
+
+    Set RsOperador = New ADODB.Recordset
+
+    RsOperador.CursorLocation = adUseClient
 
     If Trim(txtCodigo.Text) = "" Or Trim(txtSenha.Text) = "" Then
         MsgBox "Informe usuário e senha.", vbExclamation
         Exit Sub
     End If
 
-    sql = "SELECT * FROM Operador " & _
+    RsOperador.Open _
+        "SELECT * FROM Operador " & _
           "WHERE Codigo = '" & txtCodigo.Text & "' " & _
           "AND Senha = '" & txtSenha.Text & "' " & _
-          "AND Inativo = 0"
+          "AND Inativo = 0", _
+        Conn, adOpenStatic, adLockReadOnly
 
-    Set rs = New ADODB.Recordset
-    rs.Open sql, Conn, adOpenForwardOnly, adLockReadOnly
-
-    If Not rs.EOF Then
+    If Not RsOperador.EOF Then
         Unload Me
         Load MDIFrmPrincipal
         MDIFrmPrincipal.Show
@@ -115,11 +101,11 @@ Private Sub cmdLogin_Click()
         MsgBox "Usuário ou senha inválidos.", vbCritical
     End If
 
-    rs.Close
+    RsOperador.Close
     Set rs = Nothing
 End Sub
 
 Private Sub Form_Load()
-    Conectar
+    AbrirConexao
 End Sub
 
