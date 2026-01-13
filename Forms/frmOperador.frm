@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmOperador 
    Caption         =   "Cadastro de Operadores"
    ClientHeight    =   7935
@@ -270,8 +270,8 @@ Private Sub Form_Load()
     
     CarregarOperadores
 
-    If Not RsOperador.EOF Then
-        RsOperador.MoveLast
+    If Not rsOperador.EOF Then 'Se não esta no fim da lista
+        rsOperador.MoveLast 'Move para o final
         PreencherCampos
     End If
 
@@ -280,7 +280,7 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub ModoAlteracao()
-    Toolbar1.Buttons("novo").Enabled = False
+    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
     Toolbar1.Buttons("salvar").Enabled = True
     Toolbar1.Buttons("alterar").Enabled = False
     Toolbar1.Buttons("excluir").Enabled = False
@@ -289,13 +289,13 @@ Private Sub ModoAlteracao()
     Toolbar1.Buttons("anterior").Enabled = False
     Toolbar1.Buttons("proximo").Enabled = False
     Toolbar1.Buttons("ultimo").Enabled = False
-    txtCodigo.Enabled = False
+    txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
-    cmdListaOperador.Enabled = False
+    cmdListaOperador.Enabled = False 'Habilitar/Desabilitar commandButton
     txtNome.Enabled = True
-    txtNome.BackColor = vbWindowBackground
+    txtNome.BackColor = vbWindowBackground 'cor branca padrão do sistema
     txtSenha.Enabled = True
-    txtSenha.BackColor = vbWindowBackground
+    txtSenha.BackColor = vbWindowBackground 'cor branca padrão do sistema
     chkAdm.Enabled = True
     chkInativo.Enabled = True
 End Sub
@@ -314,33 +314,23 @@ Private Sub ModoConsulta()
     txtCodigo.BackColor = vbWindowBackground
     cmdListaOperador.Enabled = True
     txtNome.Enabled = False
-    txtNome.BackColor = &H8000000F   ' cor cinza padrão do sistema
+    txtNome.BackColor = &H8000000F
     txtSenha.Enabled = False
-    txtSenha.BackColor = &H8000000F   ' cor cinza padrão do sistema
+    txtSenha.BackColor = &H8000000F
     chkAdm.Enabled = False
     chkInativo.Enabled = False
 End Sub
 
-Public Sub CarregarOperadores()
-
-    Set RsOperador = New ADODB.Recordset
-
-    RsOperador.CursorLocation = adUseClient
-    RsOperador.Open _
-        "SELECT Codigo, Nome, Senha, Admin, Inativo FROM Operador ORDER BY Codigo", _
-        Conn, adOpenStatic, adLockReadOnly
-
-End Sub
 
 Private Sub PreencherCampos()
 
-    If RsOperador.EOF Or RsOperador.BOF Then Exit Sub
+    If rsOperador.EOF Or rsOperador.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
 
-    txtCodigo.Text = RsOperador!Codigo
-    txtNome.Text = RsOperador!Nome
-    txtSenha.Text = RsOperador!Senha
-    chkAdm.Value = IIf(RsOperador!Admin = 1, vbChecked, vbUnchecked)
-    chkInativo.Value = IIf(RsOperador!Inativo = 1, vbChecked, vbUnchecked)
+    txtCodigo.Text = rsOperador!Codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtNome.Text = rsOperador!Nome
+    txtSenha.Text = rsOperador!Senha
+    chkAdm.Value = IIf(rsOperador!Admin = 1, vbChecked, vbUnchecked) 'Atribuição de valor do Recorset para o CheckBox
+    chkInativo.Value = IIf(rsOperador!Inativo = 1, vbChecked, vbUnchecked)
 
 End Sub
 
@@ -348,15 +338,16 @@ End Sub
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
-
+'-------------NOVO
         Case "novo"
             txtCodigo.Text = ""
             txtNome.Text = ""
             txtSenha.Text = ""
-            chkAdm.Value = vbUnchecked
+            chkAdm.Value = vbUnchecked 'Atribuição de Marcado/Desmarcado
             chkInativo.Value = vbUnchecked
             ModoAlteracao
 
+'-------------SALVAR
         Case "salvar"
             Dim sql As String
             Dim codigoAtual As Long
@@ -364,7 +355,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             alteracao = (Trim(txtCodigo.Text) <> "")
 
             If alteracao Then
-                codigoAtual = CLng(txtCodigo.Text)
+                codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 sql = "UPDATE Operador set Nome = " & "'" & txtNome.Text & "', " & _
                     "Senha = " & "'" & txtSenha.Text & "', " & _
                     "Admin = " & IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
@@ -383,24 +374,26 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             CarregarOperadores
             
             If alteracao Then
-                RsOperador.Find "Codigo = " & codigoAtual
+                rsOperador.Find "Codigo = " & codigoAtual
             Else
-                If Not RsOperador.EOF Then RsOperador.MoveFirst
+                If Not rsOperador.EOF Then rsOperador.MoveLast
             End If
             
             PreencherCampos
             ModoConsulta
 
+'-------------ALTERACAO
         Case "alterar"
         
-            If RsOperador.EOF Or RsOperador.BOF Then Exit Sub
+            If rsOperador.EOF Or rsOperador.BOF Then Exit Sub
             
             PreencherCampos
             ModoAlteracao
 
+'-------------EXCLUIR
         Case "excluir"
             
-            If RsOperador.EOF Or RsOperador.BOF Then Exit Sub
+            If rsOperador.EOF Or rsOperador.BOF Then Exit Sub
 
             If MsgBox("Deseja realmente excluir este operador?", _
                       vbQuestion + vbYesNo, _
@@ -413,44 +406,48 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         
             CarregarOperadores
         
-            ' Reposicionar após excluir
-            If Not RsOperador.EOF Then
-                RsOperador.Find "Codigo > " & codigoExcluir
-                If RsOperador.EOF Then RsOperador.MoveLast
+            If Not rsOperador.EOF Then
+                rsOperador.Find "Codigo > " & codigoExcluir
+                If rsOperador.EOF Then rsOperador.MoveLast
             End If
         
             PreencherCampos
             ModoConsulta
 
+'-------------DESFAZER
         Case "desfazer"
             ModoConsulta
             PreencherCampos
 
+'-------------PRIMEIRO
         Case "primeiro"
-            RsOperador.MoveFirst
+            rsOperador.MoveFirst
             PreencherCampos
-        
+
+'-------------ANTERIOR
         Case "anterior"
-            If Not RsOperador.BOF Then RsOperador.MovePrevious
-            If RsOperador.BOF Then RsOperador.MoveFirst
+            If Not rsOperador.BOF Then rsOperador.MovePrevious
+            If rsOperador.BOF Then rsOperador.MoveFirst
             PreencherCampos
-        
+
+'-------------PROXIMO
         Case "proximo"
-            If Not RsOperador.EOF Then RsOperador.MoveNext
-            If RsOperador.EOF Then RsOperador.MoveLast
+            If Not rsOperador.EOF Then rsOperador.MoveNext
+            If rsOperador.EOF Then rsOperador.MoveLast
             PreencherCampos
-        
+
+'-------------ULTIMO
         Case "ultimo"
-            RsOperador.MoveLast
+            rsOperador.MoveLast
             PreencherCampos
         
     End Select
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
-    If Not RsOperador Is Nothing Then
-        If RsOperador.State = adStateOpen Then RsOperador.Close
-        Set RsOperador = Nothing
+Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o recordset
+    If Not rsOperador Is Nothing Then 'Se ele não for nada (se existir)
+        If rsOperador.State = adStateOpen Then rsOperador.Close 'Se esta aberto, fecha
+        Set rsOperador = Nothing 'Seta como nada
     End If
 End Sub
