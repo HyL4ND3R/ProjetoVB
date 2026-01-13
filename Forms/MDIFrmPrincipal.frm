@@ -7,7 +7,7 @@ Begin VB.MDIForm MDIFrmPrincipal
    ClientTop       =   870
    ClientWidth     =   18090
    LinkTopic       =   "MDIForm1"
-   StartUpPosition =   3  'Windows Default
+   StartUpPosition =   2  'CenterScreen
    Begin VB.Menu mnuTeste 
       Caption         =   "Teste"
    End

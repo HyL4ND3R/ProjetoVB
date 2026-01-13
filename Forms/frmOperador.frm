@@ -267,6 +267,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+Private ModoAtual As eModoFormulario
+
 Private Sub Form_Load()
     
     CarregarOperadores
@@ -280,7 +282,7 @@ Private Sub Form_Load()
     
 End Sub
 
-Private Sub ModoAlteracao()
+Private Sub modoInclusao()
     Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
     Toolbar1.Buttons("salvar").Enabled = True
     Toolbar1.Buttons("alterar").Enabled = False
@@ -299,6 +301,29 @@ Private Sub ModoAlteracao()
     txtSenha.BackColor = vbWindowBackground 'cor branca padrão do sistema
     chkAdm.Enabled = True
     chkInativo.Enabled = True
+    ModoAtual = mfInclusao
+End Sub
+
+Private Sub modoAlteracao()
+    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar1.Buttons("salvar").Enabled = True
+    Toolbar1.Buttons("alterar").Enabled = False
+    Toolbar1.Buttons("excluir").Enabled = False
+    Toolbar1.Buttons("desfazer").Enabled = True
+    Toolbar1.Buttons("primeiro").Enabled = False
+    Toolbar1.Buttons("anterior").Enabled = False
+    Toolbar1.Buttons("proximo").Enabled = False
+    Toolbar1.Buttons("ultimo").Enabled = False
+    txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
+    txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
+    cmdListaOperador.Enabled = False 'Habilitar/Desabilitar commandButton
+    txtNome.Enabled = True
+    txtNome.BackColor = vbWindowBackground 'cor branca padrão do sistema
+    txtSenha.Enabled = True
+    txtSenha.BackColor = vbWindowBackground 'cor branca padrão do sistema
+    chkAdm.Enabled = True
+    chkInativo.Enabled = True
+    ModoAtual = mfAlteracao
 End Sub
 
 Private Sub ModoConsulta()
@@ -320,6 +345,7 @@ Private Sub ModoConsulta()
     txtSenha.BackColor = &H8000000F
     chkAdm.Enabled = False
     chkInativo.Enabled = False
+    ModoAtual = mfConsulta
 End Sub
 
 
@@ -346,16 +372,14 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             txtSenha.Text = ""
             chkAdm.Value = vbUnchecked 'Atribuição de Marcado/Desmarcado
             chkInativo.Value = vbUnchecked
-            ModoAlteracao
+            modoInclusao
 
 '-------------SALVAR
         Case "salvar"
             Dim sql As String
             Dim codigoAtual As Long
-            Dim alteracao As Boolean
-            alteracao = (Trim(txtCodigo.Text) <> "")
 
-            If alteracao Then
+            If ModoAtual = mfAlteracao Then
                 codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 sql = "UPDATE Operador set Nome = " & "'" & txtNome.Text & "', " & _
                     "Senha = " & "'" & txtSenha.Text & "', " & _
@@ -374,7 +398,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             CarregarOperadores
             
-            If alteracao Then
+            If ModoAtual = mfAlteracao Then
                 rsOperador.Find "Codigo = " & codigoAtual
             Else
                 If Not rsOperador.EOF Then rsOperador.MoveLast
@@ -389,7 +413,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             If rsOperador.EOF Or rsOperador.BOF Then Exit Sub
             
             PreencherCampos
-            ModoAlteracao
+            modoAlteracao
 
 '-------------EXCLUIR
         Case "excluir"
@@ -456,26 +480,41 @@ End Sub
 
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
     
-    If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
-        KeyAscii = 0   ' evita o bip
-        
-        Dim codigoBusca As Long
-
-        If Trim(txtCodigo.Text) = "" Then Exit Sub
-        If Not IsNumeric(txtCodigo.Text) Then
-            MsgBox "Código inválido.", vbExclamation
-            txtCodigo.SetFocus
-            Exit Sub
-        End If
+    If ModoAtual = mfConsulta Then
+        If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
+            KeyAscii = 0   ' evita o bip
+            
+            Dim codigoBusca As Long
     
-        codigoBusca = CLng(txtCodigo.Text)
+            If Trim(txtCodigo.Text) = "" Then Exit Sub
+            If Not IsNumeric(txtCodigo.Text) Then
+                MsgBox "Código inválido.", vbExclamation
+                txtCodigo.SetFocus
+                Exit Sub
+            End If
         
-        If BuscarRS(rsOperador, "Codigo", codigoBusca) Then
-            PreencherCampos
-        Else
-            MsgBox "Não encontrado"
+            codigoBusca = CLng(txtCodigo.Text)
+            
+            If BuscarRS(rsOperador, "Codigo", codigoBusca) Then
+                PreencherCampos
+            Else
+                MsgBox "Não encontrado"
+            End If
         End If
     End If
     
 End Sub
 
+Private Sub cmdListaOperador_Click()
+    Dim f As New frmPesquisaOperador
+
+    f.Show vbModal
+
+    If f.CodigoSelecionado > 0 Then
+        If BuscarRS(rsOperador, "Codigo", f.CodigoSelecionado) Then
+            PreencherCampos
+        End If
+    End If
+
+    Unload f
+End Sub

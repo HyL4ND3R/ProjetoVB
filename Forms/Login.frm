@@ -8,7 +8,7 @@ Begin VB.Form frmLogin
    LinkTopic       =   "Form1"
    ScaleHeight     =   3255
    ScaleWidth      =   3090
-   StartUpPosition =   3  'Windows Default
+   StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdLogin 
       Caption         =   "Entrar"
       Height          =   375
