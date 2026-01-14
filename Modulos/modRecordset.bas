@@ -1,5 +1,6 @@
 Attribute VB_Name = "modRecordset"
 Public rsOperador As ADODB.Recordset
+Public rsCliente As ADODB.Recordset
 
 Public Sub CarregarOperadores()
 
@@ -8,6 +9,17 @@ Public Sub CarregarOperadores()
     rsOperador.CursorLocation = adUseClient
     rsOperador.Open _
         "SELECT Codigo, Nome, Senha, Admin, Inativo FROM Operador ORDER BY Codigo", _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
+Public Sub CarregarClientes()
+
+    Set rsCliente = New ADODB.Recordset
+
+    rsCliente.CursorLocation = adUseClient
+    rsCliente.Open _
+        "SELECT Codigo, Nome, TipoDocumento, Documento, Telefone, Inativo FROM Cliente ORDER BY Codigo", _
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
@@ -21,4 +33,5 @@ Public Function BuscarRS(rs As ADODB.Recordset, _
     BuscarRS = Not rs.EOF
 
 End Function
+
 

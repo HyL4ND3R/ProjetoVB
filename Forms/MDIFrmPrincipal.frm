@@ -4,7 +4,7 @@ Begin VB.MDIForm MDIFrmPrincipal
    Caption         =   "Principal"
    ClientHeight    =   8610
    ClientLeft      =   225
-   ClientTop       =   870
+   ClientTop       =   570
    ClientWidth     =   18090
    LinkTopic       =   "MDIForm1"
    StartUpPosition =   2  'CenterScreen
@@ -14,12 +14,19 @@ Begin VB.MDIForm MDIFrmPrincipal
    Begin VB.Menu mnuOperadores 
       Caption         =   "Operadores"
    End
+   Begin VB.Menu mnuClientes 
+      Caption         =   "Clientes"
+   End
 End
 Attribute VB_Name = "MDIFrmPrincipal"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub mnuClientes_Click()
+    frmCliente.Show
+End Sub
+
 Private Sub mnuOperadores_Click()
     frmOperador.Show
 End Sub

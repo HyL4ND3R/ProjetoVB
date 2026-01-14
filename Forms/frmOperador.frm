@@ -1,15 +1,15 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
 Begin VB.Form frmOperador 
    Caption         =   "Cadastro de Operadores"
-   ClientHeight    =   7935
-   ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   18120
+   ClientHeight    =   7965
+   ClientLeft      =   285
+   ClientTop       =   630
+   ClientWidth     =   18075
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7935
-   ScaleWidth      =   18120
+   ScaleHeight     =   7965
+   ScaleWidth      =   18075
    WindowState     =   2  'Maximized
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   17550
@@ -67,8 +67,8 @@ Begin VB.Form frmOperador
       Left            =   0
       TabIndex        =   9
       Top             =   0
-      Width           =   18120
-      _ExtentX        =   31962
+      Width           =   18075
+      _ExtentX        =   31882
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -127,7 +127,9 @@ Begin VB.Form frmOperador
          Strikethrough   =   0   'False
       EndProperty
       Height          =   390
+      IMEMode         =   3  'DISABLE
       Left            =   1680
+      PasswordChar    =   "*"
       TabIndex        =   8
       Top             =   1770
       Width           =   1965
@@ -149,9 +151,12 @@ Begin VB.Form frmOperador
       Width           =   4005
    End
    Begin VB.CommandButton cmdListaOperador 
-      Caption         =   "..."
+      DisabledPicture =   "frmOperador.frx":727E
+      DownPicture     =   "frmOperador.frx":7860
       Height          =   375
       Left            =   2730
+      Picture         =   "frmOperador.frx":7E42
+      Style           =   1  'Graphical
       TabIndex        =   6
       Top             =   750
       Width           =   525
@@ -278,7 +283,7 @@ Private Sub Form_Load()
         PreencherCampos
     End If
 
-    ModoConsulta
+    modoConsulta
     
 End Sub
 
@@ -326,7 +331,7 @@ Private Sub modoAlteracao()
     ModoAtual = mfAlteracao
 End Sub
 
-Private Sub ModoConsulta()
+Private Sub modoConsulta()
     Toolbar1.Buttons("novo").Enabled = True
     Toolbar1.Buttons("salvar").Enabled = False
     Toolbar1.Buttons("excluir").Enabled = True
@@ -405,7 +410,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
             
             PreencherCampos
-            ModoConsulta
+            modoConsulta
 
 '-------------ALTERACAO
         Case "alterar"
@@ -432,17 +437,17 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         
             CarregarOperadores
         
-            If Not rsOperador.EOF Then
-                rsOperador.Find "Codigo > " & codigoExcluir
+            If Not rsCliente.EOF Then
+                rsCliente.Find "Codigo > " & codigoExcluir
                 If rsOperador.EOF Then rsOperador.MoveLast
             End If
         
             PreencherCampos
-            ModoConsulta
+            modoConsulta
 
 '-------------DESFAZER
         Case "desfazer"
-            ModoConsulta
+            modoConsulta
             PreencherCampos
 
 '-------------PRIMEIRO

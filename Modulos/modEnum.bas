@@ -5,3 +5,8 @@ Public Enum eModoFormulario
     mfAlteracao = 2
 End Enum
 
+Public Enum eTipoDocumentoCliente
+    tdcCPF = 0
+    tdcCNPJ = 1
+    tdcOutro = 2
+End Enum
