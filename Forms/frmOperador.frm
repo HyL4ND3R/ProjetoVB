@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmOperador 
    Caption         =   "Cadastro de Operadores"
    ClientHeight    =   7965
@@ -229,7 +229,7 @@ Begin VB.Form frmOperador
       Top             =   1770
       Width           =   1065
    End
-   Begin VB.Label frmNome 
+   Begin VB.Label lblNome 
       Alignment       =   1  'Right Justify
       Caption         =   "Nome:"
       BeginProperty Font 
