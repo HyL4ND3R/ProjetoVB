@@ -1,15 +1,31 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form frmPesquisaCliente 
    Caption         =   "Pesquisa de Clientes"
-   ClientHeight    =   5130
+   ClientHeight    =   5580
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   8880
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5130
+   ScaleHeight     =   5580
    ScaleWidth      =   8880
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton cmdSelecionar 
+      Caption         =   "Selecionar"
+      Height          =   465
+      Left            =   6240
+      TabIndex        =   2
+      Top             =   5100
+      Width           =   1305
+   End
+   Begin VB.CommandButton cmdCancelar 
+      Caption         =   "Cancelar"
+      Height          =   465
+      Left            =   7560
+      TabIndex        =   1
+      Top             =   5100
+      Width           =   1305
+   End
    Begin MSFlexGridLib.MSFlexGrid grdCliente 
       Height          =   5055
       Left            =   0
@@ -38,6 +54,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Public CodigoSelecionado As Long
 
+
 Private Sub Form_Load()
     CarregarClientes
 
@@ -64,12 +81,16 @@ Private Sub Form_Load()
     End With
 End Sub
 
-Private Sub grdOperador_DblClick()
+Private Sub grdProduto_DblClick()
     Selecionar
 End Sub
 
 Private Sub cmdSelecionar_Click()
     Selecionar
+End Sub
+
+Private Sub cmdCancelar_Click()
+    Unload Me
 End Sub
 
 Private Sub Selecionar()

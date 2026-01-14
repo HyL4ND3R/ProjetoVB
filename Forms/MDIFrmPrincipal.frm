@@ -17,6 +17,9 @@ Begin VB.MDIForm MDIFrmPrincipal
    Begin VB.Menu mnuClientes 
       Caption         =   "Clientes"
    End
+   Begin VB.Menu mnuProdutos 
+      Caption         =   "Produtos"
+   End
 End
 Attribute VB_Name = "MDIFrmPrincipal"
 Attribute VB_GlobalNameSpace = False
@@ -29,6 +32,10 @@ End Sub
 
 Private Sub mnuOperadores_Click()
     frmOperador.Show
+End Sub
+
+Private Sub mnuProdutos_Click()
+    frmProduto.Show
 End Sub
 
 Private Sub mnuTeste_Click()

@@ -6,4 +6,6 @@ modRecordset = 0, 0, 1271, 642,
 modEnum = 156, 156, 1427, 798, 
 frmPesquisaOperador = 260, 260, 1531, 902, , 208, 208, 1479, 850, C
 frmCliente = 188, 48, 1488, 698, , -1, 5, 1295, 655, C
-frmPesquisaCliente = 156, 156, 1431, 806, C, 130, 130, 1405, 780, C
+frmPesquisaCliente = 156, 156, 1431, 806, , 130, 130, 1405, 780, C
+frmProduto = 162, 116, 1433, 758, , 342, 75, 1613, 717, C
+frmPesquisaProduto = 78, 78, 1349, 720, , 0, 0, 1271, 642, C
