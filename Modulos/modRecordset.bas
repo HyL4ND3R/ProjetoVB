@@ -66,7 +66,7 @@ Public Sub CarregarItensPedido(codigoPedido As Long)
     Set rsPedidoItem = New ADODB.Recordset
     
     rsPedidoItem.CursorLocation = adUseClient
-    rsPedido.Open _
+    rsPedidoItem.Open _
         "Select Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal " & _
             "From PedidoItem " & _
             "Where ControlePedido = " & codigoPedido & _
@@ -83,7 +83,7 @@ Public Function InserirPedido(pedido As cPedido)
     sql = "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (" & _
             pedido.Codigo & ", " & _
             pedido.ClienteCodigo & ", " & _
-            pedido.DataPedido & ")"
+            "'" & Format(pedido.DataPedido, "yyyy-MM-dd") & "') "
     
     Conn.Execute sql
     InserirPedido = True

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmPesquisaPedido 
    Caption         =   "Pesquisar Pedidos"
    ClientHeight    =   5220
@@ -67,18 +67,17 @@ Private Sub Form_Load()
             .TextMatrix(0, 2) = "Data"
             .TextMatrix(0, 3) = "Valor"
             
-            .ColWidth(0) = 800
-            .ColWidth(1) = 3000
-            .ColWidth(2) = 800
-            .ColWidth(3) = 1200
-        End With
+            .ColWidth(0) = 1200
+            .ColWidth(1) = 3200
+            .ColWidth(2) = 1700
+            .ColWidth(3) = 1500
         
         Do While Not rsPedido.EOF
             .AddItem _
                 rsPedido!Codigo & vbTab & _
                 rsPedido!ClienteNome & vbTab & _
-                rsPedido!DataPedido & vbTab & _
-                rsPedido!ValorTotal
+                Format(rsPedido!DataPedido, "dd/MM/yyyy") & vbTab & _
+                IIf(IsNull(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)
             rsPedido.MoveNext
         Loop
     End With
@@ -102,9 +101,3 @@ Private Sub Selecionar()
     CodigoSelecionado = CLng(grdPedido.TextMatrix(grdPedido.Row, 0))
     Unload Me
 End Sub
-
-
-
-
-
-
