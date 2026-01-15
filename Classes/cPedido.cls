@@ -15,12 +15,22 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private mControle As Long
 Private mCodigo As Long
 Private mClienteCodigo As Long
 Private mDataPedido As Date
 Private mValorTotal As Currency
 
 ' --- Propriedades ---
+
+Public Property Get Controle() As Long
+    Controle = mControle
+End Property
+
+Public Property Let Controle(ByVal v As Long)
+    mControle = v
+End Property
+
 
 Public Property Get Codigo() As Long
     Codigo = mCodigo

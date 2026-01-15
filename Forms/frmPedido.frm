@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -13,6 +13,97 @@ Begin VB.Form frmPedido
    ScaleHeight     =   11130
    ScaleWidth      =   20895
    WindowState     =   2  'Maximized
+   Begin VB.TextBox txtTotalItem 
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   390
+      Left            =   1410
+      TabIndex        =   24
+      Top             =   4080
+      Width           =   1215
+   End
+   Begin VB.TextBox txtValorUn 
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   390
+      Left            =   1410
+      TabIndex        =   22
+      Top             =   3630
+      Width           =   1215
+   End
+   Begin VB.TextBox txtQtde 
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   390
+      Left            =   1410
+      TabIndex        =   20
+      Top             =   3180
+      Width           =   1215
+   End
+   Begin VB.TextBox txtCodProduto 
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   390
+      Left            =   1410
+      TabIndex        =   18
+      Top             =   2730
+      Width           =   1215
+   End
+   Begin VB.TextBox txtDescricao 
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   390
+      Left            =   3210
+      TabIndex        =   17
+      Top             =   2730
+      Width           =   4005
+   End
+   Begin VB.CommandButton cmdListaProduto 
+      DisabledPicture =   "frmPedido.frx":0000
+      DownPicture     =   "frmPedido.frx":05E2
+      Height          =   375
+      Left            =   2670
+      Picture         =   "frmPedido.frx":0BC4
+      Style           =   1  'Graphical
+      TabIndex        =   16
+      Top             =   2730
+      Width           =   525
+   End
    Begin VB.CommandButton cmdExcluirItem 
       Caption         =   "Excluir"
       BeginProperty Font 
@@ -25,7 +116,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   390
-      Left            =   2580
+      Left            =   2610
       Style           =   1  'Graphical
       TabIndex        =   14
       Top             =   2280
@@ -43,7 +134,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   390
-      Left            =   1500
+      Left            =   1530
       Style           =   1  'Graphical
       TabIndex        =   13
       Top             =   2280
@@ -61,7 +152,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   390
-      Left            =   420
+      Left            =   450
       Style           =   1  'Graphical
       TabIndex        =   11
       Top             =   2280
@@ -79,27 +170,27 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   390
-      Left            =   1710
+      Left            =   3990
       TabIndex        =   10
-      Top             =   5640
+      Top             =   6060
       Width           =   1575
    End
    Begin MSFlexGridLib.MSFlexGrid grdItensPedido 
       Height          =   2805
-      Left            =   420
+      Left            =   2700
       TabIndex        =   9
-      Top             =   2700
+      Top             =   3180
       Width           =   8985
       _ExtentX        =   15849
       _ExtentY        =   4948
       _Version        =   393216
    End
    Begin VB.CommandButton cmdListaCliente 
-      DisabledPicture =   "frmPedido.frx":0000
-      DownPicture     =   "frmPedido.frx":05E2
+      DisabledPicture =   "frmPedido.frx":11A6
+      DownPicture     =   "frmPedido.frx":1788
       Height          =   375
       Left            =   2610
-      Picture         =   "frmPedido.frx":0BC4
+      Picture         =   "frmPedido.frx":1D6A
       Style           =   1  'Graphical
       TabIndex        =   8
       Top             =   1380
@@ -139,8 +230,8 @@ Begin VB.Form frmPedido
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   149684225
-      CurrentDate     =   46036
+      Format          =   113311745
+      CurrentDate     =   36526
       MaxDate         =   73415
       MinDate         =   36526
    End
@@ -161,11 +252,11 @@ Begin VB.Form frmPedido
       Width           =   1005
    End
    Begin VB.CommandButton cmdListaPedido 
-      DisabledPicture =   "frmPedido.frx":11A6
-      DownPicture     =   "frmPedido.frx":1788
+      DisabledPicture =   "frmPedido.frx":234C
+      DownPicture     =   "frmPedido.frx":292E
       Height          =   375
       Left            =   2610
-      Picture         =   "frmPedido.frx":1D6A
+      Picture         =   "frmPedido.frx":2F10
       Style           =   1  'Graphical
       TabIndex        =   1
       Top             =   900
@@ -240,7 +331,7 @@ Begin VB.Form frmPedido
          EndProperty
       EndProperty
       BorderStyle     =   1
-      MouseIcon       =   "frmPedido.frx":234C
+      MouseIcon       =   "frmPedido.frx":34F2
       Begin MSComctlLib.ImageList ImageList1 
          Left            =   20280
          Top             =   0
@@ -254,43 +345,115 @@ Begin VB.Form frmPedido
          BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
             NumListImages   =   9
             BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":3026
+               Picture         =   "frmPedido.frx":41CC
                Key             =   ""
             EndProperty
             BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":3D00
+               Picture         =   "frmPedido.frx":4EA6
                Key             =   ""
             EndProperty
             BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":49DA
+               Picture         =   "frmPedido.frx":5B80
                Key             =   ""
             EndProperty
             BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":56B4
+               Picture         =   "frmPedido.frx":685A
                Key             =   ""
             EndProperty
             BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":638E
+               Picture         =   "frmPedido.frx":7534
                Key             =   ""
             EndProperty
             BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":7068
+               Picture         =   "frmPedido.frx":820E
                Key             =   ""
             EndProperty
             BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":7644
+               Picture         =   "frmPedido.frx":87EA
                Key             =   ""
             EndProperty
             BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":831E
+               Picture         =   "frmPedido.frx":94C4
                Key             =   ""
             EndProperty
             BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-               Picture         =   "frmPedido.frx":8FF8
+               Picture         =   "frmPedido.frx":A19E
                Key             =   ""
             EndProperty
          EndProperty
       End
+   End
+   Begin VB.Label lblTotal 
+      Alignment       =   1  'Right Justify
+      Caption         =   "Total:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   11.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   450
+      TabIndex        =   23
+      Top             =   4080
+      Width           =   915
+   End
+   Begin VB.Label lblValorUn 
+      Alignment       =   1  'Right Justify
+      Caption         =   "Valor Un:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   11.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   450
+      TabIndex        =   21
+      Top             =   3630
+      Width           =   915
+   End
+   Begin VB.Label lblQtde 
+      Alignment       =   1  'Right Justify
+      Caption         =   "Qtde:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   11.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   450
+      TabIndex        =   19
+      Top             =   3180
+      Width           =   915
+   End
+   Begin VB.Label lblProduto 
+      Alignment       =   1  'Right Justify
+      Caption         =   "Produto:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   11.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   375
+      Left            =   450
+      TabIndex        =   15
+      Top             =   2730
+      Width           =   915
    End
    Begin VB.Label lblValorTotal 
       Alignment       =   1  'Right Justify
@@ -305,9 +468,9 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   420
+      Left            =   2700
       TabIndex        =   12
-      Top             =   5640
+      Top             =   6060
       Width           =   1245
    End
    Begin VB.Label lblCodigo 
@@ -353,12 +516,14 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-Private ModoAtual As eModoFormulario
-Dim Pedido As cPedido
+Private ModoAtualPedido As eModoFormulario
+Private ModoAtualItens As eModoFormulario
+Dim pedido As cPedido
+Dim ControlePedido As Long
 
 Private Sub Form_Load()
     
-    Set Pedido = New cPedido
+    Set pedido = New cPedido
     
     AjustarColunasGridItens
     CarregarPedidos
@@ -366,11 +531,14 @@ Private Sub Form_Load()
     If Not rsPedido.EOF Then 'Se não esta no fim da lista
         rsPedido.MoveLast 'Move para o final
         PreencherCampos
+    Else
+        dtpDataPedido.Format = dtpCustom 'Definir uma mascara para poder zerar o campo
+        dtpDataPedido.CustomFormat = " " 'Zerando a data para não ficar preenchida
     End If
 
     modoConsulta
     
-End Sub 'PAREI AQUI------------------------------------------
+End Sub
 
 Private Sub modoInclusao()
     Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
@@ -386,6 +554,17 @@ Private Sub modoInclusao()
     cmdNovoItem.Enabled = False
     cmdAlterarItem.Enabled = False
     cmdExcluirItem.Enabled = False
+    txtCodProduto.Enabled = False
+    txtCodProduto.BackColor = &H8000000F
+    cmdListaProduto.Enabled = False
+    txtDescricao.Enabled = False
+    txtDescricao.BackColor = &H8000000F
+    txtQtde.Enabled = False
+    txtQtde.BackColor = &H8000000F
+    txtValorUn.Enabled = False
+    txtValorUn.BackColor = &H8000000F
+    txtTotalItem.Enabled = False
+    txtTotalItem.BackColor = &H8000000F
     
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
@@ -397,7 +576,7 @@ Private Sub modoInclusao()
     txtNomeCliente.BackColor = vbWindowBackground 'cor branca padrão do sistema
     dtpDataPedido.Enabled = True
     
-    ModoAtual = mfInclusao
+    ModoAtualPedido = mfInclusao
 End Sub
 
 Private Sub modoAlteracao()
@@ -414,6 +593,17 @@ Private Sub modoAlteracao()
     cmdNovoItem.Enabled = False
     cmdAlterarItem.Enabled = False
     cmdExcluirItem.Enabled = False
+    txtCodProduto.Enabled = False
+    txtCodProduto.BackColor = &H8000000F
+    cmdListaProduto.Enabled = False
+    txtDescricao.Enabled = False
+    txtDescricao.BackColor = &H8000000F
+    txtQtde.Enabled = False
+    txtQtde.BackColor = &H8000000F
+    txtValorUn.Enabled = False
+    txtValorUn.BackColor = &H8000000F
+    txtTotalItem.Enabled = False
+    txtTotalItem.BackColor = &H8000000F
     
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
@@ -425,7 +615,7 @@ Private Sub modoAlteracao()
     txtNomeCliente.BackColor = vbWindowBackground 'cor branca padrão do sistema
     dtpDataPedido.Enabled = True
     
-    ModoAtual = mfAlteracao
+    ModoAtualPedido = mfAlteracao
 End Sub
 
 Private Sub modoConsulta()
@@ -442,6 +632,17 @@ Private Sub modoConsulta()
     cmdNovoItem.Enabled = True
     cmdAlterarItem.Enabled = True
     cmdExcluirItem.Enabled = True
+    txtCodProduto.Enabled = False
+    txtCodProduto.BackColor = &H8000000F
+    cmdListaProduto.Enabled = False
+    txtDescricao.Enabled = False
+    txtDescricao.BackColor = &H8000000F
+    txtQtde.Enabled = False
+    txtQtde.BackColor = &H8000000F
+    txtValorUn.Enabled = False
+    txtValorUn.BackColor = &H8000000F
+    txtTotalItem.Enabled = False
+    txtTotalItem.BackColor = &H8000000F
     
     txtCodigo.Enabled = True
     txtCodigo.BackColor = vbWindowBackground
@@ -453,21 +654,32 @@ Private Sub modoConsulta()
     txtNomeCliente.BackColor = &H8000000F
     dtpDataPedido.Enabled = False
     
-    ModoAtual = mfConsulta
+    ModoAtualPedido = mfConsulta
 End Sub
 
 
 Private Sub PreencherCampos()
 
-    If rsPedido.EOF Or rsPedido.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
+    If rsPedido.EOF Or rsPedido.BOF Then 'Se a lista não tem registros pula fora da Sub
+        dtpDataPedido.Format = dtpCustom 'Definir uma mascara para poder zerar o campo
+        dtpDataPedido.CustomFormat = " " 'Zerando a data para não ficar preenchida
+        Exit Sub
+    End If
 
+    ControlePedido = rsPedido!controle
     txtCodigo.Text = rsPedido!Codigo 'Atribuição de valor do RecordSet para o TextBox
     txtCodCliente.Text = rsPedido!CodigoCliente
     txtNomeCliente.Text = rsPedido!ClienteNome
+    dtpDataPedido.Format = dtpCustom
+    dtpDataPedido.CustomFormat = "dd/MM/yyyy" 'Redefindindo a mascara caso não tinha registros na tela antes
     dtpDataPedido.Value = rsPedido!DataPedido
     txtValorTotal.Text = rsOperador!ValorTotal
     
     PreencherItensPedido
+    
+End Sub
+
+Private Sub PrencherCamposItem()
     
 End Sub
 
@@ -527,10 +739,11 @@ End Sub
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
-'-------------NOVO
+'-------------NOVO-------------------------------------------------------------------
         Case "novo"
             
-            txtCodigo.Text = ""
+            BuscarProximoCodPedido
+            txtCodigo.Text = rsProximoCodigo!Codigo
             txtCodCliente.Text = ""
             txtNomeCliente.Text = ""
             dtpDataPedido.Value = Date
@@ -538,66 +751,70 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             modoInclusao
 
-'-------------SALVAR
+'-------------SALVAR-----------------------------------------------------------------
         Case "salvar"
             Dim sql As String
             Dim codigoAtual As Long
 
-            If ModoAtual = mfAlteracao Then
-                Pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-                Pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-                Pedido.DataPedido = dtpDataPedido.Value
-                'Parei AQUI -------------------------------------------------------------
-                'Criar uma sub no recordset para salvar o pedido e mandar o objeto pedido para ele
+            If ModoAtualPedido = mfAlteracao Then
+                pedido.controle = VerificaNull(ControlePedido, 0)
+                pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+                pedido.ClienteCodigo = CLng(txtCodCliente.Text)
+                pedido.DataPedido = dtpDataPedido.Value
+                If (Not AlterarPedido(pedido)) Then
+                    MsgBox "Erro ao Alterar o Registro!"
+                    Exit Sub
+                End If
             Else
-                sql = "INSERT INTO Operador (Nome, Senha, Admin, Inativo) VALUES (" & _
-                    "'" & txtNome.Text & "', " & _
-                    "'" & txtSenha.Text & "', " & _
-                    IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
-                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+                pedido.controle = VerificaNull(ControlePedido, 0)
+                pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+                pedido.ClienteCodigo = CLng(txtCodCliente.Text)
+                pedido.DataPedido = dtpDataPedido.Value
+                If (Not InserirPedido(pedido)) Then
+                    MsgBox "Erro ao Inserir o Registro!"
+                    Exit Sub
+                End If
             End If
 
             Conn.Execute sql
             
-            CarregarOperadores
+            CarregarPedidos
             
-            If ModoAtual = mfAlteracao Then
-                rsOperador.Find "Codigo = " & codigoAtual
+            If ModoAtualPedido = mfAlteracao Then
+                rsPedido.Find "Codigo = " & codigoAtual
             Else
-                If Not rsOperador.EOF Then rsOperador.MoveLast
+                If Not rsPedido.EOF Then rsPedido.MoveLast
             End If
             
             PreencherCampos
             modoConsulta
 
-'-------------ALTERACAO
+'-------------ALTERACAO--------------------------------------------------------------
         Case "alterar"
         
-            If rsOperador.EOF Or rsOperador.BOF Then Exit Sub
+            If rsPedido.EOF Or rsPedido.BOF Then Exit Sub
             
             PreencherCampos
             modoAlteracao
 
-'-------------EXCLUIR
+'-------------EXCLUIR----------------------------------------------------------------
         Case "excluir"
             
-            If rsOperador.EOF Or rsOperador.BOF Then Exit Sub
+            If rsPedido.EOF Or rsPedido.BOF Then Exit Sub
             
             'Mensagem de confirmação, se clicar no Não, cai fora da sub
-            If MsgBox("Deseja realmente excluir este operador?", _
+            If MsgBox("Deseja realmente excluir este Registro?", _
                       vbQuestion + vbYesNo, _
                       "Confirmação") = vbNo Then Exit Sub
 
-            Dim codigoExcluir As Long
-            codigoExcluir = CLng(txtCodigo.Text)
+                  
+            Conn.Execute "DELETE FROM Pedido WHERE Controle = " & ControlePedido
         
-            Conn.Execute "DELETE FROM Operador WHERE Codigo = " & codigoExcluir
+            CarregarPedidos
         
-            CarregarOperadores
-        
-            If Not rsCliente.EOF Then
-                rsCliente.Find "Codigo > " & codigoExcluir
-                If rsOperador.EOF Then rsOperador.MoveLast
+            If Not rsPedido.EOF Then
+                rsPedido.Find "Codigo > " & codigoExcluir
+                If rsPedido.EOF Then rsPedido.MoveLast
             End If
         
             PreencherCampos
@@ -605,29 +822,30 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------DESFAZER
         Case "desfazer"
+            txtCodigo.Text = ""
             modoConsulta
             PreencherCampos
 
 '-------------PRIMEIRO
         Case "primeiro"
-            rsOperador.MoveFirst
+            rsPedido.MoveFirst
             PreencherCampos
 
 '-------------ANTERIOR
         Case "anterior"
-            If Not rsOperador.BOF Then rsOperador.MovePrevious
-            If rsOperador.BOF Then rsOperador.MoveFirst
+            If Not rsPedido.BOF Then rsPedido.MovePrevious
+            If rsPedido.BOF Then rsPedido.MoveFirst
             PreencherCampos
 
 '-------------PROXIMO
         Case "proximo"
-            If Not rsOperador.EOF Then rsOperador.MoveNext
-            If rsOperador.EOF Then rsOperador.MoveLast
+            If Not rsPedido.EOF Then rsPedido.MoveNext
+            If rsPedido.EOF Then rsPedido.MoveLast
             PreencherCampos
 
 '-------------ULTIMO
         Case "ultimo"
-            rsOperador.MoveLast
+            rsPedido.MoveLast
             PreencherCampos
         
     End Select
@@ -643,11 +861,15 @@ Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o reco
         If rsPedidoItem.State = adStateOpen Then rsPedidoItem.Close 'Se esta aberto, fecha
         Set rsPedidoItem = Nothing 'Seta como nada
     End If
+    If Not rsProximoCodigo Is Nothing Then 'Se ele não for nada (se existir)
+        If rsProximoCodigo.State = adStateOpen Then rsProximoCodigo.Close 'Se esta aberto, fecha
+        Set rsProximoCodigo = Nothing 'Seta como nada
+    End If
 End Sub
 
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
     
-    If ModoAtual = mfConsulta Then
+    If ModoAtualPedido = mfConsulta Then
         If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
             KeyAscii = 0   ' evita o bip
             
@@ -686,3 +908,30 @@ Private Sub cmdListaPedido_Click()
     Unload f
 End Sub
 
+Private Sub cmdListaCliente_Click()
+    Dim f As New frmPesquisaCliente
+
+    f.Show vbModal
+
+    If f.CodigoSelecionado > 0 Then
+        If BuscarRS(rsCliente, "Codigo", f.CodigoSelecionado) Then
+            PreencherCampos
+        End If
+    End If
+
+    Unload f
+End Sub
+
+Private Sub cmdListaProduto_Click()
+    Dim f As New frmPesquisaProduto
+
+    f.Show vbModal
+
+    If f.CodigoSelecionado > 0 Then
+        If BuscarRS(rsCliente, "Codigo", f.CodigoSelecionado) Then
+            PreencherCampos
+        End If
+    End If
+
+    Unload f
+End Sub

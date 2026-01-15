@@ -10,6 +10,7 @@ Begin VB.MDIForm MDIFrmPrincipal
    StartUpPosition =   2  'CenterScreen
    Begin VB.Menu mnuTeste 
       Caption         =   "Teste"
+      Visible         =   0   'False
    End
    Begin VB.Menu mnuOperadores 
       Caption         =   "Operadores"
@@ -19,6 +20,9 @@ Begin VB.MDIForm MDIFrmPrincipal
    End
    Begin VB.Menu mnuProdutos 
       Caption         =   "Produtos"
+   End
+   Begin VB.Menu mnuPedidos 
+      Caption         =   "Pedidos"
    End
 End
 Attribute VB_Name = "MDIFrmPrincipal"
@@ -32,6 +36,10 @@ End Sub
 
 Private Sub mnuOperadores_Click()
     frmOperador.Show
+End Sub
+
+Private Sub mnuPedidos_Click()
+    frmPedido.Show
 End Sub
 
 Private Sub mnuProdutos_Click()
