@@ -2,6 +2,8 @@ Attribute VB_Name = "modRecordset"
 Public rsOperador As ADODB.Recordset
 Public rsCliente As ADODB.Recordset
 Public rsProduto As ADODB.Recordset
+Public rsPedido As ADODB.Recordset
+Public rsPedidoItem As ADODB.Recordset
 
 Public Sub CarregarOperadores()
 
@@ -34,6 +36,33 @@ Public Sub CarregarProdutos()
         "SELECT Codigo, Nome, Valor, Inativo FROM Produto ORDER BY Codigo", _
         Conn, adOpenStatic, adLockReadOnly
 
+End Sub
+
+Public Sub CarregarPedidos()
+
+    Set rsPedido = New ADODB.Recordset
+
+    rsPedido.CursorLocation = adUseClient
+    rsPedido.Open _
+        "Select Pedido.Codigo, Pedido.ClienteCodigo, Cliente.Nome ClienteNome, Pedido.Data DataPedido, Pedido.ValorTotal  " & _
+            "From Pedido " & _
+            "inner join Cliente on Cliente.Codigo = Pedido.ClienteCodigo " & _
+            "Order By Codigo", _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
+Public Sub CarregarItensPedido(codigoPedido As Long)
+    Set rsPedidoItem = New ADODB.Recordset
+    
+    rsPedidoItem.CursorLocation = adUseClient
+    rsPedido.Open _
+        "select Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal " & _
+            "From PedidoItem " & _
+            "Where ControlePedido = " & codigoPedido & _
+            "Order By Item", _
+        Conn, adOpenStatic, adLockReadOnly
+    
 End Sub
 
 Public Function BuscarRS(rs As ADODB.Recordset, _
