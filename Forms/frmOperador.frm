@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
 Begin VB.Form frmOperador 
    Caption         =   "Cadastro de Operadores"
    ClientHeight    =   7965
@@ -130,7 +130,7 @@ Begin VB.Form frmOperador
       IMEMode         =   3  'DISABLE
       Left            =   1680
       PasswordChar    =   "*"
-      TabIndex        =   8
+      TabIndex        =   3
       Top             =   1770
       Width           =   1965
    End
@@ -146,7 +146,7 @@ Begin VB.Form frmOperador
       EndProperty
       Height          =   390
       Left            =   1680
-      TabIndex        =   7
+      TabIndex        =   2
       Top             =   1260
       Width           =   4005
    End
@@ -157,7 +157,7 @@ Begin VB.Form frmOperador
       Left            =   2730
       Picture         =   "frmOperador.frx":7E42
       Style           =   1  'Graphical
-      TabIndex        =   6
+      TabIndex        =   8
       Top             =   750
       Width           =   525
    End
@@ -173,7 +173,7 @@ Begin VB.Form frmOperador
       EndProperty
       Height          =   390
       Left            =   1680
-      TabIndex        =   5
+      TabIndex        =   1
       Top             =   750
       Width           =   1005
    End
@@ -190,7 +190,7 @@ Begin VB.Form frmOperador
       EndProperty
       Height          =   375
       Left            =   1680
-      TabIndex        =   2
+      TabIndex        =   5
       Top             =   2790
       Width           =   1335
    End
@@ -207,7 +207,7 @@ Begin VB.Form frmOperador
       EndProperty
       Height          =   375
       Left            =   1680
-      TabIndex        =   1
+      TabIndex        =   4
       Top             =   2280
       Width           =   1875
    End
@@ -225,7 +225,7 @@ Begin VB.Form frmOperador
       EndProperty
       Height          =   375
       Left            =   570
-      TabIndex        =   4
+      TabIndex        =   7
       Top             =   1770
       Width           =   1065
    End
@@ -243,7 +243,7 @@ Begin VB.Form frmOperador
       EndProperty
       Height          =   375
       Left            =   570
-      TabIndex        =   3
+      TabIndex        =   6
       Top             =   1260
       Width           =   1065
    End

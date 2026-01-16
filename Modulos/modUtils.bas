@@ -1,10 +1,18 @@
 Attribute VB_Name = "modUtils"
 'Função para verificar null e voltar um valor padrão
-Function VerificaNull(ByVal v As Variant, Optional ByVal padrao As Variant) As Variant
-    If IsNull(v) Then ' Se for null
-        VerificaNull = padrao 'Retorna o Valor Padrão
+Public Function VerificaNull(ByVal v As Variant, Optional ByVal padrao As Variant) As Variant
+    If IsObject(v) Then
+        If v Is Nothing Then
+            VerificaNull = padrao
+        Else
+            VerificaNull = v
+        End If
     Else
-        VerificaNull = v ' Se não, retorna o valor
+        If IsNull(v) Then
+            VerificaNull = padrao
+        Else
+            VerificaNull = v
+        End If
     End If
 End Function
 

@@ -67,7 +67,7 @@ Public Sub CarregarItensPedido(codigoPedido As Long)
     
     rsPedidoItem.CursorLocation = adUseClient
     rsPedidoItem.Open _
-        "Select Controle, ControlePedido, Item, ProdutoCodigo, Descricao, Qtde, ValorUn, ValorTotal " & _
+        "Select Controle, ControlePedido, Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal " & _
             "From PedidoItem " & _
             "Where ControlePedido = " & codigoPedido & _
             "Order By Item", _
@@ -118,7 +118,7 @@ Public Function InserirItemPedido(itemPedido As cPedidoItem) As Boolean
     
     Dim sql As String
     
-    sql = "Insert into PedidoItem (ControlePedido, Item, ProdutoCodigo, Descricao, Qtde, ValorUn, ValorTotal) " & _
+    sql = "Insert into PedidoItem (ControlePedido, Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal) " & _
             "Values (" & itemPedido.ControlePedido & ", " & _
             itemPedido.Item & ", " & _
             itemPedido.ProdutoCodigo & ", " & _
@@ -145,7 +145,7 @@ Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean
             "Item = " & itemPedido.Item & ", " & _
             "ProdutoCodigo = " & itemPedido.ProdutoCodigo & ", " & _
             "Descricao = '" & itemPedido.Descricao & "', " & _
-            "Qtde = " & itemPedido.Qtde & ", " & _
+            "Quantidade = " & itemPedido.Qtde & ", " & _
             "ValorUn = " & itemPedido.ValorUn & ", " & _
             "ValorTotal = " & itemPedido.ValorTotal & _
             "Where Controle = " & itemPedido.Controle

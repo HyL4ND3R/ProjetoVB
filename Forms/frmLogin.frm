@@ -13,7 +13,7 @@ Begin VB.Form frmLogin
       Caption         =   "Entrar"
       Height          =   375
       Left            =   990
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   2370
       Width           =   1000
    End
@@ -22,7 +22,7 @@ Begin VB.Form frmLogin
       IMEMode         =   3  'DISABLE
       Left            =   810
       PasswordChar    =   "*"
-      TabIndex        =   1
+      TabIndex        =   2
       Text            =   "123"
       Top             =   1680
       Width           =   1425
@@ -57,7 +57,7 @@ Begin VB.Form frmLogin
       Caption         =   "Senha:"
       Height          =   225
       Left            =   300
-      TabIndex        =   3
+      TabIndex        =   4
       Top             =   1740
       Width           =   495
    End
@@ -65,7 +65,7 @@ Begin VB.Form frmLogin
       Caption         =   "Codigo:"
       Height          =   225
       Left            =   240
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   1170
       Width           =   555
    End

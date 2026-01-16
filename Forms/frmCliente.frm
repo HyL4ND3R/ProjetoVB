@@ -15,7 +15,7 @@ Begin VB.Form frmCliente
    Begin MSMask.MaskEdBox mskDocumento 
       Height          =   375
       Left            =   3480
-      TabIndex        =   11
+      TabIndex        =   4
       Top             =   2520
       Width           =   2535
       _ExtentX        =   4471
@@ -45,7 +45,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   375
       Left            =   2160
-      TabIndex        =   10
+      TabIndex        =   6
       Top             =   3840
       Width           =   1875
    End
@@ -61,7 +61,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   390
       Left            =   2160
-      TabIndex        =   9
+      TabIndex        =   5
       Top             =   3240
       Width           =   3855
    End
@@ -72,7 +72,7 @@ Begin VB.Form frmCliente
       Left            =   3360
       Picture         =   "frmCliente.frx":0BC4
       Style           =   1  'Graphical
-      TabIndex        =   7
+      TabIndex        =   10
       Top             =   1080
       Width           =   525
    End
@@ -88,7 +88,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   390
       Left            =   2160
-      TabIndex        =   6
+      TabIndex        =   3
       Text            =   "Combo1"
       Top             =   2520
       Width           =   1215
@@ -105,7 +105,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   390
       Left            =   2160
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   1800
       Width           =   3855
    End
@@ -244,7 +244,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   375
       Left            =   600
-      TabIndex        =   8
+      TabIndex        =   11
       Top             =   3240
       Width           =   1455
    End
@@ -262,7 +262,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   375
       Left            =   600
-      TabIndex        =   5
+      TabIndex        =   9
       Top             =   2520
       Width           =   1455
    End
@@ -280,7 +280,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   375
       Left            =   600
-      TabIndex        =   3
+      TabIndex        =   8
       Top             =   1800
       Width           =   1455
    End
@@ -298,7 +298,7 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   375
       Left            =   600
-      TabIndex        =   2
+      TabIndex        =   7
       Top             =   1080
       Width           =   1455
    End

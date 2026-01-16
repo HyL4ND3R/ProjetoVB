@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -25,7 +25,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6060
+      Left            =   6000
       TabIndex        =   26
       Top             =   2280
       Width           =   1155
@@ -42,7 +42,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   4920
+      Left            =   4860
       TabIndex        =   25
       Top             =   2280
       Width           =   1155
@@ -59,7 +59,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   3780
+      Left            =   3720
       TabIndex        =   24
       Top             =   2280
       Width           =   1155
@@ -76,7 +76,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   2640
+      Left            =   2580
       TabIndex        =   23
       Top             =   2280
       Width           =   1155
@@ -93,7 +93,7 @@ Begin VB.Form frmPedido
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   1500
+      Left            =   1440
       TabIndex        =   22
       Top             =   2280
       Width           =   1155
@@ -110,7 +110,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   21
+      TabIndex        =   8
       Top             =   4080
       Width           =   1215
    End
@@ -126,7 +126,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   19
+      TabIndex        =   7
       Top             =   3630
       Width           =   1215
    End
@@ -142,7 +142,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   17
+      TabIndex        =   6
       Top             =   3180
       Width           =   1215
    End
@@ -158,7 +158,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   15
+      TabIndex        =   4
       Top             =   2730
       Width           =   1215
    End
@@ -174,7 +174,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   3150
-      TabIndex        =   14
+      TabIndex        =   5
       Top             =   2730
       Width           =   4005
    End
@@ -185,7 +185,7 @@ Begin VB.Form frmPedido
       Left            =   2610
       Picture         =   "frmPedido.frx":0BC4
       Style           =   1  'Graphical
-      TabIndex        =   13
+      TabIndex        =   18
       Top             =   2730
       Width           =   525
    End
@@ -202,19 +202,28 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   3990
-      TabIndex        =   10
+      TabIndex        =   15
       Top             =   6060
       Width           =   1575
    End
    Begin MSFlexGridLib.MSFlexGrid grdItensPedido 
       Height          =   2805
       Left            =   2700
-      TabIndex        =   9
+      TabIndex        =   14
       Top             =   3180
       Width           =   8985
       _ExtentX        =   15849
       _ExtentY        =   4948
       _Version        =   393216
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.CommandButton cmdListaCliente 
       DisabledPicture =   "frmPedido.frx":11A6
@@ -223,7 +232,7 @@ Begin VB.Form frmPedido
       Left            =   2610
       Picture         =   "frmPedido.frx":1D6A
       Style           =   1  'Graphical
-      TabIndex        =   8
+      TabIndex        =   13
       Top             =   1380
       Width           =   525
    End
@@ -239,14 +248,14 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1560
-      TabIndex        =   7
+      TabIndex        =   2
       Top             =   1380
       Width           =   1005
    End
    Begin MSComCtl2.DTPicker dtpDataPedido 
       Height          =   375
       Left            =   5550
-      TabIndex        =   6
+      TabIndex        =   3
       Top             =   900
       Width           =   1635
       _ExtentX        =   2884
@@ -261,7 +270,7 @@ Begin VB.Form frmPedido
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   91553793
+      Format          =   150011905
       CurrentDate     =   36526
       MaxDate         =   73415
       MinDate         =   36526
@@ -278,7 +287,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1560
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   900
       Width           =   1005
    End
@@ -289,7 +298,7 @@ Begin VB.Form frmPedido
       Left            =   2610
       Picture         =   "frmPedido.frx":2F10
       Style           =   1  'Graphical
-      TabIndex        =   1
+      TabIndex        =   9
       Top             =   900
       Width           =   525
    End
@@ -313,7 +322,7 @@ Begin VB.Form frmPedido
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   5
+      TabIndex        =   12
       Top             =   0
       Width           =   20895
       _ExtentX        =   36856
@@ -428,7 +437,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   20
+      TabIndex        =   21
       Top             =   4080
       Width           =   915
    End
@@ -446,7 +455,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   18
+      TabIndex        =   20
       Top             =   3630
       Width           =   915
    End
@@ -464,7 +473,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   16
+      TabIndex        =   19
       Top             =   3180
       Width           =   915
    End
@@ -482,7 +491,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   12
+      TabIndex        =   17
       Top             =   2730
       Width           =   915
    End
@@ -500,7 +509,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   2700
-      TabIndex        =   11
+      TabIndex        =   16
       Top             =   6060
       Width           =   1245
    End
@@ -518,7 +527,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   4
+      TabIndex        =   11
       Top             =   900
       Width           =   1065
    End
@@ -536,7 +545,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   3
+      TabIndex        =   10
       Top             =   1380
       Width           =   1065
    End
@@ -554,56 +563,6 @@ Dim pedidoItem As cPedidoItem
 Dim ControlePedido As Long
 Dim ControlePedidoItem As Long
 
-
-Private Sub cmdCancelarItem_Click()
-    cancelarItem
-End Sub
-
-Private Sub cmdNovoItem_Click()
-    modoInclusaoItem
-End Sub
-
-Private Sub cmdSalvarItem_Click()
-    Dim codigoAtual As Long
-
-    If ModoAtualPedido = mfAlteracao Then
-        pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
-        pedidoItem.Controle = VerificaNull(ControlePedido, 0)
-        pedidoItem.Item = 0
-        pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
-        pedidoItem.Qtde = CDbl(txtQtde.Text)
-        pedidoItem.ValorUn = CDbl(txtValorUn.Text)
-        pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
-        If (Not AlterarItemPedido(pedido)) Then
-            MsgBox "Erro ao Alterar o Registro!"
-            Exit Sub
-        End If
-    Else
-        pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
-        pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
-        pedidoItem.Item = 0
-        pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
-        pedidoItem.Qtde = CDbl(txtQtde.Text)
-        pedidoItem.ValorUn = CDbl(txtValorUn.Text)
-        pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
-        If (Not InserirItemPedido(pedido)) Then
-            MsgBox "Erro ao Inserir o Registro!"
-            Exit Sub
-        End If
-    End If
-    
-    CarregarPedidos
-    
-    If ModoAtualPedido = mfAlteracao Then
-        rsPedido.Find "Codigo = " & codigoAtual
-    Else
-        If Not rsPedido.EOF Then rsPedido.MoveLast
-    End If
-    
-    modoInclusaoItem
-    
-End Sub
-
 Private Sub Form_Load()
     
     Set pedido = New cPedido
@@ -620,6 +579,54 @@ Private Sub Form_Load()
     End If
 
     modoConsultaPedido
+    
+End Sub
+
+Private Sub cmdCancelarItem_Click()
+    cancelarItem
+End Sub
+
+Private Sub cmdNovoItem_Click()
+    modoInclusaoItem
+End Sub
+
+Private Sub cmdAlterarItem_Click()
+    modoAlteracaoItem
+End Sub
+
+Private Sub cmdSalvarItem_Click()
+    Set pedidoItem = New cPedidoItem
+    Dim codigoAtual As Long
+
+    If ModoAtualPedido = mfAlteracao Then
+        pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
+        pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
+        pedidoItem.Item = 0
+        pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
+        pedidoItem.Descricao = txtDescricao.Text
+        pedidoItem.Qtde = CDbl(txtQtde.Text)
+        pedidoItem.ValorUn = CDbl(txtValorUn.Text)
+        pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
+        If (Not AlterarItemPedido(pedido)) Then
+            MsgBox "Erro ao Alterar o Registro!"
+            Exit Sub
+        End If
+    Else
+        pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
+        pedidoItem.Item = 0
+        pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
+        pedidoItem.Descricao = txtDescricao.Text
+        pedidoItem.Qtde = CDbl(txtQtde.Text)
+        pedidoItem.ValorUn = CDbl(txtValorUn.Text)
+        pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
+        If (Not InserirItemPedido(pedidoItem)) Then
+            MsgBox "Erro ao Inserir o Registro!"
+            Exit Sub
+        End If
+    End If
+    
+    PreencherItensPedido
+    modoInclusaoItem
     
 End Sub
 
@@ -773,8 +780,40 @@ Private Sub modoInclusaoItem()
     txtValorUn.Enabled = True
     txtValorUn.Text = ""
     txtValorUn.BackColor = vbWindowBackground
+    txtTotalItem.Enabled = False
+    txtTotalItem.Text = ""
+    txtTotalItem.BackColor = &H8000000F
     
     ModoAtualItens = mfInclusao
+    
+End Sub
+
+Private Sub modoAlteracaoItem()
+'--------------BOTÕES ITENS------------------------
+    cmdNovoItem.Enabled = False
+    cmdSalvarItem.Enabled = True
+    cmdAlterarItem.Enabled = False
+    cmdExcluirItem.Enabled = False
+    cmdCancelarItem.Enabled = True
+'--------------CAMPOS ITENS------------------------
+    txtCodProduto.Enabled = True
+    txtCodProduto.Text = ""
+    txtCodProduto.BackColor = vbWindowBackground
+    cmdListaProduto.Enabled = True
+    txtDescricao.Enabled = True
+    txtDescricao.Text = ""
+    txtDescricao.BackColor = vbWindowBackground
+    txtQtde.Enabled = True
+    txtQtde.Text = ""
+    txtQtde.BackColor = vbWindowBackground
+    txtValorUn.Enabled = True
+    txtValorUn.Text = ""
+    txtValorUn.BackColor = vbWindowBackground
+    txtTotalItem.Enabled = False
+    txtTotalItem.Text = ""
+    txtTotalItem.BackColor = &H8000000F
+    
+    ModoAtualItens = mfAlteracao
     
 End Sub
 
@@ -788,12 +827,16 @@ Private Sub cancelarItem()
 '--------------CAMPOS ITENS------------------------
     txtCodProduto.Enabled = False
     txtCodProduto.BackColor = &H8000000F
+    cmdListaProduto.Enabled = False
     txtDescricao.Enabled = False
     txtDescricao.BackColor = &H8000000F
     txtQtde.Enabled = False
     txtQtde.BackColor = &H8000000F
     txtValorUn.Enabled = False
     txtValorUn.BackColor = &H8000000F
+    txtTotalItem.Enabled = False
+    txtTotalItem.Text = ""
+    txtTotalItem.BackColor = &H8000000F
     
     PreencherCamposItem
 End Sub
@@ -831,6 +874,10 @@ Private Sub PreencherClientePedido()
 End Sub
 
 Private Sub PreencherItensPedido()
+    
+    ' Limpa o grid (mantém só o cabeçalho)
+    grdItensPedido.Rows = 1
+    
     CarregarItensPedido (ControlePedido)
     If rsPedidoItem.EOF Or rsPedidoItem.BOF Then Exit Sub
     
@@ -842,25 +889,25 @@ Private Sub PreencherItensPedido()
         Exit Sub
     End If
     
-    CarregarItensPedido (CLng(txtCodigo.Text))
-    
     linha = 1
 
-    Do While Not rs.EOF
-        grdItens.Rows = grdItens.Rows + 1
+    Do While Not rsPedidoItem.EOF
+        grdItensPedido.Rows = grdItensPedido.Rows + 1
 
-        grdItens.TextMatrix(linha, 0) = rs!Codigo
-        grdItens.TextMatrix(linha, 1) = rs!Produto
-        grdItens.TextMatrix(linha, 2) = rs!Quantidade
-        grdItens.TextMatrix(linha, 3) = Format(rs!ValorUn, "0.00")
-        grdItens.TextMatrix(linha, 4) = Format(rs!ValorTotal, "0.00")
+        grdItensPedido.TextMatrix(linha, 0) = rsPedidoItem!Controle
+        grdItensPedido.TextMatrix(linha, 1) = rsPedidoItem!ProdutoCodigo
+        grdItensPedido.TextMatrix(linha, 2) = rsPedidoItem!Descricao
+        grdItensPedido.TextMatrix(linha, 3) = rsPedidoItem!Quantidade
+        grdItensPedido.TextMatrix(linha, 4) = Format(rsPedidoItem!ValorUn, "0.00")
+        grdItensPedido.TextMatrix(linha, 5) = Format(rsPedidoItem!ValorTotal, "0.00")
 
         linha = linha + 1
-        rs.MoveNext
+        rsPedidoItem.MoveNext
     Loop
     
     If grdItensPedido.Rows > 1 Then
         grdItensPedido.Row = 1
+        PreencherCamposItem
     End If
 
 End Sub
@@ -878,12 +925,15 @@ Private Sub AjustarColunasGridItens()
         .TextMatrix(0, 5) = "Total"
 
         .ColWidth(0) = 0
-        .ColWidth(1) = 800
-        .ColWidth(2) = 3000
-        .ColWidth(3) = 800
-        .ColWidth(4) = 1200
-        .ColWidth(5) = 1200
+        .ColWidth(1) = 1000
+        .ColWidth(2) = 3800
+        .ColWidth(3) = 1000
+        .ColWidth(4) = 1500
+        .ColWidth(5) = 1500
     End With
+    
+    grdItensPedido.SelectionMode = flexSelectionByRow
+    
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
@@ -1095,26 +1145,26 @@ End Sub
 
 Private Sub PreencherCamposItem() 'Evento de preenchimentos dos campos do item para ser chamado manualmente
     
-    If grdItensPedido.Row <= 0 Then Exit Sub
+    ControlePedidoItem = 0
+    txtCodProduto.Text = ""
+    txtDescricao.Text = ""
+    txtQtde.Text = ""
+    txtValorUn.Text = ""
+    txtTotalItem.Text = ""
+    
+    ' Ignora cabeçalho ou grid vazio
+    If grdItensPedido.Rows <= 1 Then Exit Sub
+    If grdItensPedido.Row < 1 Then Exit Sub
     
     ControlePedidoItem = grdItensPedido.TextMatrix(grdItensPedido.Row, 0)
     txtCodProduto.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 1)
     txtDescricao.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 2)
     txtQtde.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 3)
     txtValorUn.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 4)
-    txtValorTotal.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 5)
+    txtTotalItem.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 5)
     
 End Sub
 
-Private Sub grdItens_RowColChange() 'Quando muda de coluna ou de linha atualiza os campos do produto
-
-    ' ignora cabeçalho
-    If grdItensPedido.Row <= 0 Then Exit Sub
-
-    txtCodProduto.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 0)
-    txtDescricao.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 1)
-    txtQtde.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 2)
-    txtValorUn.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 3)
-    txtValorTotal.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 4)
-
+Private Sub grdItensPedido_RowColChange() 'Quando muda de coluna ou de linha atualiza os campos do produto
+    PreencherCamposItem
 End Sub
