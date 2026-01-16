@@ -67,7 +67,7 @@ Public Sub CarregarItensPedido(codigoPedido As Long)
     
     rsPedidoItem.CursorLocation = adUseClient
     rsPedidoItem.Open _
-        "Select Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal " & _
+        "Select Controle, ControlePedido, Item, ProdutoCodigo, Descricao, Qtde, ValorUn, ValorTotal " & _
             "From PedidoItem " & _
             "Where ControlePedido = " & codigoPedido & _
             "Order By Item", _
@@ -102,7 +102,7 @@ Public Function AlterarPedido(pedido As cPedido) As Boolean
           "Codigo = " & pedido.Codigo & ", " & _
           "ClienteCodigo = " & pedido.ClienteCodigo & ", " & _
           "Data = '" & Format(pedido.DataPedido, "yyyy-MM-dd") & "' " & _
-          "WHERE Controle = " & pedido.controle
+          "WHERE Controle = " & pedido.Controle
 
     Conn.Execute sql
 
@@ -111,6 +111,52 @@ Public Function AlterarPedido(pedido As cPedido) As Boolean
 
 Erro:
     AlterarPedido = False
+End Function
+
+Public Function InserirItemPedido(itemPedido As cPedidoItem) As Boolean
+    On Error GoTo Erro
+    
+    Dim sql As String
+    
+    sql = "Insert into PedidoItem (ControlePedido, Item, ProdutoCodigo, Descricao, Qtde, ValorUn, ValorTotal) " & _
+            "Values (" & itemPedido.ControlePedido & ", " & _
+            itemPedido.Item & ", " & _
+            itemPedido.ProdutoCodigo & ", " & _
+            "'" & itemPedido.Descricao & "', " & _
+            itemPedido.Qtde & ", " & _
+            itemPedido.ValorUn & ", " & _
+            itemPedido.ValorTotal & ")"
+    
+    Conn.Execute sql
+    
+    InserirItemPedido = True
+    Exit Function
+    
+Erro:
+    InserirItemPedido = False
+End Function
+
+Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean
+    On Error GoTo Erro
+    
+    Dim sql As String
+    
+    sql = "UPDATE PedidoItem SET " & _
+            "Item = " & itemPedido.Item & ", " & _
+            "ProdutoCodigo = " & itemPedido.ProdutoCodigo & ", " & _
+            "Descricao = '" & itemPedido.Descricao & "', " & _
+            "Qtde = " & itemPedido.Qtde & ", " & _
+            "ValorUn = " & itemPedido.ValorUn & ", " & _
+            "ValorTotal = " & itemPedido.ValorTotal & _
+            "Where Controle = " & itemPedido.Controle
+    
+    Conn.Execute sql
+    
+    AlterarItemPedido = True
+    Exit Function
+    
+Erro:
+    AlterarItemPedido = False
 End Function
 
 Public Function BuscarRS(rs As ADODB.Recordset, _

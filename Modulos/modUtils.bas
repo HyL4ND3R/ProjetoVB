@@ -10,7 +10,7 @@ End Function
 
 'Função para validar Numero (só para lembrar)
 Function ValidaNumeroSoLembrar()
-    Dim controle As Long
+    Dim Controle As Long
 
     If Trim(txtControle.Text) = "" Then
         MsgBox "Informe o controle"
@@ -22,5 +22,5 @@ Function ValidaNumeroSoLembrar()
         Exit Function
     End If
     
-    controle = CLng(txtControle.Text)
+    Controle = CLng(txtControle.Text)
 End Function

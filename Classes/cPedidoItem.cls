@@ -15,6 +15,8 @@ Option Explicit
 
 ' --- Atributos ---
 
+Private mControle As Long
+Private mControlePedido As Long
 Private mItem As Long
 Private mProdutoCodigo As Long
 Private mDescricao As String
@@ -23,6 +25,22 @@ Private mValorUn As Currency
 Private mValorTotal As Currency
 
 ' --- Propriedades ---
+
+Public Property Get Controle() As Long
+    Controle = mControle
+End Property
+
+Public Property Let Controle(ByVal v As Long)
+    mControle = v
+End Property
+
+Public Property Get ControlePedido() As Long
+    ControlePedido = mControlePedido
+End Property
+
+Public Property Let ControlePedido(ByVal v As Long)
+    mControlePedido = v
+End Property
 
 Public Property Get Item() As Long
     Item = mItem

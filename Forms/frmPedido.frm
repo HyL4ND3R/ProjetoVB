@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -261,7 +261,7 @@ Begin VB.Form frmPedido
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   149291009
+      Format          =   91553793
       CurrentDate     =   36526
       MaxDate         =   73415
       MinDate         =   36526
@@ -550,7 +550,10 @@ Attribute VB_Exposed = False
 Private ModoAtualPedido As eModoFormulario
 Private ModoAtualItens As eModoFormulario
 Dim pedido As cPedido
+Dim pedidoItem As cPedidoItem
 Dim ControlePedido As Long
+Dim ControlePedidoItem As Long
+
 
 Private Sub cmdCancelarItem_Click()
     cancelarItem
@@ -558,6 +561,47 @@ End Sub
 
 Private Sub cmdNovoItem_Click()
     modoInclusaoItem
+End Sub
+
+Private Sub cmdSalvarItem_Click()
+    Dim codigoAtual As Long
+
+    If ModoAtualPedido = mfAlteracao Then
+        pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
+        pedidoItem.Controle = VerificaNull(ControlePedido, 0)
+        pedidoItem.Item = 0
+        pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
+        pedidoItem.Qtde = CDbl(txtQtde.Text)
+        pedidoItem.ValorUn = CDbl(txtValorUn.Text)
+        pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
+        If (Not AlterarItemPedido(pedido)) Then
+            MsgBox "Erro ao Alterar o Registro!"
+            Exit Sub
+        End If
+    Else
+        pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
+        pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
+        pedidoItem.Item = 0
+        pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
+        pedidoItem.Qtde = CDbl(txtQtde.Text)
+        pedidoItem.ValorUn = CDbl(txtValorUn.Text)
+        pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
+        If (Not InserirItemPedido(pedido)) Then
+            MsgBox "Erro ao Inserir o Registro!"
+            Exit Sub
+        End If
+    End If
+    
+    CarregarPedidos
+    
+    If ModoAtualPedido = mfAlteracao Then
+        rsPedido.Find "Codigo = " & codigoAtual
+    Else
+        If Not rsPedido.EOF Then rsPedido.MoveLast
+    End If
+    
+    modoInclusaoItem
+    
 End Sub
 
 Private Sub Form_Load()
@@ -719,6 +763,7 @@ Private Sub modoInclusaoItem()
     txtCodProduto.Enabled = True
     txtCodProduto.Text = ""
     txtCodProduto.BackColor = vbWindowBackground
+    cmdListaProduto.Enabled = True
     txtDescricao.Enabled = True
     txtDescricao.Text = ""
     txtDescricao.BackColor = vbWindowBackground
@@ -763,7 +808,7 @@ Private Sub PreencherCampos()
         Exit Sub
     End If
 
-    ControlePedido = rsPedido!controle
+    ControlePedido = rsPedido!Controle
     txtCodigo.Text = rsPedido!Codigo 'Atribuição de valor do RecordSet para o TextBox
     txtCodCliente.Text = rsPedido!ClienteCodigo
     txtNomeCliente.Text = rsPedido!ClienteNome
@@ -823,19 +868,21 @@ End Sub
 Private Sub AjustarColunasGridItens()
     With grdItensPedido
         .Rows = 1
-        .Cols = 5
+        .Cols = 6
+        
+        .TextMatrix(0, 0) = "Controle"
+        .TextMatrix(0, 1) = "Código"
+        .TextMatrix(0, 2) = "Produto"
+        .TextMatrix(0, 3) = "Qtde"
+        .TextMatrix(0, 4) = "Vlr Unit"
+        .TextMatrix(0, 5) = "Total"
 
-        .TextMatrix(0, 0) = "Código"
-        .TextMatrix(0, 1) = "Produto"
-        .TextMatrix(0, 2) = "Qtde"
-        .TextMatrix(0, 3) = "Vlr Unit"
-        .TextMatrix(0, 4) = "Total"
-
-        .ColWidth(0) = 800
-        .ColWidth(1) = 3000
-        .ColWidth(2) = 800
-        .ColWidth(3) = 1200
+        .ColWidth(0) = 0
+        .ColWidth(1) = 800
+        .ColWidth(2) = 3000
+        .ColWidth(3) = 800
         .ColWidth(4) = 1200
+        .ColWidth(5) = 1200
     End With
 End Sub
 
@@ -858,11 +905,10 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------SALVAR-----------------------------------------------------------------
         Case "salvar"
-            Dim sql As String
             Dim codigoAtual As Long
 
             If ModoAtualPedido = mfAlteracao Then
-                pedido.controle = VerificaNull(ControlePedido, 0)
+                pedido.Controle = VerificaNull(ControlePedido, 0)
                 pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
                 pedido.DataPedido = dtpDataPedido.Value
@@ -871,7 +917,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
                     Exit Sub
                 End If
             Else
-                pedido.controle = VerificaNull(ControlePedido, 0)
+                pedido.Controle = VerificaNull(ControlePedido, 0)
                 pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
                 pedido.DataPedido = dtpDataPedido.Value
@@ -1032,23 +1078,31 @@ Private Sub cmdListaProduto_Click()
 
     If f.CodigoSelecionado > 0 Then
         If BuscarRS(rsProduto, "Codigo", f.CodigoSelecionado) Then
-            PreencherCamposItem
+            PreencherCamposItemInclusao
         End If
     End If
 
     Unload f
 End Sub
 
+Private Sub PreencherCamposItemInclusao()
+    txtCodProduto.Text = rsProduto!Codigo
+    txtDescricao.Text = rsProduto!Nome
+    txtQtde.Text = 1
+    txtValorUn.Text = rsProduto!valor
+End Sub
+
 
 Private Sub PreencherCamposItem() 'Evento de preenchimentos dos campos do item para ser chamado manualmente
     
     If grdItensPedido.Row <= 0 Then Exit Sub
-
-    txtCodProduto.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 0)
-    txtDescricao.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 1)
-    txtQtde.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 2)
-    txtValorUn.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 3)
-    txtValorTotal.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 4)
+    
+    ControlePedidoItem = grdItensPedido.TextMatrix(grdItensPedido.Row, 0)
+    txtCodProduto.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 1)
+    txtDescricao.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 2)
+    txtQtde.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 3)
+    txtValorUn.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 4)
+    txtValorTotal.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 5)
     
 End Sub
 
