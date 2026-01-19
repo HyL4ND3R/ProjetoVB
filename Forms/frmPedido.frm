@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -270,7 +270,7 @@ Begin VB.Form frmPedido
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   150011905
+      Format          =   147456001
       CurrentDate     =   36526
       MaxDate         =   73415
       MinDate         =   36526
@@ -628,6 +628,28 @@ Private Sub cmdSalvarItem_Click()
     PreencherItensPedido
     modoInclusaoItem
     
+End Sub
+
+Private Sub SalvarPedido()
+    If ModoAtualPedido = mfAlteracao Then
+        pedido.Controle = VerificaNull(ControlePedido, 0)
+        pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        pedido.ClienteCodigo = CLng(txtCodCliente.Text)
+        pedido.DataPedido = dtpDataPedido.Value
+        If (Not AlterarPedido(pedido)) Then
+            MsgBox "Erro ao Alterar o Registro!"
+            Exit Sub
+        End If
+    Else
+        pedido.Controle = VerificaNull(ControlePedido, 0)
+        pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        pedido.ClienteCodigo = CLng(txtCodCliente.Text)
+        pedido.DataPedido = dtpDataPedido.Value
+        If (Not InserirPedido(pedido)) Then
+            MsgBox "Erro ao Inserir o Registro!"
+            Exit Sub
+        End If
+    End If
 End Sub
 
 Private Sub modoInclusaoPedido()
@@ -1066,33 +1088,6 @@ Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o reco
     End If
 End Sub
 
-Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
-    
-    If ModoAtualPedido = mfConsulta Then
-        If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
-            KeyAscii = 0   ' evita o bip
-            
-            Dim codigoBusca As Long
-    
-            If Trim(txtCodigo.Text) = "" Then Exit Sub
-            If Not IsNumeric(txtCodigo.Text) Then
-                MsgBox "Código inválido.", vbExclamation
-                txtCodigo.SetFocus
-                Exit Sub
-            End If
-        
-            codigoBusca = CLng(txtCodigo.Text)
-            
-            If BuscarRS(rsPedido, "Codigo", codigoBusca) Then
-                PreencherCampos
-            Else
-                MsgBox "Não encontrado"
-            End If
-        End If
-    End If
-    
-End Sub
-
 Private Sub cmdListaPedido_Click()
     Dim f As New frmPesquisaPedido
 
@@ -1165,6 +1160,54 @@ Private Sub PreencherCamposItem() 'Evento de preenchimentos dos campos do item p
     
 End Sub
 
+'Função para atualizar os campos do produto com base no item selecionado no Grid
 Private Sub grdItensPedido_RowColChange() 'Quando muda de coluna ou de linha atualiza os campos do produto
     PreencherCamposItem
+End Sub
+
+
+'----------------------------AJUSTE TABULAÇÃO-----------------------------------
+
+'----------------------------Corpo do Pedido ----------------------------------
+
+Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
+    
+    If ModoAtualPedido = mfConsulta Then
+        If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
+            KeyAscii = 0   ' evita o bip
+            
+            Dim codigoBusca As Long
+    
+            If Trim(txtCodigo.Text) = "" Then Exit Sub
+            If Not IsNumeric(txtCodigo.Text) Then
+                MsgBox "Código inválido.", vbExclamation
+                txtCodigo.SetFocus
+                Exit Sub
+            End If
+        
+            codigoBusca = CLng(txtCodigo.Text)
+            
+            If BuscarRS(rsPedido, "Codigo", codigoBusca) Then
+                PreencherCampos
+            Else
+                MsgBox "Não encontrado"
+            End If
+        End If
+    End If
+    
+End Sub
+
+Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
+    AvancarComEnterKD KeyAscii, dtpDataPedido
+End Sub
+
+Private Sub dtpDataPedido_KeyPress(KeyAscii As Integer)
+    If MsgBox("Confirma Dados?", _
+          vbQuestion + vbYesNo, _
+          "Confirmação") = vbNo Then
+        txtCodCliente.SetFocus
+        Exit Sub
+    End If
+    
+    SalvarPedido
 End Sub

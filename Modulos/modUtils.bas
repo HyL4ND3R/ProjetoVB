@@ -32,3 +32,11 @@ Function ValidaNumeroSoLembrar()
     
     Controle = CLng(txtControle.Text)
 End Function
+
+'Função Genérica para avançar com o enter
+Public Function AvancarComEnterKD(ByVal KeyCode As Integer, ByVal proximo As Control)
+    If KeyCode = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+        KeyCode = 0 'Limpa o Teclado
+        proximo.SetFocus
+    End If
+End Function
