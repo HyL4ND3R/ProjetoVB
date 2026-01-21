@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
@@ -13,6 +14,28 @@ Begin VB.Form frmPedido
    ScaleHeight     =   11130
    ScaleWidth      =   20895
    WindowState     =   2  'Maximized
+   Begin MSMask.MaskEdBox mskDataPedido 
+      Height          =   375
+      Left            =   5790
+      TabIndex        =   27
+      Top             =   900
+      Width           =   1395
+      _ExtentX        =   2461
+      _ExtentY        =   661
+      _Version        =   393216
+      MaxLength       =   10
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Mask            =   "99/99/9999"
+      PromptChar      =   "_"
+   End
    Begin VB.CommandButton cmdCancelarItem 
       Caption         =   "Cancelar"
       BeginProperty Font 
@@ -254,7 +277,7 @@ Begin VB.Form frmPedido
    End
    Begin MSComCtl2.DTPicker dtpDataPedido 
       Height          =   375
-      Left            =   5550
+      Left            =   8220
       TabIndex        =   3
       Top             =   900
       Width           =   1635
@@ -270,7 +293,7 @@ Begin VB.Form frmPedido
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   147456001
+      Format          =   131661825
       CurrentDate     =   36526
       MaxDate         =   73415
       MinDate         =   36526
@@ -555,7 +578,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Private ModoAtualPedido As eModoFormulario
 Private ModoAtualItens As eModoFormulario
 Dim pedido As cPedido
@@ -576,6 +598,9 @@ Private Sub Form_Load()
     Else
         dtpDataPedido.Format = dtpCustom 'Definir uma mascara para poder zerar o campo
         dtpDataPedido.CustomFormat = " " 'Zerando a data para não ficar preenchida
+        mskDataPedido.Mask = ""
+        mskDataPedido.Text = ""
+        mskDataPedido.Mask = "99/99/9999"
     End If
 
     modoConsultaPedido
@@ -597,6 +622,9 @@ End Sub
 Private Sub cmdSalvarItem_Click()
     Set pedidoItem = New cPedidoItem
     Dim codigoAtual As Long
+
+    'Validar os campos antes de tentar inserir
+    If Not ValidaCamposItem Then Exit Sub
 
     If ModoAtualPedido = mfAlteracao Then
         pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
@@ -635,7 +663,8 @@ Private Sub SalvarPedido()
         pedido.Controle = VerificaNull(ControlePedido, 0)
         pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-        pedido.DataPedido = dtpDataPedido.Value
+        'pedido.DataPedido = dtpDataPedido.Value
+        pedido.DataPedido = Format(mskDataPedido.Text, Date)
         If (Not AlterarPedido(pedido)) Then
             MsgBox "Erro ao Alterar o Registro!"
             Exit Sub
@@ -644,7 +673,8 @@ Private Sub SalvarPedido()
         pedido.Controle = VerificaNull(ControlePedido, 0)
         pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-        pedido.DataPedido = dtpDataPedido.Value
+        'pedido.DataPedido = dtpDataPedido.Value
+        pedido.DataPedido = Format(mskDataPedido.Text, Date)
         If (Not InserirPedido(pedido)) Then
             MsgBox "Erro ao Inserir o Registro!"
             Exit Sub
@@ -673,6 +703,7 @@ Private Sub modoInclusaoPedido()
     txtNomeCliente.Enabled = False
     txtNomeCliente.BackColor = vbWindowBackground 'cor branca padrão do sistema
     dtpDataPedido.Enabled = True
+    mskDataPedido.Enabled = True
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = False
     cmdSalvarItem.Enabled = False
@@ -716,6 +747,7 @@ Private Sub modoAlteracaoPedido()
     txtNomeCliente.Enabled = False
     txtNomeCliente.BackColor = vbWindowBackground 'cor branca padrão do sistema
     dtpDataPedido.Enabled = True
+    mskDataPedido.Enabled = True
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = False
     cmdSalvarItem.Enabled = False
@@ -759,6 +791,8 @@ Private Sub modoConsultaPedido()
     txtNomeCliente.Enabled = False
     txtNomeCliente.BackColor = &H8000000F
     dtpDataPedido.Enabled = False
+    mskDataPedido.Enabled = False
+    mskDataPedido.BackColor = &H8000000F
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = True
     cmdSalvarItem.Enabled = False
@@ -870,6 +904,9 @@ Private Sub PreencherCampos()
     If rsPedido.EOF Or rsPedido.BOF Then 'Se a lista não tem registros pula fora da Sub
         dtpDataPedido.Format = dtpCustom 'Definir uma mascara para poder zerar o campo
         dtpDataPedido.CustomFormat = " " 'Zerando a data para não ficar preenchida
+        mskDataPedido.Mask = ""
+        mskDataPedido.Text = ""
+        mskDataPedido.Mask = "99/99/9999"
         Exit Sub
     End If
 
@@ -877,9 +914,17 @@ Private Sub PreencherCampos()
     txtCodigo.Text = rsPedido!Codigo 'Atribuição de valor do RecordSet para o TextBox
     txtCodCliente.Text = rsPedido!ClienteCodigo
     txtNomeCliente.Text = rsPedido!ClienteNome
+    
+    
     dtpDataPedido.Format = dtpCustom
     dtpDataPedido.CustomFormat = "dd/MM/yyyy" 'Redefindindo a mascara caso não tinha registros na tela antes
     dtpDataPedido.Value = rsPedido!DataPedido
+    
+    mskDataPedido.Mask = ""
+    mskDataPedido.Text = ""
+    mskDataPedido.Mask = "99/99/9999"
+    mskDataPedido.Text = Format(rsPedido!DataPedido, "dd/MM/yyyy")
+    
     txtValorTotal.Text = IIf(IsNull(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)
     
     PreencherItensPedido
@@ -958,6 +1003,7 @@ Private Sub AjustarColunasGridItens()
     
 End Sub
 
+'---------------------Case Toolbar---------------------------------------------------
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
@@ -968,9 +1014,16 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             txtCodigo.Text = rsProximoCodigo!Codigo
             txtCodCliente.Text = ""
             txtNomeCliente.Text = ""
+            
             dtpDataPedido.Format = dtpCustom
             dtpDataPedido.CustomFormat = "dd/MM/yyyy"
             dtpDataPedido.Value = Date
+            
+            mskDataPedido.Mask = ""
+            mskDataPedido.Text = ""
+            mskDataPedido.Mask = "99/99/9999"
+            mskDataPedido.Text = Format(Date, "dd/MM/yyyy")
+            
             txtValorTotal.Text = ""
             
             modoInclusaoPedido
@@ -978,12 +1031,16 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 '-------------SALVAR-----------------------------------------------------------------
         Case "salvar"
             Dim codigoAtual As Long
+            
+            'Validar os campos antes de tentar inserir
+            If Not ValidaCamposPedido Then Exit Sub
 
             If ModoAtualPedido = mfAlteracao Then
                 pedido.Controle = VerificaNull(ControlePedido, 0)
                 pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-                pedido.DataPedido = dtpDataPedido.Value
+                'pedido.DataPedido = dtpDataPedido.Value
+                pedido.DataPedido = mskDataPedido.Text
                 If (Not AlterarPedido(pedido)) Then
                     MsgBox "Erro ao Alterar o Registro!"
                     Exit Sub
@@ -992,7 +1049,8 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
                 pedido.Controle = VerificaNull(ControlePedido, 0)
                 pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-                pedido.DataPedido = dtpDataPedido.Value
+                'pedido.DataPedido = dtpDataPedido.Value
+                pedido.DataPedido = mskDataPedido.Text
                 If (Not InserirPedido(pedido)) Then
                     MsgBox "Erro ao Inserir o Registro!"
                     Exit Sub
@@ -1166,6 +1224,61 @@ Private Sub grdItensPedido_RowColChange() 'Quando muda de coluna ou de linha atu
 End Sub
 
 
+'Função para validar os campos ao salvar o pedido
+Private Function ValidaCamposPedido()
+    
+    If Not IsNumeric(txtCodigo.Text) Then
+        MsgBox "Codigo Pedido inválido"
+        txtCodigo.SetFocus
+        ValidaCamposPedido = False
+        Exit Function
+    End If
+    
+    If Not IsNumeric(txtCodCliente.Text) Then
+        MsgBox "Cliente inválido"
+        txtCodCliente.SetFocus
+        ValidaCamposPedido = False
+        Exit Function
+    End If
+    
+    If Not IsDate(mskDataPedido.Text) Then
+        MsgBox "Data Inválida"
+        mskDataPedido.SetFocus
+        ValidaCamposPedido = False
+        Exit Function
+    End If
+    
+    ValidaCamposPedido = True
+    
+End Function
+
+'Função para validar os campos ao salvar o item
+Private Function ValidaCamposItem()
+    
+    If Not IsNumeric(txtCodProduto.Text) Then
+        MsgBox "Codigo Produto inválido"
+        txtCodProduto.SetFocus
+        ValidaCamposItem = False
+        Exit Function
+    End If
+    
+    If Not IsNumeric(txtQtde.Text) Then
+        MsgBox "Quantidade inválida"
+        txtQtde.SetFocus
+        ValidaCamposItem = False
+        Exit Function
+    End If
+    
+    If Not IsNumeric(txtValorUn.Text) Then
+        MsgBox "Valor Inválido inválido"
+        txtValorUn.SetFocus
+        ValidaCamposItem = False
+        Exit Function
+    End If
+    
+    ValidaCamposItem = True
+    
+End Function
 '----------------------------AJUSTE TABULAÇÃO-----------------------------------
 
 '----------------------------Corpo do Pedido ----------------------------------
@@ -1198,16 +1311,72 @@ Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
-    AvancarComEnterKD KeyAscii, dtpDataPedido
+    AvancarComEnterKD KeyAscii, mskDataPedido
 End Sub
 
-Private Sub dtpDataPedido_KeyPress(KeyAscii As Integer)
-    If MsgBox("Confirma Dados?", _
-          vbQuestion + vbYesNo, _
-          "Confirmação") = vbNo Then
-        txtCodCliente.SetFocus
-        Exit Sub
+Private Sub mskDataPedido_KeyPress(KeyAscii As Integer)
+    If KeyCode = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+        KeyCode = 0 'Limpa o Teclado
+        If MsgBox("Confirma Dados?", _
+            vbQuestion + vbYesNo, _
+            "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
+            txtCodCliente.SetFocus
+            Exit Sub
+        End If
     End If
     
     SalvarPedido
+End Sub
+
+'----------------------------AJUSTE FORMATAÇÃO----------------------------------
+
+Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = vbKeyBack Then Exit Sub
+
+    ' Só números e vírgula
+    If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+
+    ' Só uma vírgula
+    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
+        KeyAscii = 0
+    End If
+
+End Sub
+
+Private Sub txtValorTotal_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = vbKeyBack Then Exit Sub
+
+    ' Só números e vírgula
+    If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+
+    ' Só uma vírgula
+    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
+        KeyAscii = 0
+    End If
+
+End Sub
+
+Private Sub txtQtde_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = vbKeyBack Then Exit Sub
+
+    ' Só números e vírgula
+    If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+
+    ' Só uma vírgula
+    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
+        KeyAscii = 0
+    End If
+
 End Sub
