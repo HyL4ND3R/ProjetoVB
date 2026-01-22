@@ -567,6 +567,7 @@ Private Sub Form_Load()
     
     AjustarColunasGridItens
     CarregarPedidos
+    InicializarCamposNumericos
 
     If Not rsPedido.EOF Then 'Se não esta no fim da lista
         rsPedido.MoveLast 'Move para o final
@@ -856,6 +857,7 @@ Private Sub ModoInclusaoItem()
     txtTotalItem.BackColor = &H8000000F
     
     ModoAtualItens = mfInclusao
+    InicializarCamposNumericos
     txtCodProduto.SetFocus
     
 End Sub
@@ -1224,7 +1226,7 @@ Private Sub PreencherCamposItemInclusao()
     txtCodProduto.Text = rsProduto!Codigo
     txtNomeProduto.Text = rsProduto!Nome
     txtQtde.Text = 1
-    txtValorUn.Text = rsProduto!valor
+    txtValorUn.Text = rsProduto!Valor
 End Sub
 
 Private Sub LimpaCamposItens()
@@ -1313,6 +1315,12 @@ Private Function ValidaCamposItem()
     ValidaCamposItem = True
     
 End Function
+'Ajustar os campos de valor e quantidade para sempre começar com valor
+Private Sub InicializarCamposNumericos()
+    txtQtde.Text = "0,00"
+    txtValorUn.Text = "0,00"
+    txtTotalItem.Text = "0,00"
+End Sub
 
 '----------------------------AJUSTES CAMPOS DO CORPO DO PEDIDO ----------------------------------
 
@@ -1482,7 +1490,7 @@ Private Sub txtQtde_KeyPress(KeyAscii As Integer)
             End If
             
             If valorZeradoOuVazio Then
-                txtValorUn.Text = Format(rsProdutoCod!valor, "0.00")
+                txtValorUn.Text = Format(rsProdutoCod!Valor, "0.00")
             End If
             
             ' Calcula Total
@@ -1520,10 +1528,28 @@ Private Sub txtQtde_KeyPress(KeyAscii As Integer)
 
 End Sub
 
+Private Sub txtQtde_LostFocus()
+    txtQtde.Text = FormataDecimal(txtQtde.Text)
+End Sub
+
 Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
 
     If KeyAscii = vbKeyBack Then Exit Sub
 
+    ' Calcula Total
+    If IsNumeric(txtValorUn.Text) Then
+        If IsNumeric(txtQtde.Text) Then
+            txtTotalItem.Text = Format( _
+                CDbl(txtValorUn.Text) * CDbl(txtQtde.Text), "0.00")
+        Else
+            MsgBox "Quantidade inválida", vbOKOnly
+            txtQtde.SetFocus
+        End If
+    Else
+        MsgBox "Valor inválido", vbOKOnly
+        txtValorUn.SetFocus
+    End If
+    
     If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
         
         KeyCode = 0 'Limpa o Teclado
@@ -1556,8 +1582,13 @@ Private Sub txtValorUn_Change()
     If IsNumeric(txtValorUn.Text) Then
         If IsNumeric(txtQtde.Text) Then
             txtTotalItem.Text = CDbl(txtValorUn.Text) * CDbl(txtQtde.Text)
+            FormataDecimal txtTotalItem.Text
         End If
     End If
+End Sub
+
+Private Sub txtValorUn_LostFocus()
+    txtValorUn.Text = FormataDecimal(txtValorUn.Text)
 End Sub
 
 Private Sub txtValorTotal_KeyPress(KeyAscii As Integer)

@@ -137,30 +137,42 @@ Erro:
     AlterarPedido = False
 End Function
 
+'Função para inserir item no pedido usando ADO Command e alterando os parametros
 Public Function InserirItemPedido(itemPedido As cPedidoItem) As Boolean
     On Error GoTo Erro
-    
-    Dim sql As String
-    
-    sql = "Insert into PedidoItem (ControlePedido, Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal) " & _
-            "Values (" & itemPedido.ControlePedido & ", " & _
-            itemPedido.Item & ", " & _
-            itemPedido.ProdutoCodigo & ", " & _
-            "'" & itemPedido.Descricao & "', " & _
-            itemPedido.Qtde & ", " & _
-            itemPedido.ValorUn & ", " & _
-            itemPedido.ValorTotal & ")"
-    
-    Conn.Execute sql
-    
+
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "INSERT INTO PedidoItem " & _
+            "(ControlePedido, Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal) " & _
+            "VALUES (?, ?, ?, ?, ?, ?, ?)"
+
+        ' --- Parâmetros ---
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.ControlePedido)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.Item)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.ProdutoCodigo)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, itemPedido.Descricao)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , itemPedido.Qtde)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , itemPedido.ValorUn)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , itemPedido.ValorTotal)
+
+        .Execute
+    End With
+
     InserirItemPedido = True
     Exit Function
-    
+
 Erro:
     InserirItemPedido = False
 End Function
 
-Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean
+
+Public Function AlterarItemPedidoxxxx(itemPedido As cPedidoItem) As Boolean
     On Error GoTo Erro
     
     Dim sql As String
@@ -182,13 +194,52 @@ Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean
 Erro:
     AlterarItemPedido = False
 End Function
+
+Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean
+    On Error GoTo Erro
+
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "UPDATE PedidoItem SET " & _
+            "Item = ?, " & _
+            "ProdutoCodigo = ?, " & _
+            "Descricao = ?, " & _
+            "Quantidade = ?, " & _
+            "ValorUn = ?, " & _
+            "ValorTotal = ? " & _
+            "Where Controle = ? "
+
+        ' --- Parametros ---
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.Item)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.ProdutoCodigo)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, itemPedido.Descricao)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , itemPedido.Qtde)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , itemPedido.ValorUn)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , itemPedido.ValorTotal)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.Controle)
+
+        .Execute
+    End With
+
+    AlterarItemPedido = True
+    Exit Function
+
+Erro:
+    AlterarItemPedido = False
+End Function
+
 '-------------FUNÇÕES GENERICAS------------------------------------------------------------------------------------------------------
 Public Function BuscarRS(rs As ADODB.Recordset, _
                          ByVal campo As String, _
-                         ByVal valor As Variant) As Boolean
+                         ByVal Valor As Variant) As Boolean
 
     rs.MoveFirst
-    rs.Find campo & " = " & valor
+    rs.Find campo & " = " & Valor
     BuscarRS = Not rs.EOF
 
 End Function

@@ -40,3 +40,23 @@ Public Function AvancarComEnterKD(ByVal KeyCode As Integer, ByVal proximo As Con
         proximo.SetFocus
     End If
 End Function
+
+'Função para formatar numero para decimal
+Public Function FormataDecimal(ByVal Valor As String) As String
+    If Trim(Valor) = "" Then
+        FormataDecimal = "0,00"
+    ElseIf IsNumeric(Valor) Then
+        FormataDecimal = Format(CDbl(Valor), "0.00")
+    Else
+        FormataDecimal = "0,00"
+    End If
+End Function
+
+'Função para fazer o replace da virgula por um ponto, para inserir no banco
+Public Function NumeroSQL(ByVal Valor As Variant) As String
+    If IsNumeric(Valor) Then
+        NumeroSQL = Replace(CStr(Valor), ",", ".")
+    Else
+        NumeroSQL = "0"
+    End If
+End Function
