@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -577,21 +577,42 @@ Private Sub Form_Load()
         mskDataPedido.Mask = "99/99/9999"
     End If
 
-    modoConsultaPedido
+    ModoConsultaPedido
     
 End Sub
 
+Private Sub cmdExcluirItem_Click()
+            
+    If grdItensPedido.RowSel < 1 Then Exit Sub
+    
+    'Mensagem de confirmação, se clicar no Não, cai fora da sub
+    If MsgBox("Deseja realmente excluir este Registro?", _
+              vbQuestion + vbYesNo, _
+              "Confirmação") = vbNo Then Exit Sub
+
+    If Not IsNull(ControlePedidoItem) Then
+        Conn.Execute "DELETE FROM PedidoItem WHERE Controle = " & ControlePedidoItem
+    Else
+        MsgBox "Controle não encontrado", vbOKOnly
+    End If
+    
+    CarregarItensPedido CLng(txtCodigo.Text)
+    PreencherItensPedido
+    CancelarItem
+
+End Sub
+
 Private Sub cmdCancelarItem_Click()
-    cancelarItem
+    CancelarItem
 End Sub
 
 Private Sub cmdNovoItem_Click()
-    modoInclusaoItem
+    ModoInclusaoItem
 End Sub
 
 Private Sub cmdAlterarItem_Click()
     If grdItensPedido.RowSel < 1 Then Exit Sub
-    modoAlteracaoItem
+    ModoAlteracaoItem
 End Sub
 
 Private Sub cmdSalvarItem_Click()
@@ -601,7 +622,7 @@ Private Sub cmdSalvarItem_Click()
     'Validar os campos antes de tentar inserir
     If Not ValidaCamposItem Then Exit Sub
 
-    If ModoAtualPedido = mfAlteracao Then
+    If ModoAtualItens = mfAlteracao Then
         pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
         pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
         pedidoItem.Item = 0
@@ -610,7 +631,7 @@ Private Sub cmdSalvarItem_Click()
         pedidoItem.Qtde = CDbl(txtQtde.Text)
         pedidoItem.ValorUn = CDbl(txtValorUn.Text)
         pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
-        If (Not AlterarItemPedido(pedido)) Then
+        If (Not AlterarItemPedido(pedidoItem)) Then
             MsgBox "Erro ao Alterar o Registro!"
             Exit Sub
         End If
@@ -629,7 +650,7 @@ Private Sub cmdSalvarItem_Click()
     End If
     
     PreencherItensPedido
-    modoInclusaoItem
+    ModoInclusaoItem
     
 End Sub
 
@@ -655,7 +676,7 @@ Private Sub SalvarPedido()
     End If
 End Sub
 
-Private Sub modoInclusaoPedido()
+Private Sub ModoInclusaoPedido()
 '--------------TOOLBAR------------------------
     Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
     Toolbar.Buttons("salvar").Enabled = True
@@ -700,7 +721,7 @@ Private Sub modoInclusaoPedido()
     txtCodCliente.SetFocus
 End Sub
 
-Private Sub modoAlteracaoPedido()
+Private Sub ModoAlteracaoPedido()
 '--------------TOOLBAR------------------------
     Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
     Toolbar.Buttons("salvar").Enabled = True
@@ -744,7 +765,7 @@ Private Sub modoAlteracaoPedido()
     ModoAtualPedido = mfAlteracao
 End Sub
 
-Private Sub modoConsultaPedido()
+Private Sub ModoConsultaPedido()
 '--------------TOOLBAR------------------------
     Toolbar.Buttons("novo").Enabled = True
     Toolbar.Buttons("salvar").Enabled = False
@@ -788,7 +809,7 @@ Private Sub modoConsultaPedido()
     ModoAtualPedido = mfConsulta
 End Sub
 
-Private Sub modoInclusaoItem()
+Private Sub ModoInclusaoItem()
 '--------------TOOLBAR------------------------
     Toolbar.Buttons("novo").Enabled = False
     Toolbar.Buttons("salvar").Enabled = False
@@ -839,7 +860,7 @@ Private Sub modoInclusaoItem()
     
 End Sub
 
-Private Sub modoAlteracaoItem()
+Private Sub ModoAlteracaoItem()
 '--------------TOOLBAR------------------------
     Toolbar.Buttons("novo").Enabled = False
     Toolbar.Buttons("salvar").Enabled = False
@@ -869,20 +890,15 @@ Private Sub modoAlteracaoItem()
     cmdCancelarItem.Enabled = True
 '--------------CAMPOS ITENS------------------------
     txtCodProduto.Enabled = True
-    txtCodProduto.Text = ""
     txtCodProduto.BackColor = vbWindowBackground
     cmdListaProduto.Enabled = True
     txtNomeProduto.Enabled = True
-    txtNomeProduto.Text = ""
     txtNomeProduto.BackColor = vbWindowBackground
     txtQtde.Enabled = True
-    txtQtde.Text = ""
     txtQtde.BackColor = vbWindowBackground
     txtValorUn.Enabled = True
-    txtValorUn.Text = ""
     txtValorUn.BackColor = vbWindowBackground
     txtTotalItem.Enabled = False
-    txtTotalItem.Text = ""
     txtTotalItem.BackColor = &H8000000F
     
     ModoAtualItens = mfAlteracao
@@ -890,7 +906,7 @@ Private Sub modoAlteracaoItem()
     
 End Sub
 
-Private Sub cancelarItem()
+Private Sub CancelarItem()
 '--------------TOOLBAR------------------------
     Toolbar.Buttons("novo").Enabled = True
     Toolbar.Buttons("salvar").Enabled = False
@@ -1058,7 +1074,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             txtValorTotal.Text = ""
             
-            modoInclusaoPedido
+            ModoInclusaoPedido
 
 '-------------SALVAR-----------------------------------------------------------------
         Case "salvar"
@@ -1096,7 +1112,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
             
             PreencherCampos
-            modoConsultaPedido
+            ModoConsultaPedido
 
 '-------------ALTERACAO--------------------------------------------------------------
         Case "alterar"
@@ -1104,7 +1120,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             If rsPedido.EOF Or rsPedido.BOF Then Exit Sub
             
             PreencherCampos
-            modoAlteracaoPedido
+            ModoAlteracaoPedido
 
 '-------------EXCLUIR----------------------------------------------------------------
         Case "excluir"
@@ -1127,12 +1143,12 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             End If
         
             PreencherCampos
-            modoConsultaPedido
+            ModoConsultaPedido
 
 '-------------DESFAZER
         Case "desfazer"
             txtCodigo.Text = ""
-            modoConsultaPedido
+            ModoConsultaPedido
             PreencherCampos
 
 '-------------PRIMEIRO
@@ -1241,7 +1257,6 @@ End Sub
 Private Sub grdItensPedido_RowColChange() 'Quando muda de coluna ou de linha atualiza os campos do produto
     PreencherCamposItem
 End Sub
-
 
 'Função para validar os campos ao salvar o pedido
 Private Function ValidaCamposPedido()
@@ -1427,42 +1442,67 @@ End Sub
 
 Private Sub txtQtde_KeyPress(KeyAscii As Integer)
 
+    ' Permite Backspace
     If KeyAscii = vbKeyBack Then Exit Sub
-    
-    If KeyAscii = vbKeyReturn Then 'Se a tecla for enter
-        AvancarComEnterKD KeyAscii, txtValorUn  'avança para o próximo campo
+
+    ' ENTER
+    If KeyAscii = vbKeyReturn Then
         
-        If Not IsNumeric(txtCodProduto.Text) Then 'Validação de Numérico
-            MsgBox "Código Produto Inválido", vbOKOnly 'Aviso de código invalido
-            txtCodProduto.SetFocus 'Volta para o campo CodProduto
-            Exit Sub 'Sai da Sub
-        End If 'Se não
+        AvancarComEnterKD KeyAscii, txtValorUn
         
-        If Not IsNumeric(txtQtde.Text) Then
-            MsgBox "Quantidade Inválida", vbOKOnly 'Aviso de código invalido
-            txtQtde.SetFocus 'Volta para o campo CodProduto
-            Exit Sub 'Sai da Sub
-        End If 'Se não
+        ' Valida Código Produto
+        If Trim(txtCodProduto.Text) = "" Or Not IsNumeric(txtCodProduto.Text) Then
+            MsgBox "Código Produto Inválido", vbOKOnly
+            txtCodProduto.SetFocus
+            Exit Sub
+        End If
         
-        BuscarProdutoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
+        ' Valida Quantidade
+        If Trim(txtQtde.Text) = "" Or Not IsNumeric(txtQtde.Text) Then
+            MsgBox "Quantidade Inválida", vbOKOnly
+            txtQtde.SetFocus
+            Exit Sub
+        End If
         
-        If Not rsProdutoCod.BOF Or Not rsProdutoCod.EOF Then 'Se a lista não esta vazia
+        ' Busca Produto
+        BuscarProdutoPorCodigo CLng(txtCodProduto.Text)
+        
+        If Not (rsProdutoCod.BOF And rsProdutoCod.EOF) Then
             
-            txtValorUn.Text = rsProdutoCod!valor
-            If IsNumeric(txtValorUn.Text) Then
-                If IsNumeric(txtQtde.Text) Then
-                    txtTotalItem.Text = CDbl(txtValorUn.Text) * CDbl(txtQtde.Text)
-                Else
-                    MsgBox "Valor Inválido", vbOKOnly
+            ' ?? Só altera o ValorUnitário se estiver vazio ou zerado
+            Dim valorZeradoOuVazio As Boolean
+            valorZeradoOuVazio = False
+            
+            If Trim(txtValorUn.Text) = "" Then
+                valorZeradoOuVazio = True
+            ElseIf IsNumeric(txtValorUn.Text) Then
+                If CDbl(txtValorUn.Text) = 0 Then
+                    valorZeradoOuVazio = True
                 End If
-            Else
-                MsgBox "Quantidade Inválida", vbOKOnly
             End If
             
-        Else 'Se a Lista esta vazia
-            MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
-            txtCodProduto.SetFocus 'Volta para o campo CodProduto
-            Exit Sub 'Sai da sub
+            If valorZeradoOuVazio Then
+                txtValorUn.Text = Format(rsProdutoCod!valor, "0.00")
+            End If
+            
+            ' Calcula Total
+            If IsNumeric(txtValorUn.Text) Then
+                If IsNumeric(txtQtde.Text) Then
+                    txtTotalItem.Text = Format( _
+                        CDbl(txtValorUn.Text) * CDbl(txtQtde.Text), "0.00")
+                Else
+                    MsgBox "Quantidade inválida", vbOKOnly
+                    txtQtde.SetFocus
+                End If
+            Else
+                MsgBox "Valor inválido", vbOKOnly
+                txtValorUn.SetFocus
+            End If
+            
+        Else
+            MsgBox "Código não Encontrado", vbOKOnly
+            txtCodProduto.SetFocus
+            Exit Sub
         End If
         
     End If
@@ -1510,6 +1550,14 @@ Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
         KeyAscii = 0
     End If
 
+End Sub
+
+Private Sub txtValorUn_Change()
+    If IsNumeric(txtValorUn.Text) Then
+        If IsNumeric(txtQtde.Text) Then
+            txtTotalItem.Text = CDbl(txtValorUn.Text) * CDbl(txtQtde.Text)
+        End If
+    End If
 End Sub
 
 Private Sub txtValorTotal_KeyPress(KeyAscii As Integer)
