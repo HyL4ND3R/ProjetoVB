@@ -2,7 +2,6 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -16,11 +15,11 @@ Begin VB.Form frmPedido
    WindowState     =   2  'Maximized
    Begin MSMask.MaskEdBox mskDataPedido 
       Height          =   375
-      Left            =   5790
-      TabIndex        =   27
+      Left            =   5730
+      TabIndex        =   26
       Top             =   900
-      Width           =   1395
-      _ExtentX        =   2461
+      Width           =   1455
+      _ExtentX        =   2566
       _ExtentY        =   661
       _Version        =   393216
       MaxLength       =   10
@@ -49,7 +48,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   435
       Left            =   6000
-      TabIndex        =   26
+      TabIndex        =   25
       Top             =   2280
       Width           =   1155
    End
@@ -66,7 +65,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   435
       Left            =   4860
-      TabIndex        =   25
+      TabIndex        =   24
       Top             =   2280
       Width           =   1155
    End
@@ -83,7 +82,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   435
       Left            =   3720
-      TabIndex        =   24
+      TabIndex        =   23
       Top             =   2280
       Width           =   1155
    End
@@ -100,7 +99,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   435
       Left            =   2580
-      TabIndex        =   23
+      TabIndex        =   22
       Top             =   2280
       Width           =   1155
    End
@@ -117,7 +116,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   435
       Left            =   1440
-      TabIndex        =   22
+      TabIndex        =   21
       Top             =   2280
       Width           =   1155
    End
@@ -133,7 +132,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   4080
       Width           =   1215
    End
@@ -149,7 +148,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   3630
       Width           =   1215
    End
@@ -165,7 +164,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   3180
       Width           =   1215
    End
@@ -181,11 +180,11 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   1410
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   2730
       Width           =   1215
    End
-   Begin VB.TextBox txtDescricao 
+   Begin VB.TextBox txtNomeProduto 
       BeginProperty Font 
          Name            =   "Arial"
          Size            =   12
@@ -197,7 +196,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   3150
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   2730
       Width           =   4005
    End
@@ -208,7 +207,7 @@ Begin VB.Form frmPedido
       Left            =   2610
       Picture         =   "frmPedido.frx":0BC4
       Style           =   1  'Graphical
-      TabIndex        =   18
+      TabIndex        =   17
       Top             =   2730
       Width           =   525
    End
@@ -225,14 +224,14 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   390
       Left            =   3990
-      TabIndex        =   15
+      TabIndex        =   14
       Top             =   6060
       Width           =   1575
    End
    Begin MSFlexGridLib.MSFlexGrid grdItensPedido 
       Height          =   2805
       Left            =   2700
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   3180
       Width           =   8985
       _ExtentX        =   15849
@@ -255,7 +254,7 @@ Begin VB.Form frmPedido
       Left            =   2610
       Picture         =   "frmPedido.frx":1D6A
       Style           =   1  'Graphical
-      TabIndex        =   13
+      TabIndex        =   12
       Top             =   1380
       Width           =   525
    End
@@ -274,29 +273,6 @@ Begin VB.Form frmPedido
       TabIndex        =   2
       Top             =   1380
       Width           =   1005
-   End
-   Begin MSComCtl2.DTPicker dtpDataPedido 
-      Height          =   375
-      Left            =   8220
-      TabIndex        =   3
-      Top             =   900
-      Width           =   1635
-      _ExtentX        =   2884
-      _ExtentY        =   661
-      _Version        =   393216
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Arial"
-         Size            =   12
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Format          =   131661825
-      CurrentDate     =   36526
-      MaxDate         =   73415
-      MinDate         =   36526
    End
    Begin VB.TextBox txtCodigo 
       BeginProperty Font 
@@ -321,7 +297,7 @@ Begin VB.Form frmPedido
       Left            =   2610
       Picture         =   "frmPedido.frx":2F10
       Style           =   1  'Graphical
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   900
       Width           =   525
    End
@@ -341,11 +317,11 @@ Begin VB.Form frmPedido
       Top             =   1380
       Width           =   4005
    End
-   Begin MSComctlLib.Toolbar Toolbar1 
+   Begin MSComctlLib.Toolbar Toolbar 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   0
       Width           =   20895
       _ExtentX        =   36856
@@ -460,7 +436,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   21
+      TabIndex        =   20
       Top             =   4080
       Width           =   915
    End
@@ -478,7 +454,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   20
+      TabIndex        =   19
       Top             =   3630
       Width           =   915
    End
@@ -496,7 +472,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   19
+      TabIndex        =   18
       Top             =   3180
       Width           =   915
    End
@@ -514,7 +490,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   2730
       Width           =   915
    End
@@ -532,7 +508,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   2700
-      TabIndex        =   16
+      TabIndex        =   15
       Top             =   6060
       Width           =   1245
    End
@@ -550,7 +526,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   900
       Width           =   1065
    End
@@ -568,7 +544,7 @@ Begin VB.Form frmPedido
       EndProperty
       Height          =   375
       Left            =   450
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   1380
       Width           =   1065
    End
@@ -596,8 +572,6 @@ Private Sub Form_Load()
         rsPedido.MoveLast 'Move para o final
         PreencherCampos
     Else
-        dtpDataPedido.Format = dtpCustom 'Definir uma mascara para poder zerar o campo
-        dtpDataPedido.CustomFormat = " " 'Zerando a data para não ficar preenchida
         mskDataPedido.Mask = ""
         mskDataPedido.Text = ""
         mskDataPedido.Mask = "99/99/9999"
@@ -616,6 +590,7 @@ Private Sub cmdNovoItem_Click()
 End Sub
 
 Private Sub cmdAlterarItem_Click()
+    If grdItensPedido.RowSel < 1 Then Exit Sub
     modoAlteracaoItem
 End Sub
 
@@ -631,7 +606,7 @@ Private Sub cmdSalvarItem_Click()
         pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
         pedidoItem.Item = 0
         pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
-        pedidoItem.Descricao = txtDescricao.Text
+        pedidoItem.Descricao = txtNomeProduto.Text
         pedidoItem.Qtde = CDbl(txtQtde.Text)
         pedidoItem.ValorUn = CDbl(txtValorUn.Text)
         pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
@@ -643,7 +618,7 @@ Private Sub cmdSalvarItem_Click()
         pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
         pedidoItem.Item = 0
         pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
-        pedidoItem.Descricao = txtDescricao.Text
+        pedidoItem.Descricao = txtNomeProduto.Text
         pedidoItem.Qtde = CDbl(txtQtde.Text)
         pedidoItem.ValorUn = CDbl(txtValorUn.Text)
         pedidoItem.ValorTotal = CDbl(txtQtde.Text) * CDbl(txtValorUn.Text)
@@ -663,7 +638,6 @@ Private Sub SalvarPedido()
         pedido.Controle = VerificaNull(ControlePedido, 0)
         pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-        'pedido.DataPedido = dtpDataPedido.Value
         pedido.DataPedido = Format(mskDataPedido.Text, Date)
         If (Not AlterarPedido(pedido)) Then
             MsgBox "Erro ao Alterar o Registro!"
@@ -673,7 +647,6 @@ Private Sub SalvarPedido()
         pedido.Controle = VerificaNull(ControlePedido, 0)
         pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-        'pedido.DataPedido = dtpDataPedido.Value
         pedido.DataPedido = Format(mskDataPedido.Text, Date)
         If (Not InserirPedido(pedido)) Then
             MsgBox "Erro ao Inserir o Registro!"
@@ -684,15 +657,15 @@ End Sub
 
 Private Sub modoInclusaoPedido()
 '--------------TOOLBAR------------------------
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
 '--------------CAMPOS PEDIDO------------------------
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
@@ -702,8 +675,8 @@ Private Sub modoInclusaoPedido()
     cmdListaCliente.Enabled = True 'Habilitar/Desabilitar commandButton
     txtNomeCliente.Enabled = False
     txtNomeCliente.BackColor = vbWindowBackground 'cor branca padrão do sistema
-    dtpDataPedido.Enabled = True
     mskDataPedido.Enabled = True
+    mskDataPedido.BackColor = vbWindowBackground
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = False
     cmdSalvarItem.Enabled = False
@@ -714,8 +687,8 @@ Private Sub modoInclusaoPedido()
     txtCodProduto.Enabled = False
     txtCodProduto.BackColor = &H8000000F
     cmdListaProduto.Enabled = False
-    txtDescricao.Enabled = False
-    txtDescricao.BackColor = &H8000000F
+    txtNomeProduto.Enabled = False
+    txtNomeProduto.BackColor = &H8000000F
     txtQtde.Enabled = False
     txtQtde.BackColor = &H8000000F
     txtValorUn.Enabled = False
@@ -724,19 +697,20 @@ Private Sub modoInclusaoPedido()
     txtTotalItem.BackColor = &H8000000F
     
     ModoAtualPedido = mfInclusao
+    txtCodCliente.SetFocus
 End Sub
 
 Private Sub modoAlteracaoPedido()
 '--------------TOOLBAR------------------------
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
 '--------------CAMPOS PEDIDO------------------------
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
@@ -746,8 +720,8 @@ Private Sub modoAlteracaoPedido()
     cmdListaCliente.Enabled = True 'Habilitar/Desabilitar commandButton
     txtNomeCliente.Enabled = False
     txtNomeCliente.BackColor = vbWindowBackground 'cor branca padrão do sistema
-    dtpDataPedido.Enabled = True
     mskDataPedido.Enabled = True
+    mskDataPedido.BackColor = vbWindowBackground
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = False
     cmdSalvarItem.Enabled = False
@@ -758,8 +732,8 @@ Private Sub modoAlteracaoPedido()
     txtCodProduto.Enabled = False
     txtCodProduto.BackColor = &H8000000F
     cmdListaProduto.Enabled = False
-    txtDescricao.Enabled = False
-    txtDescricao.BackColor = &H8000000F
+    txtNomeProduto.Enabled = False
+    txtNomeProduto.BackColor = &H8000000F
     txtQtde.Enabled = False
     txtQtde.BackColor = &H8000000F
     txtValorUn.Enabled = False
@@ -772,15 +746,15 @@ End Sub
 
 Private Sub modoConsultaPedido()
 '--------------TOOLBAR------------------------
-    Toolbar1.Buttons("novo").Enabled = True
-    Toolbar1.Buttons("salvar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = True
-    Toolbar1.Buttons("desfazer").Enabled = False
-    Toolbar1.Buttons("primeiro").Enabled = True
-    Toolbar1.Buttons("anterior").Enabled = True
-    Toolbar1.Buttons("proximo").Enabled = True
-    Toolbar1.Buttons("ultimo").Enabled = True
+    Toolbar.Buttons("novo").Enabled = True
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = True
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = True
+    Toolbar.Buttons("anterior").Enabled = True
+    Toolbar.Buttons("proximo").Enabled = True
+    Toolbar.Buttons("ultimo").Enabled = True
 '--------------CAMPOS PEDIDO------------------------
     txtCodigo.Enabled = True
     txtCodigo.BackColor = vbWindowBackground
@@ -790,7 +764,6 @@ Private Sub modoConsultaPedido()
     cmdListaCliente.Enabled = False
     txtNomeCliente.Enabled = False
     txtNomeCliente.BackColor = &H8000000F
-    dtpDataPedido.Enabled = False
     mskDataPedido.Enabled = False
     mskDataPedido.BackColor = &H8000000F
 '--------------BOTÕES ITENS------------------------
@@ -803,8 +776,8 @@ Private Sub modoConsultaPedido()
     txtCodProduto.Enabled = False
     txtCodProduto.BackColor = &H8000000F
     cmdListaProduto.Enabled = False
-    txtDescricao.Enabled = False
-    txtDescricao.BackColor = &H8000000F
+    txtNomeProduto.Enabled = False
+    txtNomeProduto.BackColor = &H8000000F
     txtQtde.Enabled = False
     txtQtde.BackColor = &H8000000F
     txtValorUn.Enabled = False
@@ -816,6 +789,27 @@ Private Sub modoConsultaPedido()
 End Sub
 
 Private Sub modoInclusaoItem()
+'--------------TOOLBAR------------------------
+    Toolbar.Buttons("novo").Enabled = False
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
+'--------------CAMPOS PEDIDO------------------------
+    txtCodigo.Enabled = False
+    txtCodigo.BackColor = &H8000000F
+    cmdListaPedido.Enabled = False
+    txtCodCliente.Enabled = False
+    txtCodCliente.BackColor = &H8000000F
+    cmdListaCliente.Enabled = False
+    txtNomeCliente.Enabled = False
+    txtNomeCliente.BackColor = &H8000000F
+    mskDataPedido.Enabled = False
+    mskDataPedido.BackColor = &H8000000F
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = False
     cmdSalvarItem.Enabled = True
@@ -827,9 +821,9 @@ Private Sub modoInclusaoItem()
     txtCodProduto.Text = ""
     txtCodProduto.BackColor = vbWindowBackground
     cmdListaProduto.Enabled = True
-    txtDescricao.Enabled = True
-    txtDescricao.Text = ""
-    txtDescricao.BackColor = vbWindowBackground
+    txtNomeProduto.Enabled = True
+    txtNomeProduto.Text = ""
+    txtNomeProduto.BackColor = vbWindowBackground
     txtQtde.Enabled = True
     txtQtde.Text = ""
     txtQtde.BackColor = vbWindowBackground
@@ -841,10 +835,32 @@ Private Sub modoInclusaoItem()
     txtTotalItem.BackColor = &H8000000F
     
     ModoAtualItens = mfInclusao
+    txtCodProduto.SetFocus
     
 End Sub
 
 Private Sub modoAlteracaoItem()
+'--------------TOOLBAR------------------------
+    Toolbar.Buttons("novo").Enabled = False
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
+'--------------CAMPOS PEDIDO------------------------
+    txtCodigo.Enabled = False
+    txtCodigo.BackColor = &H8000000F
+    cmdListaPedido.Enabled = False
+    txtCodCliente.Enabled = False
+    txtCodCliente.BackColor = &H8000000F
+    cmdListaCliente.Enabled = False
+    txtNomeCliente.Enabled = False
+    txtNomeCliente.BackColor = &H8000000F
+    mskDataPedido.Enabled = False
+    mskDataPedido.BackColor = &H8000000F
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = False
     cmdSalvarItem.Enabled = True
@@ -856,9 +872,9 @@ Private Sub modoAlteracaoItem()
     txtCodProduto.Text = ""
     txtCodProduto.BackColor = vbWindowBackground
     cmdListaProduto.Enabled = True
-    txtDescricao.Enabled = True
-    txtDescricao.Text = ""
-    txtDescricao.BackColor = vbWindowBackground
+    txtNomeProduto.Enabled = True
+    txtNomeProduto.Text = ""
+    txtNomeProduto.BackColor = vbWindowBackground
     txtQtde.Enabled = True
     txtQtde.Text = ""
     txtQtde.BackColor = vbWindowBackground
@@ -870,10 +886,32 @@ Private Sub modoAlteracaoItem()
     txtTotalItem.BackColor = &H8000000F
     
     ModoAtualItens = mfAlteracao
+    txtCodProduto.SetFocus
     
 End Sub
 
 Private Sub cancelarItem()
+'--------------TOOLBAR------------------------
+    Toolbar.Buttons("novo").Enabled = True
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = True
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = True
+    Toolbar.Buttons("anterior").Enabled = True
+    Toolbar.Buttons("proximo").Enabled = True
+    Toolbar.Buttons("ultimo").Enabled = True
+'--------------CAMPOS PEDIDO------------------------
+    txtCodigo.Enabled = True
+    txtCodigo.BackColor = vbWindowBackground
+    cmdListaPedido.Enabled = True
+    txtCodCliente.Enabled = False
+    txtCodCliente.BackColor = &H8000000F
+    cmdListaCliente.Enabled = False
+    txtNomeCliente.Enabled = False
+    txtNomeCliente.BackColor = &H8000000F
+    mskDataPedido.Enabled = False
+    mskDataPedido.BackColor = &H8000000F
 '--------------BOTÕES ITENS------------------------
     cmdNovoItem.Enabled = True
     cmdSalvarItem.Enabled = False
@@ -884,8 +922,8 @@ Private Sub cancelarItem()
     txtCodProduto.Enabled = False
     txtCodProduto.BackColor = &H8000000F
     cmdListaProduto.Enabled = False
-    txtDescricao.Enabled = False
-    txtDescricao.BackColor = &H8000000F
+    txtNomeProduto.Enabled = False
+    txtNomeProduto.BackColor = &H8000000F
     txtQtde.Enabled = False
     txtQtde.BackColor = &H8000000F
     txtValorUn.Enabled = False
@@ -900,10 +938,12 @@ End Sub
 
 
 Private Sub PreencherCampos()
-
-    If rsPedido.EOF Or rsPedido.BOF Then 'Se a lista não tem registros pula fora da Sub
-        dtpDataPedido.Format = dtpCustom 'Definir uma mascara para poder zerar o campo
-        dtpDataPedido.CustomFormat = " " 'Zerando a data para não ficar preenchida
+    
+    'Se tiver vazio limpa os campos
+    If rsPedido.EOF Or rsPedido.BOF = True Then 'Se a lista não tem registros pula fora da Sub
+        txtCodigo.Text = ""
+        txtCodCliente.Text = ""
+        txtNomeCliente.Text = ""
         mskDataPedido.Mask = ""
         mskDataPedido.Text = ""
         mskDataPedido.Mask = "99/99/9999"
@@ -914,11 +954,6 @@ Private Sub PreencherCampos()
     txtCodigo.Text = rsPedido!Codigo 'Atribuição de valor do RecordSet para o TextBox
     txtCodCliente.Text = rsPedido!ClienteCodigo
     txtNomeCliente.Text = rsPedido!ClienteNome
-    
-    
-    dtpDataPedido.Format = dtpCustom
-    dtpDataPedido.CustomFormat = "dd/MM/yyyy" 'Redefindindo a mascara caso não tinha registros na tela antes
-    dtpDataPedido.Value = rsPedido!DataPedido
     
     mskDataPedido.Mask = ""
     mskDataPedido.Text = ""
@@ -946,6 +981,7 @@ Private Sub PreencherItensPedido()
     grdItensPedido.Rows = 1
     
     CarregarItensPedido (ControlePedido)
+    LimpaCamposItens
     If rsPedidoItem.EOF Or rsPedidoItem.BOF Then Exit Sub
     
     Dim linha As Long
@@ -1004,7 +1040,7 @@ Private Sub AjustarColunasGridItens()
 End Sub
 
 '---------------------Case Toolbar---------------------------------------------------
-Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
 '-------------NOVO-------------------------------------------------------------------
@@ -1014,10 +1050,6 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             txtCodigo.Text = rsProximoCodigo!Codigo
             txtCodCliente.Text = ""
             txtNomeCliente.Text = ""
-            
-            dtpDataPedido.Format = dtpCustom
-            dtpDataPedido.CustomFormat = "dd/MM/yyyy"
-            dtpDataPedido.Value = Date
             
             mskDataPedido.Mask = ""
             mskDataPedido.Text = ""
@@ -1039,7 +1071,6 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
                 pedido.Controle = VerificaNull(ControlePedido, 0)
                 pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-                'pedido.DataPedido = dtpDataPedido.Value
                 pedido.DataPedido = mskDataPedido.Text
                 If (Not AlterarPedido(pedido)) Then
                     MsgBox "Erro ao Alterar o Registro!"
@@ -1049,7 +1080,6 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
                 pedido.Controle = VerificaNull(ControlePedido, 0)
                 pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-                'pedido.DataPedido = dtpDataPedido.Value
                 pedido.DataPedido = mskDataPedido.Text
                 If (Not InserirPedido(pedido)) Then
                     MsgBox "Erro ao Inserir o Registro!"
@@ -1131,20 +1161,6 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o recordset
-    If Not rsPedido Is Nothing Then 'Se ele não for nada (se existir)
-        If rsPedido.State = adStateOpen Then rsPedido.Close 'Se esta aberto, fecha
-        Set rsPedido = Nothing 'Seta como nada
-    End If
-    If Not rsPedidoItem Is Nothing Then 'Se ele não for nada (se existir)
-        If rsPedidoItem.State = adStateOpen Then rsPedidoItem.Close 'Se esta aberto, fecha
-        Set rsPedidoItem = Nothing 'Seta como nada
-    End If
-    If Not rsProximoCodigo Is Nothing Then 'Se ele não for nada (se existir)
-        If rsProximoCodigo.State = adStateOpen Then rsProximoCodigo.Close 'Se esta aberto, fecha
-        Set rsProximoCodigo = Nothing 'Seta como nada
-    End If
-End Sub
 
 Private Sub cmdListaPedido_Click()
     Dim f As New frmPesquisaPedido
@@ -1190,20 +1206,23 @@ End Sub
 
 Private Sub PreencherCamposItemInclusao()
     txtCodProduto.Text = rsProduto!Codigo
-    txtDescricao.Text = rsProduto!Nome
+    txtNomeProduto.Text = rsProduto!Nome
     txtQtde.Text = 1
     txtValorUn.Text = rsProduto!valor
 End Sub
 
-
-Private Sub PreencherCamposItem() 'Evento de preenchimentos dos campos do item para ser chamado manualmente
-    
+Private Sub LimpaCamposItens()
     ControlePedidoItem = 0
     txtCodProduto.Text = ""
-    txtDescricao.Text = ""
+    txtNomeProduto.Text = ""
     txtQtde.Text = ""
     txtValorUn.Text = ""
     txtTotalItem.Text = ""
+End Sub
+
+Private Sub PreencherCamposItem() 'Evento de preenchimentos dos campos do item para ser chamado manualmente
+    
+    LimpaCamposItens
     
     ' Ignora cabeçalho ou grid vazio
     If grdItensPedido.Rows <= 1 Then Exit Sub
@@ -1211,7 +1230,7 @@ Private Sub PreencherCamposItem() 'Evento de preenchimentos dos campos do item p
     
     ControlePedidoItem = grdItensPedido.TextMatrix(grdItensPedido.Row, 0)
     txtCodProduto.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 1)
-    txtDescricao.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 2)
+    txtNomeProduto.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 2)
     txtQtde.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 3)
     txtValorUn.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 4)
     txtTotalItem.Text = grdItensPedido.TextMatrix(grdItensPedido.Row, 5)
@@ -1279,11 +1298,12 @@ Private Function ValidaCamposItem()
     ValidaCamposItem = True
     
 End Function
-'----------------------------AJUSTE TABULAÇÃO-----------------------------------
 
-'----------------------------Corpo do Pedido ----------------------------------
+'----------------------------AJUSTES CAMPOS DO CORPO DO PEDIDO ----------------------------------
 
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
     
     If ModoAtualPedido = mfConsulta Then
         If KeyAscii = vbKeyReturn Then 'KeyCode do Enter
@@ -1308,31 +1328,144 @@ Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
         End If
     End If
     
+        ' Só números
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+    
 End Sub
 
 Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
-    AvancarComEnterKD KeyAscii, mskDataPedido
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then 'Se a tecla for enter
+        
+        If Not IsNumeric(txtCodCliente.Text) Then 'Validação de Numérico
+            MsgBox "Código Inválido", vbOKOnly 'Aviso de código invalido
+            txtCodCliente.SetFocus 'Volta para o campo CodCliente
+            Exit Sub 'Sai da Sub
+        End If 'Se não
+        
+        BuscarClientePorCodigo CLng(txtCodCliente.Text) 'Busca o Cliente pelo Codigo
+        
+        If Not rsClienteCod.BOF Or Not rsClienteCod.EOF Then 'Se a lista não esta vazia
+            txtCodCliente.Text = rsClienteCod!Codigo 'Atribui o Codigo ao Campo
+            txtNomeCliente.Text = rsClienteCod!Nome 'Atribui o Nome ao Campo
+        Else 'Se a Lista esta vazia
+            MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
+            txtCodCliente.SetFocus 'Volta para o campo CodCliente
+            Exit Sub 'Sai da sub
+        End If
+        
+        AvancarComEnterKD KeyAscii, mskDataPedido 'Se tudo deu certo, avança para o próximo campo
+    End If
+    
+    ' Só números
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+        
 End Sub
 
 Private Sub mskDataPedido_KeyPress(KeyAscii As Integer)
-    If KeyCode = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+
+    If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+        
         KeyCode = 0 'Limpa o Teclado
+        
         If MsgBox("Confirma Dados?", _
             vbQuestion + vbYesNo, _
             "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
             txtCodCliente.SetFocus
             Exit Sub
         End If
+        
+        SalvarPedido
     End If
-    
-    SalvarPedido
 End Sub
 
-'----------------------------AJUSTE FORMATAÇÃO----------------------------------
+'----------------------------AJUSTES CAMPOS DOS ITENS----------------------------------
 
-Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
+Private Sub txtCodProduto_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then 'Se a tecla for enter
+        
+        If Not IsNumeric(txtCodProduto.Text) Then 'Validação de Numérico
+            MsgBox "Código Inválido", vbOKOnly 'Aviso de código invalido
+            txtCodProduto.SetFocus 'Volta para o campo CodProduto
+            Exit Sub 'Sai da Sub
+        End If 'Se não
+        
+        BuscarProdutoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
+        
+        If Not rsProdutoCod.BOF Or Not rsProdutoCod.EOF Then 'Se a lista não esta vazia
+            txtCodProduto.Text = rsProdutoCod!Codigo 'Atribui o Codigo ao Campo
+            txtNomeProduto.Text = rsProdutoCod!Nome 'Atribui o Nome ao Campo
+        Else 'Se a Lista esta vazia
+            MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
+            txtCodProduto.SetFocus 'Volta para o campo CodProduto
+            Exit Sub 'Sai da sub
+        End If
+        
+        AvancarComEnterKD KeyAscii, txtQtde 'Se tudo deu certo, avança para o próximo campo
+    End If
+    
+    ' Só números
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+    
+End Sub
+
+Private Sub txtQtde_KeyPress(KeyAscii As Integer)
 
     If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then 'Se a tecla for enter
+        AvancarComEnterKD KeyAscii, txtValorUn  'avança para o próximo campo
+        
+        If Not IsNumeric(txtCodProduto.Text) Then 'Validação de Numérico
+            MsgBox "Código Produto Inválido", vbOKOnly 'Aviso de código invalido
+            txtCodProduto.SetFocus 'Volta para o campo CodProduto
+            Exit Sub 'Sai da Sub
+        End If 'Se não
+        
+        If Not IsNumeric(txtQtde.Text) Then
+            MsgBox "Quantidade Inválida", vbOKOnly 'Aviso de código invalido
+            txtQtde.SetFocus 'Volta para o campo CodProduto
+            Exit Sub 'Sai da Sub
+        End If 'Se não
+        
+        BuscarProdutoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
+        
+        If Not rsProdutoCod.BOF Or Not rsProdutoCod.EOF Then 'Se a lista não esta vazia
+            
+            txtValorUn.Text = rsProdutoCod!valor
+            If IsNumeric(txtValorUn.Text) Then
+                If IsNumeric(txtQtde.Text) Then
+                    txtTotalItem.Text = CDbl(txtValorUn.Text) * CDbl(txtQtde.Text)
+                Else
+                    MsgBox "Valor Inválido", vbOKOnly
+                End If
+            Else
+                MsgBox "Quantidade Inválida", vbOKOnly
+            End If
+            
+        Else 'Se a Lista esta vazia
+            MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
+            txtCodProduto.SetFocus 'Volta para o campo CodProduto
+            Exit Sub 'Sai da sub
+        End If
+        
+    End If
 
     ' Só números e vírgula
     If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
@@ -1341,7 +1474,39 @@ Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
     End If
 
     ' Só uma vírgula
-    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
+    If Chr(KeyAscii) = "," And InStr(txtQtde.Text, ",") > 0 Then
+        KeyAscii = 0
+    End If
+
+End Sub
+
+Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = vbKeyBack Then Exit Sub
+
+    If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+        
+        KeyCode = 0 'Limpa o Teclado
+        
+        If MsgBox("Confirma Dados?", _
+            vbQuestion + vbYesNo, _
+            "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
+            txtCodProduto.SetFocus
+            Exit Sub
+        End If
+        
+        cmdSalvarItem_Click
+        
+    End If
+
+    ' Só números e vírgula
+    If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+
+    ' Só uma vírgula
+    If Chr(KeyAscii) = "," And InStr(txtValorUn.Text, ",") > 0 Then
         KeyAscii = 0
     End If
 
@@ -1358,25 +1523,30 @@ Private Sub txtValorTotal_KeyPress(KeyAscii As Integer)
     End If
 
     ' Só uma vírgula
-    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
+    If Chr(KeyAscii) = "," And InStr(txtValorTotal.Text, ",") > 0 Then
         KeyAscii = 0
     End If
 
 End Sub
 
-Private Sub txtQtde_KeyPress(KeyAscii As Integer)
+'------------------------------UNLOAD DO FORMULARIO----------------------------------------------
 
-    If KeyAscii = vbKeyBack Then Exit Sub
-
-    ' Só números e vírgula
-    If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
-        KeyAscii = 0
-        Exit Sub
+'No Unload do formulario fecha os recordset's
+Private Sub Form_Unload(Cancel As Integer)
+    If Not rsPedido Is Nothing Then 'Se ele não for nada (se existir)
+        If rsPedido.State = adStateOpen Then rsPedido.Close 'Se esta aberto, fecha
+        Set rsPedido = Nothing 'Seta como nada
     End If
-
-    ' Só uma vírgula
-    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
-        KeyAscii = 0
+    If Not rsPedidoItem Is Nothing Then 'Se ele não for nada (se existir)
+        If rsPedidoItem.State = adStateOpen Then rsPedidoItem.Close 'Se esta aberto, fecha
+        Set rsPedidoItem = Nothing 'Seta como nada
     End If
-
+    If Not rsProximoCodigo Is Nothing Then 'Se ele não for nada (se existir)
+        If rsProximoCodigo.State = adStateOpen Then rsProximoCodigo.Close 'Se esta aberto, fecha
+        Set rsProximoCodigo = Nothing 'Seta como nada
+    End If
+    If Not rsClienteCod Is Nothing Then 'Se ele não for nada (se existir)
+        If rsClienteCod.State = adStateOpen Then rsClienteCod.Close 'Se esta aberto, fecha
+        Set rsClienteCod = Nothing 'Seta como nada
+    End If
 End Sub

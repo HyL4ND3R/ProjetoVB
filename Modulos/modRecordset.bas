@@ -1,11 +1,13 @@
 Attribute VB_Name = "modRecordset"
-Public rsOperador As ADODB.Recordset
-Public rsCliente As ADODB.Recordset
-Public rsProduto As ADODB.Recordset
-Public rsPedido As ADODB.Recordset
-Public rsProximoCodigo As ADODB.Recordset
-Public rsPedidoItem As ADODB.Recordset
-
+Public rsOperador As ADODB.Recordset 'Tabela Operador
+Public rsCliente As ADODB.Recordset 'Tabela Cliente
+Public rsClienteCod As ADODB.Recordset 'Buscar Cliente especifico
+Public rsProduto As ADODB.Recordset 'Tabela Produto
+Public rsProdutoCod As ADODB.Recordset 'Buscar Produto especifico
+Public rsPedido As ADODB.Recordset 'Tabela Pedido
+Public rsProximoCodigo As ADODB.Recordset 'Buscar próximo codigo de pedido
+Public rsPedidoItem As ADODB.Recordset 'Tabela PedidoItem
+'-------------OPERADORES------------------------------------------------------------------------------------------------------
 Public Sub CarregarOperadores()
 
     Set rsOperador = New ADODB.Recordset
@@ -16,7 +18,7 @@ Public Sub CarregarOperadores()
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
-
+'-------------CLIENTES------------------------------------------------------------------------------------------------------
 Public Sub CarregarClientes()
 
     Set rsCliente = New ADODB.Recordset
@@ -28,6 +30,17 @@ Public Sub CarregarClientes()
 
 End Sub
 
+Public Sub BuscarClientePorCodigo(CodCliente As Integer)
+    
+    Set rsClienteCod = New ADODB.Recordset
+    
+    rsClienteCod.CursorLocation = adUseClient
+    rsClienteCod.Open _
+        "SELECT * FROM Cliente WHERE Codigo = " & CodCliente, _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+'-------------PRODUTOS------------------------------------------------------------------------------------------------------
 Public Sub CarregarProdutos()
 
     Set rsProduto = New ADODB.Recordset
@@ -39,6 +52,17 @@ Public Sub CarregarProdutos()
 
 End Sub
 
+Public Sub BuscarProdutoPorCodigo(CodCliente As Integer)
+    
+    Set rsProdutoCod = New ADODB.Recordset
+    
+    rsProdutoCod.CursorLocation = adUseClient
+    rsProdutoCod.Open _
+        "SELECT * FROM Produto WHERE Codigo = " & CodCliente, _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+'-------------PEDIDOS------------------------------------------------------------------------------------------------------
 Public Sub CarregarPedidos()
 
     Set rsPedido = New ADODB.Recordset
@@ -158,7 +182,7 @@ Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean
 Erro:
     AlterarItemPedido = False
 End Function
-
+'-------------FUNÇÕES GENERICAS------------------------------------------------------------------------------------------------------
 Public Function BuscarRS(rs As ADODB.Recordset, _
                          ByVal campo As String, _
                          ByVal valor As Variant) As Boolean
