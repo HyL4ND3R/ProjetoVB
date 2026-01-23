@@ -7,6 +7,7 @@ Public rsProdutoCod As ADODB.Recordset 'Buscar Produto especifico
 Public rsPedido As ADODB.Recordset 'Tabela Pedido
 Public rsProximoCodigo As ADODB.Recordset 'Buscar próximo codigo de pedido
 Public rsPedidoItem As ADODB.Recordset 'Tabela PedidoItem
+Public rsPedidoItemCod As ADODB.Recordset 'Próximo cod de ITEM do pedido
 '-------------OPERADORES------------------------------------------------------------------------------------------------------
 Public Sub CarregarOperadores()
 
@@ -137,6 +138,36 @@ Erro:
     AlterarPedido = False
 End Function
 
+Public Function BuscaProximoCodItemPedido(ByVal ControlePedido As Long) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+
+    Set cmd = New ADODB.Command
+    Set rsPedidoItemCod = New ADODB.Recordset
+
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "SELECT ISNULL(Max(item),0) + 1 as Item" & _
+            "FROM PedidoItem WHERE ControlePedido = ?"
+
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , ControlePedido)
+    End With
+
+    rsPedidoItemCod.CursorLocation = adUseClient
+    rsPedidoItemCod.Open cmd, , adOpenStatic, adLockReadOnly
+
+    Set BuscarItensPedido = rsPedidoItemCod
+    
+    BuscaProximoCodItemPedido = True
+    Exit Function
+Erro:
+    BuscaProximoCodItemPedido = False
+
+End Function
+
 'Função para inserir item no pedido usando ADO Command e alterando os parametros
 Public Function InserirItemPedido(itemPedido As cPedidoItem) As Boolean
     On Error GoTo Erro
@@ -152,7 +183,7 @@ Public Function InserirItemPedido(itemPedido As cPedidoItem) As Boolean
             "(ControlePedido, Item, ProdutoCodigo, Descricao, Quantidade, ValorUn, ValorTotal) " & _
             "VALUES (?, ?, ?, ?, ?, ?, ?)"
 
-        ' --- Parâmetros ---
+        ' --- Alterando Parâmetros ---
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.ControlePedido)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.Item)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , itemPedido.ProdutoCodigo)

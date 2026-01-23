@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -133,6 +133,7 @@ Begin VB.Form frmPedido
       Height          =   390
       Left            =   1410
       TabIndex        =   7
+      Text            =   "0,00"
       Top             =   4080
       Width           =   1215
    End
@@ -149,6 +150,7 @@ Begin VB.Form frmPedido
       Height          =   390
       Left            =   1410
       TabIndex        =   6
+      Text            =   "0,00"
       Top             =   3630
       Width           =   1215
    End
@@ -165,6 +167,7 @@ Begin VB.Form frmPedido
       Height          =   390
       Left            =   1410
       TabIndex        =   5
+      Text            =   "0,00"
       Top             =   3180
       Width           =   1215
    End
@@ -225,6 +228,7 @@ Begin VB.Form frmPedido
       Height          =   390
       Left            =   3990
       TabIndex        =   14
+      Text            =   "0,00"
       Top             =   6060
       Width           =   1575
    End
@@ -626,7 +630,8 @@ Private Sub cmdSalvarItem_Click()
     If ModoAtualItens = mfAlteracao Then
         pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
         pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
-        pedidoItem.Item = 0
+        BuscaProximoCodItemPedido (ControlePedido) 'Buscar o próximo codigo de Item
+        pedidoItem.Item = CLng(rsPedidoItemCod!Item)
         pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
         pedidoItem.Descricao = txtNomeProduto.Text
         pedidoItem.Qtde = CDbl(txtQtde.Text)
@@ -638,7 +643,8 @@ Private Sub cmdSalvarItem_Click()
         End If
     Else
         pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
-        pedidoItem.Item = 0
+        BuscaProximoCodItemPedido (ControlePedido) 'Buscar o próximo codigo de Item
+        pedidoItem.Item = CLng(rsPedidoItemCod!Item)
         pedidoItem.ProdutoCodigo = CLng(txtCodProduto.Text)
         pedidoItem.Descricao = txtNomeProduto.Text
         pedidoItem.Qtde = CDbl(txtQtde.Text)
@@ -1296,6 +1302,11 @@ Private Function ValidaCamposItem()
         txtCodProduto.SetFocus
         ValidaCamposItem = False
         Exit Function
+    ElseIf CLng(txtCodProduto.Text) = 0 Then
+        MsgBox "Codigo Produto inválido"
+        txtCodProduto.SetFocus
+        ValidaCamposItem = False
+        Exit Function
     End If
     
     If Not IsNumeric(txtQtde.Text) Then
@@ -1303,9 +1314,19 @@ Private Function ValidaCamposItem()
         txtQtde.SetFocus
         ValidaCamposItem = False
         Exit Function
+    ElseIf CLng(txtQtde.Text) = 0 Then
+        MsgBox "Quantidade inválida"
+        txtQtde.SetFocus
+        ValidaCamposItem = False
+        Exit Function
     End If
     
     If Not IsNumeric(txtValorUn.Text) Then
+        MsgBox "Valor Inválido inválido"
+        txtValorUn.SetFocus
+        ValidaCamposItem = False
+        Exit Function
+    ElseIf CLng(txtValorUn.Text) = 0 Then
         MsgBox "Valor Inválido inválido"
         txtValorUn.SetFocus
         ValidaCamposItem = False
@@ -1320,6 +1341,7 @@ Private Sub InicializarCamposNumericos()
     txtQtde.Text = "0,00"
     txtValorUn.Text = "0,00"
     txtTotalItem.Text = "0,00"
+    txtValorTotal.Text = "0,00"
 End Sub
 
 '----------------------------AJUSTES CAMPOS DO CORPO DO PEDIDO ----------------------------------
@@ -1627,5 +1649,9 @@ Private Sub Form_Unload(Cancel As Integer)
     If Not rsClienteCod Is Nothing Then 'Se ele não for nada (se existir)
         If rsClienteCod.State = adStateOpen Then rsClienteCod.Close 'Se esta aberto, fecha
         Set rsClienteCod = Nothing 'Seta como nada
+    End If
+    If Not rsPedidoItemCod Is Nothing Then 'Se ele não for nada (se existir)
+        If rsPedidoItemCod.State = adStateOpen Then rsPedidoItemCod.Close 'Se esta aberto, fecha
+        Set rsPedidoItemCod = Nothing 'Seta como nada
     End If
 End Sub
