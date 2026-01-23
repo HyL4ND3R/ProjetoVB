@@ -273,6 +273,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 Private ModoAtual As eModoFormulario
+Private CodigoAtual As Long
 
 Private Sub Form_Load()
     
@@ -381,30 +382,18 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------SALVAR
         Case "salvar"
-            Dim sql As String
-            Dim codigoAtual As Long
-
-            If ModoAtual = mfAlteracao Then
-                codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-                sql = "UPDATE Operador set Nome = " & "'" & txtNome.Text & "', " & _
-                    "Senha = " & "'" & txtSenha.Text & "', " & _
-                    "Admin = " & IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
-                    "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & _
-                    "WHERE Codigo = " & txtCodigo.Text
-            Else
-                sql = "INSERT INTO Operador (Nome, Senha, Admin, Inativo) VALUES (" & _
-                    "'" & txtNome.Text & "', " & _
-                    "'" & txtSenha.Text & "', " & _
-                    IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
-                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+            
+            If Not ValidaCampos Then Exit Sub
+            
+            If Not SalvarOperador Then
+                MsgBox "Erro ao Salvar o Operador!", vbOKOnly
+                Exit Sub
             End If
-
-            Conn.Execute sql
             
             CarregarOperadores
             
             If ModoAtual = mfAlteracao Then
-                rsOperador.Find "Codigo = " & codigoAtual
+                rsOperador.Find "Codigo = " & CodigoAtual
             Else
                 If Not rsOperador.EOF Then rsOperador.MoveLast
             End If
@@ -437,8 +426,8 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         
             CarregarOperadores
         
-            If Not rsCliente.EOF Then
-                rsCliente.Find "Codigo > " & codigoExcluir
+            If Not rsOperador.EOF Then
+                rsOperador.Find "Codigo > " & codigoExcluir
                 If rsOperador.EOF Then rsOperador.MoveLast
             End If
         
@@ -510,6 +499,46 @@ Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
     
 End Sub
 
+Private Sub txtNome_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then 'Verifica se é enter
+        KeyAscii = 0 'Cancela o Enter, sem beep do windws
+        txtSenha.SetFocus
+    End If
+End Sub
+
+Private Sub txtSenha_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+    
+        KeyAscii = 0 'Limpa o Teclado
+        
+        If Not (ValidaCampos) Then Exit Sub
+        
+        If MsgBox("Confirma Dados?", _
+            vbQuestion + vbYesNo, _
+            "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
+            txtNome.SetFocus
+            Exit Sub
+        End If
+        
+        If Not SalvarOperador Then
+            MsgBox "Erro ao Salvar o Operador!", vbOKOnly
+            Exit Sub
+        End If
+        
+        CarregarOperadores
+        
+        If ModoAtual = mfAlteracao Then
+            rsOperador.Find "Codigo = " & CodigoAtual
+        Else
+            If Not rsOperador.EOF Then rsOperador.MoveLast
+        End If
+        
+        PreencherCampos
+        modoConsulta
+    
+    End If
+End Sub
+
 Private Sub cmdListaOperador_Click()
     Dim f As New frmPesquisaOperador
 
@@ -523,3 +552,53 @@ Private Sub cmdListaOperador_Click()
 
     Unload f
 End Sub
+
+Private Function SalvarOperador() As Boolean
+    On Error GoTo Erro
+    
+    Dim Sql As String
+    
+    If ModoAtual = mfAlteracao Then
+        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        Sql = "UPDATE Operador set Nome = " & "'" & txtNome.Text & "', " & _
+            "Senha = " & "'" & txtSenha.Text & "', " & _
+            "Admin = " & IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
+            "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
+            "WHERE Codigo = " & txtCodigo.Text
+    Else
+        Sql = "INSERT INTO Operador (Nome, Senha, Admin, Inativo) VALUES (" & _
+            "'" & txtNome.Text & "', " & _
+            "'" & txtSenha.Text & "', " & _
+            IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
+            IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+    End If
+
+    Conn.Execute Sql
+    SalvarOperador = True
+    Exit Function
+    
+Erro:
+    SalvarOperador = False
+    
+End Function
+
+
+Private Function ValidaCampos() As Boolean
+    
+    If Trim(txtNome.Text = "") Then
+        MsgBox "Nome Inválido"
+        txtNome.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    If Trim(txtSenha.Text = "") Then
+        MsgBox "Senha Inválida"
+        txtNome.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    ValidaCampos = True
+    
+End Function

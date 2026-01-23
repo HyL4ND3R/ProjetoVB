@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
 Begin VB.Form frmProduto 
    Caption         =   "Cadastro de Produtos"
    ClientHeight    =   8115
@@ -254,6 +254,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 Private ModoAtual As eModoFormulario
+Private CodigoAtual As Long
 
 Private Sub Form_Load()
     
@@ -287,6 +288,7 @@ Private Sub modoInclusao()
     txtValor.BackColor = vbWindowBackground 'cor branca padrão do sistema
     chkInativo.Enabled = True
     ModoAtual = mfInclusao
+    txtValor.Text = "0,00"
 End Sub
 
 Private Sub modoAlteracao()
@@ -338,7 +340,7 @@ Private Sub PreencherCampos()
 
     txtCodigo.Text = rsProduto!Codigo 'Atribuição de valor do RecordSet para o TextBox
     txtNome.Text = rsProduto!Nome
-    txtValor.Text = rsProduto!valor
+    txtValor.Text = Format(rsProduto!Valor, "0.00")
     chkInativo.Value = IIf(rsProduto!Inativo = 1, vbChecked, vbUnchecked)
 
 End Sub
@@ -357,28 +359,18 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------SALVAR
         Case "salvar"
-            Dim sql As String
-            Dim codigoAtual As Long
-
-            If ModoAtual = mfAlteracao Then
-                codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-                sql = "UPDATE Produto set Nome = " & "'" & txtNome.Text & "', " & _
-                    "Valor = '" & CDbl(txtValor.Text) & "', " & _
-                    "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & _
-                    "WHERE Codigo = " & txtCodigo.Text
-            Else
-                sql = "INSERT INTO Produto (Nome, Valor, Inativo) VALUES (" & _
-                    "'" & txtNome.Text & "', " & _
-                    "'" & CDbl(txtValor.Text) & "', " & _
-                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+            
+            If Not ValidaCampos Then Exit Sub
+            
+            If Not SalvarProduto Then
+                MsgBox "Erro ao salvar o Produto!", vbOKOnly
+                Exit Sub
             End If
-
-            Conn.Execute sql
             
             CarregarProdutos
             
             If ModoAtual = mfAlteracao Then
-                rsProduto.Find "Codigo = " & codigoAtual
+                rsProduto.Find "Codigo = " & CodigoAtual
             Else
                 If Not rsProduto.EOF Then rsProduto.MoveLast
             End If
@@ -484,6 +476,68 @@ Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
     
 End Sub
 
+Private Sub txtNome_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        KeyAscii = 0
+        txtValor.SetFocus
+    End If
+End Sub
+
+Private Sub txtValor_KeyPress(KeyAscii As Integer)
+
+    ' Permite Backspace
+    If KeyAscii = vbKeyBack Then Exit Sub
+
+    ' ENTER
+    If KeyAscii = vbKeyReturn Then
+    
+        KeyAscii = 0
+                
+        If Not ValidaCampos Then Exit Sub
+            
+        If MsgBox("Confirma Dados?", _
+            vbQuestion + vbYesNo, _
+            "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
+            txtNome.SetFocus
+            Exit Sub
+        End If
+            
+        If Not SalvarProduto Then
+            MsgBox "Erro ao salvar o Produto!", vbOKOnly
+            Exit Sub
+        End If
+        
+        CarregarProdutos
+        
+        If ModoAtual = mfAlteracao Then
+            rsProduto.Find "Codigo = " & CodigoAtual
+        Else
+            If Not rsProduto.EOF Then rsProduto.MoveLast
+        End If
+        
+        PreencherCampos
+        modoConsulta
+                
+    End If
+
+    ' Só números e vírgula
+    If InStr("0123456789,", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+
+    ' Só uma vírgula
+    If Chr(KeyAscii) = "," And InStr(txtValor.Text, ",") > 0 Then
+        KeyAscii = 0
+    End If
+
+End Sub
+
+Private Sub txtValor_GotFocus()
+    txtValor.SelStart = 0
+    txtValor.SelLength = Len(txtValor.Text)
+End Sub
+
 Private Sub cmdListaProduto_Click()
     Dim f As New frmPesquisaProduto
 
@@ -498,4 +552,51 @@ Private Sub cmdListaProduto_Click()
     Unload f
 End Sub
 
+Private Function SalvarProduto() As Boolean
+    On Error GoTo Erro
+    
+    Dim Sql As String
+    
+    If ModoAtual = mfAlteracao Then
+        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        Sql = "UPDATE Produto set Nome = " & "'" & txtNome.Text & "', " & _
+            "Valor = '" & CDbl(txtValor.Text) & "', " & _
+            "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
+            "WHERE Codigo = " & txtCodigo.Text
+    Else
+        Sql = "INSERT INTO Produto (Nome, Valor, Inativo) VALUES (" & _
+            "'" & txtNome.Text & "', " & _
+            "'" & CDbl(txtValor.Text) & "', " & _
+            IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+    End If
+
+    Conn.Execute Sql
+    SalvarProduto = True
+    Exit Function
+    
+Erro:
+    SalvarProduto = False
+    
+End Function
+
+
+Private Function ValidaCampos() As Boolean
+    
+    If Trim(txtNome.Text = "") Then
+        MsgBox "Nome Inválido"
+        txtNome.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    If txtValor.Text = "" Or Not IsNumeric(txtValor.Text) Then
+        MsgBox "Valor Inválido"
+        txtValor.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    ValidaCampos = True
+    
+End Function
 

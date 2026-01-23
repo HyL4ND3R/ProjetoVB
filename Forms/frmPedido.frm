@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -1440,7 +1440,7 @@ Private Sub mskDataPedido_KeyPress(KeyAscii As Integer)
 
     If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
         
-        KeyCode = 0 'Limpa o Teclado
+        KeyAscii = 0 'Limpa o Teclado
         
         If MsgBox("Confirma Dados?", _
             vbQuestion + vbYesNo, _
@@ -1601,7 +1601,7 @@ Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
     
     If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
         
-        KeyCode = 0 'Limpa o Teclado
+        KeyAscii = 0 'Limpa o Teclado
         
         If MsgBox("Confirma Dados?", _
             vbQuestion + vbYesNo, _

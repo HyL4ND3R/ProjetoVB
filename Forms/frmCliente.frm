@@ -125,7 +125,7 @@ Begin VB.Form frmCliente
       Top             =   1080
       Width           =   1095
    End
-   Begin MSComctlLib.Toolbar Toolbar1 
+   Begin MSComctlLib.Toolbar Toolbar 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
@@ -311,6 +311,7 @@ Attribute VB_Exposed = False
 
 Private ModoAtual As eModoFormulario
 Private TipoDocumento As eTipoDocumentoCliente
+Private CodigoAtual As Long
 
 Private Sub Form_Load()
     
@@ -327,15 +328,15 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub modoInclusao()
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
     cmdListaCliente.Enabled = False 'Habilitar/Desabilitar commandButton
@@ -351,15 +352,15 @@ Private Sub modoInclusao()
 End Sub
 
 Private Sub modoAlteracao()
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
     cmdListaCliente.Enabled = False 'Habilitar/Desabilitar commandButton
@@ -375,15 +376,15 @@ Private Sub modoAlteracao()
 End Sub
 
 Private Sub modoConsulta()
-    Toolbar1.Buttons("novo").Enabled = True
-    Toolbar1.Buttons("salvar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = True
-    Toolbar1.Buttons("desfazer").Enabled = False
-    Toolbar1.Buttons("primeiro").Enabled = True
-    Toolbar1.Buttons("anterior").Enabled = True
-    Toolbar1.Buttons("proximo").Enabled = True
-    Toolbar1.Buttons("ultimo").Enabled = True
+    Toolbar.Buttons("novo").Enabled = True
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = True
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = True
+    Toolbar.Buttons("anterior").Enabled = True
+    Toolbar.Buttons("proximo").Enabled = True
+    Toolbar.Buttons("ultimo").Enabled = True
     txtCodigo.Enabled = True
     txtCodigo.BackColor = vbWindowBackground&
     cmdListaCliente.Enabled = True
@@ -422,7 +423,7 @@ Private Sub PreencherCampos()
 
 End Sub
 
-Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
     
@@ -441,32 +442,18 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------SALVAR
         Case "salvar"
-            Dim sql As String
-            Dim codigoAtual As Long
-
-            If ModoAtual = mfAlteracao Then
-                codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-                sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
-                    "TipoDocumento = " & "'" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & "', " & _
-                    "Documento = '" & mskDocumento.Text & "', " & _
-                    "Telefone = '" & txtTelefone.Text & "', " & _
-                    "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & _
-                    "WHERE Codigo = " & txtCodigo.Text
-            Else
-                sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
-                    "'" & txtNome.Text & "', " & _
-                    "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
-                    "'" & mskDocumento.Text & "', " & _
-                    "'" & txtTelefone.Text & "', " & _
-                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+            
+            If Not (ValidaCampos) Then Exit Sub
+            
+            If Not SalvarCliente Then
+                MsgBox "Erro ao Salvar o Cliente!", vbOKOnly
+                Exit Sub
             End If
-
-            Conn.Execute sql
             
             CarregarClientes
             
             If ModoAtual = mfAlteracao Then
-                rsCliente.Find "Codigo = " & codigoAtual
+                rsCliente.Find "Codigo = " & CodigoAtual
             Else
                 If Not rsCliente.EOF Then rsCliente.MoveLast
             End If
@@ -538,6 +525,39 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 End Sub
 
+'Função para salvar o Cliente
+Private Function SalvarCliente() As Boolean
+    On Error GoTo Erro
+    
+    Dim Sql As String
+    
+    If ModoAtual = mfAlteracao Then
+        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        Sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
+            "TipoDocumento = " & "'" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & "', " & _
+            "Documento = '" & mskDocumento.Text & "', " & _
+            "Telefone = '" & txtTelefone.Text & "', " & _
+            "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
+            "WHERE Codigo = " & txtCodigo.Text
+    Else
+        Sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
+            "'" & txtNome.Text & "', " & _
+            "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
+            "'" & mskDocumento.Text & "', " & _
+            "'" & txtTelefone.Text & "', " & _
+            IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+    End If
+
+    Conn.Execute Sql
+    
+    SalvarCliente = True
+    Exit Function
+    
+Erro:
+    SalvarCliente = False
+
+End Function
+
 Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o recordset
     If Not rsCliente Is Nothing Then 'Se ele não for nada (se existir)
         If rsCliente.State = adStateOpen Then rsCliente.Close 'Se esta aberto, fecha
@@ -545,6 +565,7 @@ Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o reco
     End If
 End Sub
 
+'Clique do txtCodigo
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
     
     If ModoAtual = mfConsulta Then
@@ -570,6 +591,86 @@ Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
         End If
     End If
     
+End Sub
+
+'Clique do txtNome
+Private Sub txtNome_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then 'Verifica se é enter
+        KeyAscii = 0 'Cancela o Enter, sem beep do windws
+        cboTipoDocumento.SetFocus
+    End If
+End Sub
+
+Private Sub cboTipoDocumento_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then 'Verifica se é enter
+        KeyAscii = 0 'Cancela o Enter, sem beep do windws
+        mskDocumento.SetFocus
+    End If
+End Sub
+
+'Atribuir a máscara ao documento com base no Tipo Documento
+Private Sub cboTipoDocumento_Click()
+
+    ' Remove a máscara primeiro para não dar erro
+    mskDocumento.Mask = ""
+    mskDocumento.Text = ""
+
+    ' Depois define a mascara novamente
+    Select Case cboTipoDocumento.ListIndex
+        
+        Case tdcCPF
+            mskDocumento.Mask = "999.999.999-99"
+
+        Case tdcCNPJ
+            mskDocumento.Mask = "99.999.999/9999-99"
+            
+        Case tdcOutro
+            mskDocumento.Mask = ""
+            
+    End Select
+
+End Sub
+
+Private Sub mskDocumento_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then 'Verifica se é enter
+        KeyAscii = 0 'Cancela o Enter, sem beep do windws
+        txtTelefone.SetFocus
+    End If
+End Sub
+
+Private Sub txtTelefone_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyReturn Then 'Verifica se a tecla digitada é enter
+    
+        KeyAscii = 0 'Limpa o Teclado
+        
+        If Not (ValidaCampos) Then Exit Sub
+        
+        If MsgBox("Confirma Dados?", _
+            vbQuestion + vbYesNo, _
+            "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
+            txtNome.SetFocus
+            Exit Sub
+        End If
+        
+        If Not SalvarCliente Then
+            MsgBox "Erro ao Salvar o Cliente!", vbOKOnly
+            Exit Sub
+        End If
+        
+        CarregarClientes
+        
+        If ModoAtual = mfAlteracao Then
+            rsCliente.Find "Codigo = " & CodigoAtual
+        Else
+            If Not rsCliente.EOF Then rsCliente.MoveLast
+        End If
+        
+        PreencherCampos
+        modoConsulta
+    
+    End If
+
 End Sub
 
 Private Sub cmdListaCliente_Click()
@@ -598,24 +699,63 @@ Private Sub popularComboTipoDocumento() 'Sub para popular o ComboBox
 
 End Sub
 
-Private Sub cboTipoDocumento_Click()
 
-    ' Remove a máscara primeiro para não dar erro
-    mskDocumento.Mask = ""
-    mskDocumento.Text = ""
-
-    ' Depois define a mascara novamente
+'Função para validar campos
+Private Function ValidaCampos()
+    
+    If Trim(txtNome.Text = "") Then
+        MsgBox "Nome Inválido"
+        txtNome.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    If cboTipoDocumento.ListIndex = -1 Then
+        MsgBox "Tipo Documento inválido"
+        cboTipoDocumento.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
     Select Case cboTipoDocumento.ListIndex
         
         Case tdcCPF
-            mskDocumento.Mask = "###.###.###-##"
-
+            If mskDocumento.Text = "" Or _
+            mskDocumento.Text = "___.___.___-__" Or _
+            Len(mskDocumento.Text) <> 14 Then
+                MsgBox "Documento inválido"
+                mskDocumento.SetFocus
+                ValidaCampos = False
+                Exit Function
+            End If
+        
         Case tdcCNPJ
-            mskDocumento.Mask = "##.###.###/####-##"
-            
+            If mskDocumento.Text = "" Or _
+            mskDocumento.Text = "__.___.___/____-__" Or _
+            Len(mskDocumento.Text) <> 18 Then
+                MsgBox "Documento inválido"
+                mskDocumento.SetFocus
+                ValidaCampos = False
+                Exit Function
+            End If
+        
         Case tdcOutro
-            mskDocumento.Mask = ""
-            
+            If mskDocumento.Text = "" Then
+                MsgBox "Documento inválido"
+                mskDocumento.SetFocus
+                ValidaCampos = False
+                Exit Function
+            End If
+    
     End Select
-
-End Sub
+    
+    If Len(txtTelefone.Text) < 9 Or Len(txtTelefone.Text) > 15 Then
+        MsgBox "Telefone inválido"
+        txtTelefone.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    ValidaCampos = True
+    
+End Function
