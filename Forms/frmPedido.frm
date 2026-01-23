@@ -656,6 +656,10 @@ Private Sub cmdSalvarItem_Click()
         End If
     End If
     
+    If (Not CalculaTotaisPedido(ControlePedido)) Then
+        MsgBox "Erro ao calcular os totais do pedido!", vbOKOnly
+    End If
+    CarregarPedidos
     PreencherItensPedido
     ModoInclusaoItem
     
@@ -984,7 +988,7 @@ Private Sub PreencherCampos()
     mskDataPedido.Mask = "99/99/9999"
     mskDataPedido.Text = Format(rsPedido!DataPedido, "dd/MM/yyyy")
     
-    txtValorTotal.Text = IIf(IsNull(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)
+    txtValorTotal.Text = Format((IIf(IsNull(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)), "0.00")
     
     PreencherItensPedido
     

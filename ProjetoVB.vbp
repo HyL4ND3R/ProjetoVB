@@ -22,6 +22,7 @@ Class=cPedidoItem; Classes\cPedidoItem.cls
 Module=modUtils; Modulos\modUtils.bas
 Form=Forms\frmPesquisaPedido.frm
 Form=Forms\frmTeste.frm
+Module=modStoreProcedures; Modulos\modStoreProcedures.bas
 Startup="frmLogin"
 HelpFile=""
 Command32=""

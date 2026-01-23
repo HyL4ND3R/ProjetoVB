@@ -103,14 +103,14 @@ End Sub
 Public Function InserirPedido(pedido As cPedido)
     On Error GoTo Erro
     
-    Dim sql As String
+    Dim Sql As String
     
-    sql = "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (" & _
+    Sql = "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (" & _
             pedido.Codigo & ", " & _
             pedido.ClienteCodigo & ", " & _
             "'" & Format(pedido.DataPedido, "yyyy-MM-dd") & "') "
     
-    Conn.Execute sql
+    Conn.Execute Sql
     InserirPedido = True
     Exit Function
     
@@ -121,15 +121,15 @@ End Function
 Public Function AlterarPedido(pedido As cPedido) As Boolean
     On Error GoTo Erro
 
-    Dim sql As String
+    Dim Sql As String
 
-    sql = "UPDATE Pedido SET " & _
+    Sql = "UPDATE Pedido SET " & _
           "Codigo = " & pedido.Codigo & ", " & _
           "ClienteCodigo = " & pedido.ClienteCodigo & ", " & _
           "Data = '" & Format(pedido.DataPedido, "yyyy-MM-dd") & "' " & _
           "WHERE Controle = " & pedido.Controle
 
-    Conn.Execute sql
+    Conn.Execute Sql
 
     AlterarPedido = True
     Exit Function
@@ -150,7 +150,7 @@ Public Function BuscaProximoCodItemPedido(ByVal ControlePedido As Long) As Boole
         .ActiveConnection = Conn
         .CommandType = adCmdText
         .CommandText = _
-            "SELECT ISNULL(Max(item),0) + 1 as Item" & _
+            "SELECT ISNULL(Max(item),0) + 1 as Item " & _
             "FROM PedidoItem WHERE ControlePedido = ?"
 
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , ControlePedido)
@@ -206,9 +206,9 @@ End Function
 Public Function AlterarItemPedidoxxxx(itemPedido As cPedidoItem) As Boolean
     On Error GoTo Erro
     
-    Dim sql As String
+    Dim Sql As String
     
-    sql = "UPDATE PedidoItem SET " & _
+    Sql = "UPDATE PedidoItem SET " & _
             "Item = " & itemPedido.Item & ", " & _
             "ProdutoCodigo = " & itemPedido.ProdutoCodigo & ", " & _
             "Descricao = '" & itemPedido.Descricao & "', " & _
@@ -217,7 +217,7 @@ Public Function AlterarItemPedidoxxxx(itemPedido As cPedidoItem) As Boolean
             "ValorTotal = " & itemPedido.ValorTotal & _
             "Where Controle = " & itemPedido.Controle
     
-    Conn.Execute sql
+    Conn.Execute Sql
     
     AlterarItemPedido = True
     Exit Function
