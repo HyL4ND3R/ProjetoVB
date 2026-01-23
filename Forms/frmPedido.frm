@@ -571,7 +571,8 @@ Private Sub Form_Load()
     
     AjustarColunasGridItens
     CarregarPedidos
-    InicializarCamposNumericos
+    InicializarCamposNumericosItens
+    InicializarCamposNumericosItensPedido
 
     If Not rsPedido.EOF Then 'Se não esta no fim da lista
         rsPedido.MoveLast 'Move para o final
@@ -601,6 +602,11 @@ Private Sub cmdExcluirItem_Click()
         MsgBox "Controle não encontrado", vbOKOnly
     End If
     
+    If (Not CalculaTotaisPedido(ControlePedido)) Then
+        MsgBox "Erro ao calcular os totais do pedido!", vbOKOnly
+    End If
+    
+    CarregarPedidos
     CarregarItensPedido CLng(txtCodigo.Text)
     PreencherItensPedido
     CancelarItem
@@ -659,6 +665,7 @@ Private Sub cmdSalvarItem_Click()
     If (Not CalculaTotaisPedido(ControlePedido)) Then
         MsgBox "Erro ao calcular os totais do pedido!", vbOKOnly
     End If
+    
     CarregarPedidos
     PreencherItensPedido
     ModoInclusaoItem
@@ -867,7 +874,7 @@ Private Sub ModoInclusaoItem()
     txtTotalItem.BackColor = &H8000000F
     
     ModoAtualItens = mfInclusao
-    InicializarCamposNumericos
+    InicializarCamposNumericosItens
     txtCodProduto.SetFocus
     
 End Sub
@@ -1039,6 +1046,11 @@ Private Sub PreencherItensPedido()
     If grdItensPedido.Rows > 1 Then
         grdItensPedido.Row = 1
         PreencherCamposItem
+    End If
+    
+    If IsNumeric(txtCodigo.Text) Then
+        BuscarRS rsPedido, "Codigo", txtCodigo.Text
+        txtValorTotal.Text = Format(rsPedido!ValorTotal, "0.00")
     End If
 
 End Sub
@@ -1341,10 +1353,13 @@ Private Function ValidaCamposItem()
     
 End Function
 'Ajustar os campos de valor e quantidade para sempre começar com valor
-Private Sub InicializarCamposNumericos()
-    txtQtde.Text = "0,00"
+Private Sub InicializarCamposNumericosItens()
+    txtQtde.Text = IIf(ModoAtualItens = mfInclusao, "1", "0")
     txtValorUn.Text = "0,00"
     txtTotalItem.Text = "0,00"
+End Sub
+
+Private Sub InicializarCamposNumericosItensPedido()
     txtValorTotal.Text = "0,00"
 End Sub
 
@@ -1554,9 +1569,17 @@ Private Sub txtQtde_KeyPress(KeyAscii As Integer)
 
 End Sub
 
+'Ao entrar no campo seleciona todo o texto automaticamente
+Private Sub txtQtde_GotFocus()
+    txtQtde.SelStart = 0
+    txtQtde.SelLength = Len(txtQtde.Text)
+End Sub
+
+'Ao sair do campo formata o conteudo para decimal
 Private Sub txtQtde_LostFocus()
     txtQtde.Text = FormataDecimal(txtQtde.Text)
 End Sub
+
 
 Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
 
@@ -1604,6 +1627,13 @@ Private Sub txtValorUn_KeyPress(KeyAscii As Integer)
 
 End Sub
 
+'Ao entrar no campo já seleciona todo o conteudo automaticamente
+Private Sub txtValorUn_GotFocus()
+    txtValorUn.SelStart = 0
+    txtValorUn.SelLength = Len(txtValorUn.Text)
+End Sub
+
+'Ao mudar algo no valor do campo já atualiza o valor do total item
 Private Sub txtValorUn_Change()
     If IsNumeric(txtValorUn.Text) Then
         If IsNumeric(txtQtde.Text) Then
@@ -1613,6 +1643,7 @@ Private Sub txtValorUn_Change()
     End If
 End Sub
 
+'Ao Sair do Campo Formata ele para decimal
 Private Sub txtValorUn_LostFocus()
     txtValorUn.Text = FormataDecimal(txtValorUn.Text)
 End Sub
