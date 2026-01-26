@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmCliente 
    Caption         =   "Cadastro de Clientes"
    ClientHeight    =   8100
@@ -311,7 +311,7 @@ Attribute VB_Exposed = False
 
 Private ModoAtual As eModoFormulario
 Private TipoDocumento As eTipoDocumentoCliente
-Private CodigoAtual As Long
+Private codigoAtual As Long
 
 Private Sub Form_Load()
     
@@ -453,7 +453,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             CarregarClientes
             
             If ModoAtual = mfAlteracao Then
-                rsCliente.Find "Codigo = " & CodigoAtual
+                rsCliente.Find "Codigo = " & codigoAtual
             Else
                 If Not rsCliente.EOF Then rsCliente.MoveLast
             End If
@@ -532,7 +532,7 @@ Private Function SalvarCliente() As Boolean
     Dim Sql As String
     
     If ModoAtual = mfAlteracao Then
-        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         Sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
             "TipoDocumento = " & "'" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & "', " & _
             "Documento = '" & mskDocumento.Text & "', " & _
@@ -661,7 +661,7 @@ Private Sub txtTelefone_KeyPress(KeyAscii As Integer)
         CarregarClientes
         
         If ModoAtual = mfAlteracao Then
-            rsCliente.Find "Codigo = " & CodigoAtual
+            rsCliente.Find "Codigo = " & codigoAtual
         Else
             If Not rsCliente.EOF Then rsCliente.MoveLast
         End If

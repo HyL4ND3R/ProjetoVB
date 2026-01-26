@@ -82,6 +82,10 @@ Private Sub cmdSelecionar_Click()
     Selecionar
 End Sub
 
+Private Sub cmdCancelar_Click()
+    Unload Me
+End Sub
+
 Private Sub Selecionar()
     If grdOperador.Row = 0 Then Exit Sub
 
