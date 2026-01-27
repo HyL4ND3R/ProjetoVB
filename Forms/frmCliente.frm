@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmCliente 
    Caption         =   "Cadastro de Clientes"
    ClientHeight    =   8100
@@ -319,7 +319,7 @@ Attribute VB_Exposed = False
 
 Private ModoAtual As eModoFormulario
 Private TipoDocumento As eTipoDocumentoCliente
-Private codigoAtual As Long
+Private CodigoAtual As Long
 
 Private Sub Form_Load()
     
@@ -461,7 +461,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             CarregarClientes
             
             If ModoAtual = mfAlteracao Then
-                rsCliente.Find "Codigo = " & codigoAtual
+                rsCliente.Find "Codigo = " & CodigoAtual
             Else
                 If Not rsCliente.EOF Then rsCliente.MoveLast
             End If
@@ -531,10 +531,24 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
 '-------------VISUALIZAR
         Case "visualizar"
-            Dim rpt As New rptClientes
+            Dim rpt As New ARClientes
+            Dim sql As String
+            
             CarregarClientes
             
-            Set rpt.rsDadosImpressao = rsCliente
+            rpt.txtCodigo = rsCliente("Codigo")
+            rpt.txtNome = rsCliente("Nome")
+            
+            'Define a Conexão com o Banco
+            rpt.DCImpPedido.ConnectionString = Conn
+            
+            sql = "Select * from Cliente"
+            
+            'Define a string que vai ser executada no banco
+            rpt.DCImpPedido.Source = sql
+            
+            rpt.Run
+            
             rpt.Show vbModal
         
     End Select
@@ -545,18 +559,18 @@ End Sub
 Private Function SalvarCliente() As Boolean
     On Error GoTo Erro
     
-    Dim Sql As String
+    Dim sql As String
     
     If ModoAtual = mfAlteracao Then
-        codigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-        Sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
+        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
             "TipoDocumento = " & "'" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & "', " & _
             "Documento = '" & mskDocumento.Text & "', " & _
             "Telefone = '" & txtTelefone.Text & "', " & _
             "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
             "WHERE Codigo = " & txtCodigo.Text
     Else
-        Sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
+        sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
             "'" & txtNome.Text & "', " & _
             "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
             "'" & mskDocumento.Text & "', " & _
@@ -564,7 +578,7 @@ Private Function SalvarCliente() As Boolean
             IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
     End If
 
-    Conn.Execute Sql
+    Conn.Execute sql
     
     SalvarCliente = True
     Exit Function
@@ -677,7 +691,7 @@ Private Sub txtTelefone_KeyPress(KeyAscii As Integer)
         CarregarClientes
         
         If ModoAtual = mfAlteracao Then
-            rsCliente.Find "Codigo = " & codigoAtual
+            rsCliente.Find "Codigo = " & CodigoAtual
         Else
             If Not rsCliente.EOF Then rsCliente.MoveLast
         End If
