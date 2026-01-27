@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -426,6 +426,24 @@ Begin VB.Form frmPedido
          EndProperty
       End
    End
+   Begin VB.Label lblData 
+      Alignment       =   1  'Right Justify
+      Caption         =   "Data:"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   345
+      Left            =   5010
+      TabIndex        =   27
+      Top             =   930
+      Width           =   705
+   End
    Begin VB.Label lblTotal 
       Alignment       =   1  'Right Justify
       Caption         =   "Total:"
@@ -628,11 +646,12 @@ End Sub
 
 Private Sub cmdSalvarItem_Click()
     Set pedidoItem = New cPedidoItem
-    Dim codigoAtual As Long
+    Dim CodigoAtual As Long
 
     'Validar os campos antes de tentar inserir
     If Not ValidaCamposItem Then Exit Sub
 
+    'Inserção usando o Objeto cPedidoItem para passar os dados
     If ModoAtualItens = mfAlteracao Then
         pedidoItem.Controle = VerificaNull(ControlePedidoItem, 0)
         pedidoItem.ControlePedido = VerificaNull(ControlePedido, 0)
@@ -1079,6 +1098,10 @@ Private Sub AjustarColunasGridItens()
     
 End Sub
 
+Private Sub lblData_Click()
+
+End Sub
+
 '---------------------Case Toolbar---------------------------------------------------
 Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
@@ -1102,7 +1125,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------SALVAR-----------------------------------------------------------------
         Case "salvar"
-            Dim codigoAtual As Long
+            Dim CodigoAtual As Long
             
             'Validar os campos antes de tentar inserir
             If Not ValidaCamposPedido Then Exit Sub
@@ -1130,7 +1153,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             CarregarPedidos
             
             If ModoAtualPedido = mfAlteracao Then
-                rsPedido.Find "Codigo = " & codigoAtual
+                rsPedido.Find "Codigo = " & CodigoAtual
             Else
                 If Not rsPedido.EOF Then rsPedido.MoveLast
             End If

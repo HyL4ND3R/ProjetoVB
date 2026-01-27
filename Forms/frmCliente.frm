@@ -532,7 +532,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 '-------------VISUALIZAR
         Case "visualizar"
             Dim rpt As New ARClientes
-            Dim sql As String
+            Dim Sql As String
             
             CarregarClientes
             
@@ -540,12 +540,12 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             rpt.txtNome = rsCliente("Nome")
             
             'Define a Conexão com o Banco
-            rpt.DCImpPedido.ConnectionString = Conn
+            rpt.dcImpPedido.ConnectionString = Conn
             
-            sql = "Select * from Cliente"
+            Sql = "Select * from Cliente"
             
             'Define a string que vai ser executada no banco
-            rpt.DCImpPedido.Source = sql
+            rpt.dcImpPedido.Source = Sql
             
             rpt.Run
             
@@ -559,18 +559,18 @@ End Sub
 Private Function SalvarCliente() As Boolean
     On Error GoTo Erro
     
-    Dim sql As String
+    Dim Sql As String
     
     If ModoAtual = mfAlteracao Then
         CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-        sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
+        Sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
             "TipoDocumento = " & "'" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & "', " & _
             "Documento = '" & mskDocumento.Text & "', " & _
             "Telefone = '" & txtTelefone.Text & "', " & _
             "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
             "WHERE Codigo = " & txtCodigo.Text
     Else
-        sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
+        Sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
             "'" & txtNome.Text & "', " & _
             "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
             "'" & mskDocumento.Text & "', " & _
@@ -578,7 +578,7 @@ Private Function SalvarCliente() As Boolean
             IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
     End If
 
-    Conn.Execute sql
+    Conn.Execute Sql
     
     SalvarCliente = True
     Exit Function
@@ -629,6 +629,11 @@ Private Sub txtNome_KeyPress(KeyAscii As Integer)
         KeyAscii = 0 'Cancela o Enter, sem beep do windws
         cboTipoDocumento.SetFocus
     End If
+    
+    If KeyAscii = vbKeyF4 Then
+        cmdListaCliente_Click
+    End If
+    
 End Sub
 
 Private Sub cboTipoDocumento_KeyPress(KeyAscii As Integer)
