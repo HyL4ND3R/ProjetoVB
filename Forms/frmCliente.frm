@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmCliente 
    Caption         =   "Cadastro de Clientes"
    ClientHeight    =   8100
@@ -139,7 +139,7 @@ Begin VB.Form frmCliente
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   9
+         NumButtons      =   10
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "novo"
             ImageIndex      =   1
@@ -176,6 +176,10 @@ Begin VB.Form frmCliente
             Key             =   "ultimo"
             ImageIndex      =   9
          EndProperty
+         BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "visualizar"
+            ImageIndex      =   10
+         EndProperty
       EndProperty
       BorderStyle     =   1
       MouseIcon       =   "frmCliente.frx":11A6
@@ -190,7 +194,7 @@ Begin VB.Form frmCliente
          MaskColor       =   12632256
          _Version        =   393216
          BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-            NumListImages   =   9
+            NumListImages   =   10
             BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
                Picture         =   "frmCliente.frx":1E80
                Key             =   ""
@@ -225,6 +229,10 @@ Begin VB.Form frmCliente
             EndProperty
             BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
                Picture         =   "frmCliente.frx":7E52
+               Key             =   ""
+            EndProperty
+            BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+               Picture         =   "frmCliente.frx":8424
                Key             =   ""
             EndProperty
          EndProperty
@@ -520,6 +528,14 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
         Case "ultimo"
             rsCliente.MoveLast
             PreencherCampos
+            
+'-------------VISUALIZAR
+        Case "visualizar"
+            Dim rpt As New rptClientes
+            CarregarClientes
+            
+            Set rpt.rsDadosImpressao = rsCliente
+            rpt.Show vbModal
         
     End Select
 
