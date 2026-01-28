@@ -15,3 +15,29 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private fItem As Integer
+
+Private Sub ActiveReport_ReportStart()
+    
+    fItem = 0
+    
+End Sub
+
+Private Sub Detail_Format()
+
+    'Fundo
+    If fItem Mod 2 = 0 Then
+        Detail.BackColor = &HFFFFFF
+    Else
+        Detail.BackColor = &HE0E0E0
+    End If
+    fItem = fItem + 1
+
+End Sub
+
+Private Sub PageFooter_Format()
+    
+    fldOperador = "Operador: " & rsOperador!Codigo & " - " & rsOperador!Nome
+    fldPagina = "Página: " & Format(pageNumber, "###000")
+    
+End Sub

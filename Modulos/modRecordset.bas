@@ -26,7 +26,9 @@ Public Sub CarregarClientes()
 
     rsCliente.CursorLocation = adUseClient
     rsCliente.Open _
-        "SELECT Codigo, Nome, TipoDocumento, Documento, Telefone, Inativo FROM Cliente ORDER BY Codigo", _
+        "SELECT Codigo, Nome, TipoDocumento, " & _
+        "Case TipoDocumento When 0 Then 'CPF' When 1 Then 'CNPJ' ELSE 'Outros' End as TipoDocumentoExtenso, " & _
+        "Documento, Telefone, Inativo FROM Cliente ORDER BY Codigo", _
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub

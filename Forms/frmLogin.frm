@@ -76,6 +76,11 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
  Private Sub cmdLogin_Click()
+    
+    If Not rsOperador Is Nothing Then 'Se ele não for nada (se existir)
+        If rsOperador.State = adStateOpen Then rsOperador.Close 'Se esta aberto, fecha
+        Set rsOperador = Nothing 'Seta como nada
+    End If
 
     Set rsOperador = New ADODB.Recordset
 
@@ -101,8 +106,8 @@ Attribute VB_Exposed = False
         MsgBox "Usuário ou senha inválidos.", vbCritical
     End If
 
-    rsOperador.Close
-    Set rs = Nothing
+    'rsOperador.Close
+    'Set rsOperador = Nothing
 End Sub
 
 Private Sub Form_Load()
