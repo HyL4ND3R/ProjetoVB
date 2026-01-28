@@ -77,28 +77,28 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
  Private Sub cmdLogin_Click()
     
-    If Not rsOperador Is Nothing Then 'Se ele não for nada (se existir)
-        If rsOperador.State = adStateOpen Then rsOperador.Close 'Se esta aberto, fecha
-        Set rsOperador = Nothing 'Seta como nada
+    If Not rsOperadorLogado Is Nothing Then 'Se ele não for nada (se existir)
+        If rsOperadorLogado.State = adStateOpen Then rsOperadorLogado.Close 'Se esta aberto, fecha
+        Set rsOperadorLogado = Nothing 'Seta como nada
     End If
 
-    Set rsOperador = New ADODB.Recordset
+    Set rsOperadorLogado = New ADODB.Recordset
 
-    rsOperador.CursorLocation = adUseClient
+    rsOperadorLogado.CursorLocation = adUseClient
 
     If Trim(txtCodigo.Text) = "" Or Trim(txtSenha.Text) = "" Then
         MsgBox "Informe usuário e senha.", vbExclamation
         Exit Sub
     End If
 
-    rsOperador.Open _
+    rsOperadorLogado.Open _
         "SELECT * FROM Operador " & _
           "WHERE Codigo = '" & txtCodigo.Text & "' " & _
           "AND Senha = '" & txtSenha.Text & "' " & _
           "AND Inativo = 0", _
         Conn, adOpenStatic, adLockReadOnly
 
-    If Not rsOperador.EOF Then
+    If Not rsOperadorLogado.EOF Then
         Unload Me
         Load MDIFrmPrincipal
         MDIFrmPrincipal.Show
@@ -106,8 +106,8 @@ Attribute VB_Exposed = False
         MsgBox "Usuário ou senha inválidos.", vbCritical
     End If
 
-    'rsOperador.Close
-    'Set rsOperador = Nothing
+    'rsOperadorLogado.Close
+    'Set rsOperadorLogado = Nothing
 End Sub
 
 Private Sub Form_Load()

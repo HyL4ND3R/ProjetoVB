@@ -1,4 +1,5 @@
 Attribute VB_Name = "modRecordset"
+Public rsOperadorLogado As ADODB.Recordset 'Usado para o operadorLogado
 Public rsOperador As ADODB.Recordset 'Tabela Operador
 Public rsCliente As ADODB.Recordset 'Tabela Cliente
 Public rsClienteCod As ADODB.Recordset 'Buscar Cliente especifico

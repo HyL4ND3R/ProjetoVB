@@ -28,6 +28,7 @@ Form=Forms\frmPesquisaPedido.frm
 Form=Forms\frmTeste.frm
 Module=modStoreProcedures; Modulos\modStoreProcedures.bas
 Designer=Designers\arImpressaoClientes.Dsr
+Designer=Designers\arRelatorioPedidos.Dsr
 Startup="frmLogin"
 HelpFile=""
 Command32=""

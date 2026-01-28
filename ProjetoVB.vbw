@@ -16,4 +16,5 @@ modUtils = 104, 104, 1392, 746, C
 frmPesquisaPedido = 148, 80, 1436, 722, C, 130, 130, 1418, 772, C
 frmTeste = 104, 104, 1392, 746, C, 78, 78, 1366, 720, C
 modStoreProcedures = 26, 26, 1314, 668, C
-arImpressaoClientes = 52, 52, 1505, 555, , 104, 80, 1338, 666, C
+arImpressaoClientes = 166, 142, 1619, 645, , 104, 80, 1338, 666, C
+arRelatorioPedidos = 156, 156, 1433, 798, , 104, 104, 1340, 682, C
