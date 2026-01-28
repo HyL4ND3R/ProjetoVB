@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -335,7 +335,7 @@ Begin VB.Form frmPedido
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   9
+         NumButtons      =   10
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "novo"
             ImageIndex      =   1
@@ -372,6 +372,10 @@ Begin VB.Form frmPedido
             Key             =   "ultimo"
             ImageIndex      =   9
          EndProperty
+         BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "visualizar"
+            ImageIndex      =   10
+         EndProperty
       EndProperty
       BorderStyle     =   1
       MouseIcon       =   "frmPedido.frx":34F2
@@ -386,7 +390,7 @@ Begin VB.Form frmPedido
          MaskColor       =   12632256
          _Version        =   393216
          BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-            NumListImages   =   9
+            NumListImages   =   10
             BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
                Picture         =   "frmPedido.frx":41CC
                Key             =   ""
@@ -421,6 +425,10 @@ Begin VB.Form frmPedido
             EndProperty
             BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
                Picture         =   "frmPedido.frx":A19E
+               Key             =   ""
+            EndProperty
+            BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+               Picture         =   "frmPedido.frx":A770
                Key             =   ""
             EndProperty
          EndProperty
@@ -1098,10 +1106,6 @@ Private Sub AjustarColunasGridItens()
     
 End Sub
 
-Private Sub lblData_Click()
-
-End Sub
-
 '---------------------Case Toolbar---------------------------------------------------
 Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
@@ -1219,6 +1223,31 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
         Case "ultimo"
             rsPedido.MoveLast
             PreencherCampos
+            
+'-------------VISUALIZAR
+        Case "visualizar"
+            Dim rpt As New arRelatorioPedidos
+            Dim Sql As String
+            
+            'Define a Conexão com o Banco
+            rpt.dcRelPedidos.ConnectionString = Conn
+            
+            Sql = "select Pedido.Codigo As Pedido, Cliente.Nome As Cliente, pedido.Data As DataPedido, " & _
+                    "Pedido.QtdeTotal As QtdeTotal, Pedido.ValorTotal As ValorTotal, " & _
+                    "PedidoItem.ProdutoCodigo As ProdutoCod,  PedidoItem.Descricao As Produto, " & _
+                    "PedidoItem.Quantidade As ProdutoQtde, PedidoItem.ValorUn As ProdutoValorUn, " & _
+                    "PedidoItem.ValorTotal As ProdutoValorTotal " & _
+                    "From pedido " & _
+                    "Inner join Cliente on Pedido.ClienteCodigo = Cliente.Codigo " & _
+                    "Left join PedidoItem  on PedidoItem.ControlePedido = Pedido.Controle " & _
+                    "Order by PedidoItem.Item"
+            
+            'Define a string que vai ser executada no banco
+            rpt.dcRelPedidos.Source = Sql
+            
+            rpt.Run
+            
+            rpt.Show vbModal
         
     End Select
 

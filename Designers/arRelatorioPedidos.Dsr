@@ -39,14 +39,34 @@ Private Sub Detail_Format()
     fItem = fItem + 1
 
     If (codPedido = CLng(rs!pedido)) Then
-        'fazer aqui a ocultação dos campos
+        'Ocultado os campos para somente mostrar o item
+        fldPedido.Visible = False
+        fldCliente.Visible = False
+        fldData.Visible = False
+        fldQtdeTotal.Visible = False
+        fldValorTotal.Visible = False
+        lblProdutoCod.Visible = False
+        lblProduto.Visible = False
+        lblProdutoQtde.Visible = False
+        lblProdutoValorUn.Visible = False
+        lblProdutoValorTotal.Visible = False
     Else
+        'Mostrando novamente os campos pois é um pedido novo
         codPedido = CLng(rs!pedido)
+        fldPedido.Visible = True
+        fldCliente.Visible = True
+        fldData.Visible = True
+        fldQtdeTotal.Visible = True
+        fldValorTotal.Visible = True
+        lblProdutoCod.Visible = True
+        lblProduto.Visible = True
+        lblProdutoQtde.Visible = True
+        lblProdutoValorUn.Visible = True
+        lblProdutoValorTotal.Visible = True
     End If
     
     
     
-
 End Sub
 
 Private Sub PageFooter_Format()
