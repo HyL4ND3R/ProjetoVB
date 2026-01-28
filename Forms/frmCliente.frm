@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmCliente 
    Caption         =   "Cadastro de Clientes"
    ClientHeight    =   8100
@@ -539,7 +539,9 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             Sql = "SELECT Codigo, Nome, " & _
             "Case TipoDocumento When 0 Then 'CPF' When 1 Then 'CNPJ' ELSE 'Outros' End as TipoDocumento, " & _
-            "Documento, Telefone, Inativo FROM Cliente ORDER BY Codigo"
+            "Documento, Telefone, " & _
+            "Case Inativo When 0 Then 'Não' When 1 Then 'Sim' Else 'ERRO' End as Inativo " & _
+            "FROM Cliente ORDER BY Codigo"
             
             'Define a string que vai ser executada no banco
             rpt.dcImpPedido.Source = Sql
