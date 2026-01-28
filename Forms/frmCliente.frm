@@ -531,7 +531,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
 '-------------VISUALIZAR
         Case "visualizar"
-            Dim rpt As New ARClientes
+            Dim rpt As New arImpressaoClientes
             Dim Sql As String
             
             'Define a Conexão com o Banco
