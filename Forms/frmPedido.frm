@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -1232,15 +1232,15 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             'Define a Conexão com o Banco
             rpt.dcRelPedidos.ConnectionString = Conn
             
-            Sql = "select Pedido.Codigo As Pedido, Cliente.Nome As Cliente, pedido.Data As DataPedido, " & _
-                    "Pedido.QtdeTotal As QtdeTotal, Pedido.ValorTotal As ValorTotal, " & _
+            Sql = "select Pedido.Codigo As Pedido, Cliente.Nome As Cliente, FORMAT(pedido.Data,'dd/MM/yyyy') As DataPedido, " & _
+                    "isNull(Pedido.QtdeTotal,0) As QtdeTotal, IsNull(Pedido.ValorTotal,0) As ValorTotal, " & _
                     "PedidoItem.ProdutoCodigo As ProdutoCod,  PedidoItem.Descricao As Produto, " & _
                     "PedidoItem.Quantidade As ProdutoQtde, PedidoItem.ValorUn As ProdutoValorUn, " & _
                     "PedidoItem.ValorTotal As ProdutoValorTotal " & _
                     "From pedido " & _
                     "Inner join Cliente on Pedido.ClienteCodigo = Cliente.Codigo " & _
                     "Left join PedidoItem  on PedidoItem.ControlePedido = Pedido.Controle " & _
-                    "Order by PedidoItem.Item"
+                    "Order by Pedido.Codigo, PedidoItem.Item"
             
             'Define a string que vai ser executada no banco
             rpt.dcRelPedidos.Source = Sql
@@ -1530,7 +1530,7 @@ Private Sub txtCodProduto_KeyPress(KeyAscii As Integer)
             Exit Sub 'Sai da sub
         End If
         
-        AvancarComEnterKD KeyAscii, txtQtde 'Se tudo deu certo, avança para o próximo campo
+        txtQtde.SetFocus 'Se tudo deu certo, avança para o próximo campo
     End If
     
     ' Só números
@@ -1549,7 +1549,7 @@ Private Sub txtQtde_KeyPress(KeyAscii As Integer)
     ' ENTER
     If KeyAscii = vbKeyReturn Then
         
-        AvancarComEnterKD KeyAscii, txtValorUn
+        txtValorUn.SetFocus
         
         ' Valida Código Produto
         If Trim(txtCodProduto.Text) = "" Or Not IsNumeric(txtCodProduto.Text) Then
