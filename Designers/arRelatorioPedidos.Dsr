@@ -55,6 +55,7 @@ Private Sub Detail_Format()
         fldProdutoQtde.Top = 0
         fldProdutoValorUn.Top = 0
         fldProdutoValorTotal.Top = 0
+        'Ajustando Tamanho do Detail para ficar pequeno e só mostrar a linha do item
         Detail.Height = 284
     Else
         'Atualizando a variavel de controle do Cod Pedido
@@ -73,11 +74,12 @@ Private Sub Detail_Format()
         lblProdutoValorUn.Visible = True
         lblProdutoValorTotal.Visible = True
         'Puxando os itens para baixo para mostrar os dados do pedido
-        fldProdutoCod.Top = 567
-        fldProduto.Top = 567
-        fldProdutoQtde.Top = 567
-        fldProdutoValorUn.Top = 567
-        fldProdutoValorTotal.Top = 567
+        fldProdutoCod.Top = 750
+        fldProduto.Top = 750
+        fldProdutoQtde.Top = 750
+        fldProdutoValorUn.Top = 750
+        fldProdutoValorTotal.Top = 750
+        'Ajustando tamanho do Detail para ficar grande e mostrar tudo
         Detail.Height = 870
     End If
     
@@ -95,7 +97,9 @@ Private Sub Detail_Format()
         lblProdutoQtde.Visible = False
         lblProdutoValorUn.Visible = False
         lblProdutoValorTotal.Visible = False
+        'Ajustado tamanho do Detail para ficar pequeno e só mostrar a linha do pedido
         Detail.Height = 284
+        
     End If
 
     

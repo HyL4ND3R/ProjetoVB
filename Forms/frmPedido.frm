@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -622,7 +622,7 @@ Private Sub cmdExcluirItem_Click()
               vbQuestion + vbYesNo, _
               "Confirmação") = vbNo Then Exit Sub
 
-    If Not IsNull(ControlePedidoItem) Then
+    If Not ISNULL(ControlePedidoItem) Then
         Conn.Execute "DELETE FROM PedidoItem WHERE Controle = " & ControlePedidoItem
     Else
         MsgBox "Controle não encontrado", vbOKOnly
@@ -630,6 +630,10 @@ Private Sub cmdExcluirItem_Click()
     
     If (Not CalculaTotaisPedido(ControlePedido)) Then
         MsgBox "Erro ao calcular os totais do pedido!", vbOKOnly
+    End If
+    
+    If (Not RecalcularItemPedido(ControlePedido)) Then
+        MsgBox "Erro ao recalcular os itens do pedido!", vbOKOnly
     End If
     
     CarregarPedidos
@@ -1022,7 +1026,7 @@ Private Sub PreencherCampos()
     mskDataPedido.Mask = "99/99/9999"
     mskDataPedido.Text = Format(rsPedido!DataPedido, "dd/MM/yyyy")
     
-    txtValorTotal.Text = Format((IIf(IsNull(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)), "0.00")
+    txtValorTotal.Text = Format((IIf(ISNULL(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)), "0.00")
     
     PreencherItensPedido
     
@@ -1226,29 +1230,48 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
 '-------------VISUALIZAR
         Case "visualizar"
-            Dim rpt As New arRelatorioPedidos
+            
+            'Validação do campo código do pedido
+            If (Not IsNumeric(txtCodigo.Text)) Then
+                MsgBox "Codigo De Pedido inválido!", vbOKOnly
+                Exit Sub
+            End If
+            
+            BuscarPedidoPorCodigo CLng(txtCodigo.Text)
+            
+            'Validação se o pedido existe
+            If (rsPedidoCod.BOF Or rsPedidoCod.EOF) Then
+                MsgBox "Pedido não Encontrado!", vbOKOnly
+                Exit Sub
+            End If
+
+            Dim rpt As New arImpressaoPedido
             Dim Sql As String
             
             'Define a Conexão com o Banco
-            rpt.dcRelPedidos.ConnectionString = Conn
+            rpt.dcImpPedido.ConnectionString = Conn
             
-            Sql = "select Pedido.Codigo As Pedido, Cliente.Nome As Cliente, FORMAT(pedido.Data,'dd/MM/yyyy') As DataPedido, " & _
+            Sql = "Select Pedido.Codigo As Pedido, " & _
+                    "CONVERT(varchar,Pedido.ClienteCodigo) + ' - ' + CONVERT(varchar,Cliente.Nome) As Cliente, " & _
+                    "FORMAT(pedido.Data,'dd/MM/yyyy') As DataPedido, " & _
                     "isNull(Pedido.QtdeTotal,0) As QtdeTotal, IsNull(Pedido.ValorTotal,0) As ValorTotal, " & _
-                    "PedidoItem.ProdutoCodigo As ProdutoCod,  PedidoItem.Descricao As Produto, " & _
+                    "PedidoItem.Item As PedidoItem, " & _
+                    "PedidoItem.ProdutoCodigo As ProdutoCodigo,  PedidoItem.Descricao As ProdutoDescricao, " & _
                     "PedidoItem.Quantidade As ProdutoQtde, PedidoItem.ValorUn As ProdutoValorUn, " & _
                     "PedidoItem.ValorTotal As ProdutoValorTotal " & _
                     "From pedido " & _
                     "Inner join Cliente on Pedido.ClienteCodigo = Cliente.Codigo " & _
                     "Left join PedidoItem  on PedidoItem.ControlePedido = Pedido.Controle " & _
-                    "Order by Pedido.Codigo, PedidoItem.Item"
+                    "Where Pedido.Codigo = " & txtCodigo.Text & _
+                    "Order By PedidoItem.Item"
             
             'Define a string que vai ser executada no banco
-            rpt.dcRelPedidos.Source = Sql
+            rpt.dcImpPedido.Source = Sql
             
             rpt.Run
             
             rpt.Show vbModal
-        
+            
     End Select
 
 End Sub

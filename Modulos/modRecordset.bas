@@ -6,6 +6,7 @@ Public rsClienteCod As ADODB.Recordset 'Buscar Cliente especifico
 Public rsProduto As ADODB.Recordset 'Tabela Produto
 Public rsProdutoCod As ADODB.Recordset 'Buscar Produto especifico
 Public rsPedido As ADODB.Recordset 'Tabela Pedido
+Public rsPedidoCod As ADODB.Recordset 'Buscar Pedido especifico
 Public rsProximoCodigo As ADODB.Recordset 'Buscar próximo codigo de pedido
 Public rsPedidoItem As ADODB.Recordset 'Tabela PedidoItem
 Public rsPedidoItemCod As ADODB.Recordset 'Próximo cod de ITEM do pedido
@@ -79,6 +80,19 @@ Public Sub CarregarPedidos()
             "Order By Codigo", _
         Conn, adOpenStatic, adLockReadOnly
 
+End Sub
+
+Public Sub BuscarPedidoPorCodigo(CodPedido As Long)
+    Set rsPedidoCod = New ADODB.Recordset
+    
+    rsPedidoCod.CursorLocation = adUseClient
+    rsPedidoCod.Open _
+        "select Pedido.Controle, Pedido.Codigo, Pedido.ClienteCodigo, Cliente.Nome As Cliente, Pedido.Data, " & _
+            "ISNULL(Pedido.QtdeTotal, 0) as QtdeTotal, ISNULL(Pedido.ValorTotal, 0) as ValorTotal " & _
+            "From pedido " & _
+            "Inner join Cliente on Pedido.ClienteCodigo = Cliente.Codigo " & _
+            "Where Pedido.Codigo = " & CodPedido, _
+        Conn, adOpenStatic, adLockReadOnly
 End Sub
 
 Public Sub BuscarProximoCodPedido()
