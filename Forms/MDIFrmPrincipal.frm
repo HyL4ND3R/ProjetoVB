@@ -23,6 +23,9 @@ Begin VB.MDIForm MDIFrmPrincipal
    Begin VB.Menu mnuPedidos 
       Caption         =   "Pedidos"
    End
+   Begin VB.Menu mnuRelPedidos 
+      Caption         =   "Relatório Pedidos"
+   End
 End
 Attribute VB_Name = "MDIFrmPrincipal"
 Attribute VB_GlobalNameSpace = False
@@ -43,6 +46,10 @@ End Sub
 
 Private Sub mnuProdutos_Click()
     frmProduto.Show
+End Sub
+
+Private Sub mnuRelPedidos_Click()
+    frmRelPedidos.Show
 End Sub
 
 Private Sub mnuTeste_Click()

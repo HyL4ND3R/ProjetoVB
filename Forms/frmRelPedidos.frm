@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmRelPedidos 
    Caption         =   "Relatório De Pedidos"
    ClientHeight    =   4050
@@ -49,7 +49,7 @@ Begin VB.Form frmRelPedidos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   390
-      Left            =   3270
+      Left            =   3240
       TabIndex        =   10
       Top             =   2070
       Width           =   3150
@@ -68,7 +68,7 @@ Begin VB.Form frmRelPedidos
       Left            =   1890
       TabIndex        =   9
       Top             =   2070
-      Width           =   855
+      Width           =   825
    End
    Begin VB.TextBox txtNomeCliente 
       BeginProperty Font 
@@ -83,7 +83,7 @@ Begin VB.Form frmRelPedidos
       Height          =   390
       Left            =   3240
       TabIndex        =   8
-      Top             =   1575
+      Top             =   1590
       Width           =   3150
    End
    Begin VB.TextBox txtCodCliente 
@@ -105,7 +105,7 @@ Begin VB.Form frmRelPedidos
    Begin VB.CommandButton cmdListaCliente 
       DisabledPicture =   "frmRelPedidos.frx":11A6
       DownPicture     =   "frmRelPedidos.frx":1788
-      Height          =   375
+      Height          =   405
       Left            =   2715
       Picture         =   "frmRelPedidos.frx":1D6A
       Style           =   1  'Graphical
@@ -131,10 +131,10 @@ Begin VB.Form frmRelPedidos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   62455809
+      Format          =   155385857
       CurrentDate     =   46051
    End
-   Begin MSComCtl2.DTPicker DTPicker1 
+   Begin MSComCtl2.DTPicker dtpDataFinal 
       Height          =   375
       Left            =   1890
       TabIndex        =   1
@@ -152,7 +152,7 @@ Begin VB.Form frmRelPedidos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   62455809
+      Format          =   155385857
       CurrentDate     =   46051
    End
    Begin VB.Label lblCliente 
@@ -235,10 +235,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
-Private Sub Form_Load()
-    
-End Sub
-
 Private Sub cmdVisualizar_Click()
     
     If (Not ValidaCampos) Then Exit Sub
@@ -257,17 +253,220 @@ Private Sub cmdVisualizar_Click()
             "From pedido " & _
             "Inner join Cliente on Pedido.ClienteCodigo = Cliente.Codigo " & _
             "Left join PedidoItem  on PedidoItem.ControlePedido = Pedido.Controle " & _
-            "Order by Pedido.Codigo, PedidoItem.Item"
+            "Where FORMAT(Pedido.Data,'dd/MM/yyyy') Between '" & dtpDataInicial.Value & "' and '" & dtpDataFinal.Value & "'"
+            
+    If Trim(txtCodCliente.Text <> "") Then
+        Sql = Sql & " And Pedido.ClienteCodigo = " & txtCodCliente.Text
+    End If
+    
+    If Trim(txtCodProduto.Text <> "") Then
+        Sql = Sql & " And PedidoItem.ProdutoCodigo = " & txtCodProduto.Text
+    End If
+              
+    Sql = Sql & " Order by Pedido.Codigo, PedidoItem.Item"
     
     'Define a string que vai ser executada no banco
     rpt.dcRelPedidos.Source = Sql
     
-    rpt.Run
+    If rpt.dcRelPedidos.Recordset.BOF Or rpt.dcRelPedidos.Recordset.EOF Then
+        MsgBox "Nenhum Registro Encontrado!", vbOKOnly
+        Exit Sub
+    End If
     
+    rpt.Run
+
     rpt.Show vbModal
 
 End Sub
 
+Private Sub dtpDataInicial_KeyDown(KeyAscii As Integer, Shift As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then
+        If Not IsDate(dtpDataInicial.Value) Then
+            MsgBox "Data inválida", vbOKOnly
+            dtpDataInicial.SetFocus
+            Exit Sub
+        End If
+        dtpDataFinal.SetFocus
+    End If
+    
+End Sub
+
+Private Sub dtpDataFinal_KeyDown(KeyAscii As Integer, Shift As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then
+        If Not IsDate(dtpDataFinal.Value) Then
+            MsgBox "Data inválida", vbOKOnly
+            dtpDataFinal.SetFocus
+            Exit Sub
+        End If
+        txtCodCliente.SetFocus
+    End If
+    
+End Sub
+
+Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then 'Se a tecla for enter
+        
+        If Trim(txtCodCliente.Text <> "") Then
+            If Not IsNumeric(txtCodCliente.Text) Then 'Validação de Numérico
+                MsgBox "Código Inválido", vbOKOnly 'Aviso de código invalido
+                txtCodCliente.SetFocus 'Volta para o campo CodProduto
+                Exit Sub 'Sai da Sub
+            End If 'Se não
+            
+            BuscarClientePorCodigo CLng(txtCodCliente.Text) 'Busca o Cliente pelo Codigo
+            
+            If Not rsClienteCod.BOF Or Not rsClienteCod.EOF Then 'Se a lista não esta vazia
+                txtCodCliente.Text = rsClienteCod!Codigo 'Atribui o Codigo ao Campo
+                txtNomeCliente.Text = rsClienteCod!Nome 'Atribui o Nome ao Campo
+            Else 'Se a Lista esta vazia
+                MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
+                txtCodCliente.SetFocus 'Volta para o campo CodProduto
+                Exit Sub 'Sai da sub
+            End If
+            
+        End If
+        
+        txtCodProduto.SetFocus 'Se tudo deu certo, avança para o próximo campo
+        
+    End If
+    
+    ' Só números
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+    
+End Sub
+
+Private Sub txtCodProduto_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If KeyAscii = vbKeyReturn Then 'Se a tecla for enter
+        
+        If Trim(txtCodProduto.Text <> "") Then
+        
+            If Not IsNumeric(txtCodProduto.Text) Then 'Validação de Numérico
+                MsgBox "Código Inválido", vbOKOnly 'Aviso de código invalido
+                txtCodProduto.SetFocus 'Volta para o campo CodProduto
+                Exit Sub 'Sai da Sub
+            End If 'Se não
+            
+            BuscarProdutoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
+            
+            If Not rsProdutoCod.BOF Or Not rsProdutoCod.EOF Then 'Se a lista não esta vazia
+                txtCodProduto.Text = rsProdutoCod!Codigo 'Atribui o Codigo ao Campo
+                txtNomeProduto.Text = rsProdutoCod!Nome 'Atribui o Nome ao Campo
+            Else 'Se a Lista esta vazia
+                MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
+                txtCodProduto.SetFocus 'Volta para o campo CodProduto
+                Exit Sub 'Sai da sub
+            End If
+            
+        End If
+        
+        cmdVisualizar.SetFocus 'Se tudo deu certo, avança para o próximo campo
+    End If
+      
+    ' Só números
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+    
+End Sub
+
+Private Sub cmdVisualizar_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        cmdVisualizar_Click
+    End If
+End Sub
+
+Private Sub cmdListaCliente_Click()
+    Dim f As New frmPesquisaCliente
+
+    f.Show vbModal
+
+    If f.CodigoSelecionado > 0 Then
+        If BuscarRS(rsCliente, "Codigo", f.CodigoSelecionado) Then
+            PreencherCliente
+        End If
+    End If
+
+    Unload f
+End Sub
+
+Private Sub cmdListaProduto_Click()
+    Dim f As New frmPesquisaProduto
+
+    f.Show vbModal
+
+    If f.CodigoSelecionado > 0 Then
+        If BuscarRS(rsProduto, "Codigo", f.CodigoSelecionado) Then
+            PreencherProduto
+        End If
+    End If
+
+    Unload f
+End Sub
+
+Private Sub PreencherCliente()
+    txtCodCliente.Text = rsCliente!Codigo
+    txtNomeCliente.Text = rsCliente!Nome
+End Sub
+
+Private Sub PreencherProduto()
+    txtCodProduto.Text = rsProduto!Codigo
+    txtNomeProduto.Text = rsProduto!Nome
+End Sub
+
 Private Function ValidaCampos() As Boolean
+        
+    If Not IsDate(dtpDataInicial) Then
+        MsgBox "Data Inicial Inválida!"
+        dtpDataInicial.SetFocus
+        ValidaCamposPedido = False
+        Exit Function
+    End If
+    
+    If Not IsDate(dtpDataFinal.Value) Then
+        MsgBox "Data Final Inválida!"
+        dtpDataFinal.SetFocus
+        ValidaCamposPedido = False
+        Exit Function
+    End If
+    
+    If Trim(txtCodCliente.Text <> "") Then
+        If Not IsNumeric(txtCodCliente.Text) Then
+            MsgBox "Cliente inválido!"
+            txtCodCliente.Text = ""
+            txtNomeCliente.Text = ""
+            txtCodCliente.SetFocus
+            ValidaCamposPedido = False
+            Exit Function
+        End If
+    End If
+    
+    If Trim(txtCodProduto.Text <> "") Then
+        If Not IsNumeric(txtCodProduto.Text) Then
+            MsgBox "Produto inválido!"
+            txtCodProduto.Text = ""
+            txtNomeProduto.Text = ""
+            txtCodProduto.SetFocus
+            ValidaCamposPedido = False
+            Exit Function
+        End If
+    End If
+    
+    ValidaCampos = True
     
 End Function

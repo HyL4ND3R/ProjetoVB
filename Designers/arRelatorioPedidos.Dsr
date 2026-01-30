@@ -16,13 +16,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private fItem As Integer
-Private codPedido As Integer
+Private CodPedido As Integer
 Private rs As ADODB.Recordset
 
 Private Sub ActiveReport_ReportStart()
     
     Set rs = Me.dcRelPedidos.Recordset
-    codPedido = 0
+    CodPedido = 0
     primeiroItem = True
     fItem = 0
     
@@ -37,7 +37,7 @@ End Sub
 
 Private Sub Detail_Format()
 
-    If (codPedido = CLng(rs!pedido)) Then
+    If (CodPedido = CLng(rs!pedido)) Then
         'Ocultado os campos para somente mostrar o item
         fldPedido.Visible = False
         fldCliente.Visible = False
@@ -59,7 +59,7 @@ Private Sub Detail_Format()
         Detail.Height = 284
     Else
         'Atualizando a variavel de controle do Cod Pedido
-        codPedido = CLng(rs!pedido)
+        CodPedido = CLng(rs!pedido)
         'Incrementando a variavel de controle do fundo
         fItem = fItem + 1
         'Mostrando novamente os campos pois é um pedido novo

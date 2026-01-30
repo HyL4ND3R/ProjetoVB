@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -622,7 +622,7 @@ Private Sub cmdExcluirItem_Click()
               vbQuestion + vbYesNo, _
               "Confirmação") = vbNo Then Exit Sub
 
-    If Not ISNULL(ControlePedidoItem) Then
+    If Not IsNull(ControlePedidoItem) Then
         Conn.Execute "DELETE FROM PedidoItem WHERE Controle = " & ControlePedidoItem
     Else
         MsgBox "Controle não encontrado", vbOKOnly
@@ -1026,7 +1026,7 @@ Private Sub PreencherCampos()
     mskDataPedido.Mask = "99/99/9999"
     mskDataPedido.Text = Format(rsPedido!DataPedido, "dd/MM/yyyy")
     
-    txtValorTotal.Text = Format((IIf(ISNULL(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)), "0.00")
+    txtValorTotal.Text = Format((IIf(IsNull(rsPedido!ValorTotal), 0, rsPedido!ValorTotal)), "0.00")
     
     PreencherItensPedido
     
