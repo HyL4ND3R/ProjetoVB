@@ -1,7 +1,7 @@
-frmLogin = 66, 85, 1355, 727, C, 182, 182, 1471, 824, C
+frmLogin = 65, 121, 1354, 763, , 182, 182, 1471, 824, C
 MDIFrmPrincipal = 208, 208, 1479, 850, C, 71, 88, 1342, 796, C
 frmOperador = 132, 76, 1403, 718, C, 299, 98, 1570, 740, C
-modConexao = 152, 156, 1423, 798, C
+modConexao = 310, 58, 1401, 700, 
 modRecordset = 173, 83, 1444, 725, C
 modEnum = 156, 156, 1427, 798, C
 frmPesquisaOperador = 260, 260, 1531, 902, C, 208, 208, 1479, 850, C
@@ -20,3 +20,5 @@ arImpressaoClientes = 85, 172, 1162, 675, C, 104, 80, 1338, 666, C
 arRelatorioPedidos = 284, 134, 1561, 776, , 99, 26, 2019, 1106, C
 arImpressaoPedido = 95, 86, 1370, 736, C, 36, 83, 1956, 1163, C
 frmRelPedidos = 113, 150, 1388, 800, , 96, 96, 1371, 746, C
+modIni = 234, 234, 1509, 884, 
+frmConfigBanco = 132, 201, 1407, 851, , 260, 260, 1535, 910, C

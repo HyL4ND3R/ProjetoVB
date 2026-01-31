@@ -76,6 +76,15 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
  Private Sub cmdLogin_Click()
+ 
+    If Not AbrirConexao Then
+        MsgBox "Erro ao conectar no banco de dados.", vbCritical
+        frmConfigBanco.Show vbModal
+        If Not AbrirConexao Then
+            MsgBox "Conexão não configurada. O sistema será fechado."
+            End
+        End If
+    End If
     
     If Not rsOperadorLogado Is Nothing Then 'Se ele não for nada (se existir)
         If rsOperadorLogado.State = adStateOpen Then rsOperadorLogado.Close 'Se esta aberto, fecha
@@ -108,9 +117,5 @@ Attribute VB_Exposed = False
 
     'rsOperadorLogado.Close
     'Set rsOperadorLogado = Nothing
-End Sub
-
-Private Sub Form_Load()
-    AbrirConexao
 End Sub
 
