@@ -20,5 +20,5 @@ arImpressaoClientes = 85, 172, 1162, 675, C, 104, 80, 1338, 666, C
 arRelatorioPedidos = 284, 134, 1561, 776, , 99, 26, 2019, 1106, C
 arImpressaoPedido = 95, 86, 1370, 736, C, 36, 83, 1956, 1163, C
 frmRelPedidos = 113, 150, 1388, 800, , 96, 96, 1371, 746, C
-modIni = 234, 234, 1509, 884, 
-frmConfigBanco = 132, 201, 1407, 851, , 260, 260, 1535, 910, C
+modIni = 234, 234, 1509, 884, C
+frmConfigBanco = 132, 201, 1407, 851, C, 260, 260, 1535, 910, C

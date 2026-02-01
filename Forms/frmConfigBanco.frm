@@ -226,8 +226,8 @@ Private Sub cmdTestar_Click()
     On Error GoTo Erro
 
     'Definindo TimeOut menor para caso de erro
-    cn.ConnectionTimeout = 5 'segundos (ex: 3, 5, 10)
-    cn.CommandTimeout = 5
+    cn.ConnectionTimeout = 3 'segundos (ex: 3, 5, 10)
+    cn.CommandTimeout = 3
 
     cn.ConnectionString = _
         "Provider=SQLOLEDB;" & _
