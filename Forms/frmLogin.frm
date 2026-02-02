@@ -35,6 +35,13 @@ Begin VB.Form frmLogin
       Top             =   1110
       Width           =   1455
    End
+   Begin VB.Label lblConfigBanco 
+      Height          =   315
+      Left            =   420
+      TabIndex        =   6
+      Top             =   330
+      Width           =   375
+   End
    Begin VB.Label lblTitulo 
       Alignment       =   2  'Center
       Caption         =   "LOGIN"
@@ -119,3 +126,8 @@ Attribute VB_Exposed = False
     'Set rsOperadorLogado = Nothing
 End Sub
 
+Private Sub lblConfigBanco_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button = vbRightButton Then
+        frmConfigBanco.Show vbModal
+    End If
+End Sub
