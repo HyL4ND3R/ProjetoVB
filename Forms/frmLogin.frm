@@ -23,7 +23,6 @@ Begin VB.Form frmLogin
       Left            =   810
       PasswordChar    =   "*"
       TabIndex        =   2
-      Text            =   "123"
       Top             =   1680
       Width           =   1425
    End
@@ -31,7 +30,6 @@ Begin VB.Form frmLogin
       Height          =   315
       Left            =   810
       TabIndex        =   0
-      Text            =   "1"
       Top             =   1110
       Width           =   1455
    End
@@ -130,4 +128,30 @@ Private Sub lblConfigBanco_MouseDown(Button As Integer, Shift As Integer, X As S
     If Button = vbRightButton Then
         frmConfigBanco.Show vbModal
     End If
+End Sub
+
+Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If (KeyAscii = vbKeyReturn) Then
+        txtSenha.SetFocus
+    End If
+    
+    ' Só números
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+
+End Sub
+
+Private Sub txtSenha_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
+    If (KeyAscii = vbKeyReturn) Then
+        cmdLogin.SetFocus
+    End If
+    
 End Sub

@@ -236,11 +236,11 @@ Public Function AlterarItemPedidoxxxx(itemPedido As cPedidoItem) As Boolean
     
     Conn.Execute Sql
     
-    AlterarItemPedido = True
+    AlterarItemPedidoxxxx = True
     Exit Function
     
 Erro:
-    AlterarItemPedido = False
+    AlterarItemPedidoxxxx = False
 End Function
 
 Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean

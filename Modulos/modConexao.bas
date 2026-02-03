@@ -20,8 +20,7 @@ Public Function AbrirConexao() As Boolean
     Set Conn = New ADODB.Connection
     
     'Definindo TimeOut menor para caso de erro
-    Conn.ConnectionTimeout = 3 'segundos (ex: 3, 5, 10)
-    Conn.CommandTimeout = 3
+    Conn.ConnectionTimeout = 1 'segundos (ex: 3, 5, 10)
     
     Conn.ConnectionString = _
         "Provider=SQLOLEDB;" & _

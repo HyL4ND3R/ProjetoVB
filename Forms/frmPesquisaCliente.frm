@@ -54,7 +54,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Public CodigoSelecionado As Long
 
-
 Private Sub Form_Load()
     CarregarClientes
 
@@ -81,7 +80,7 @@ Private Sub Form_Load()
     End With
 End Sub
 
-Private Sub grdProduto_DblClick()
+Private Sub grdCliente_DblClick()
     Selecionar
 End Sub
 

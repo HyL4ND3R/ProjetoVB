@@ -210,7 +210,7 @@ Private Sub Form_Load()
 
     ' Se o arquivo não existir, sai sem erro
     If Dir(arqINI) = "" Then
-        MsgBox "Arquivo .ini Não Encontrado", vbExclamation
+        MsgBox "Arquivo .ini não encontrado, criando um novo", vbExclamation
         Exit Sub
     End If
     
@@ -226,8 +226,7 @@ Private Sub cmdTestar_Click()
     On Error GoTo Erro
 
     'Definindo TimeOut menor para caso de erro
-    cn.ConnectionTimeout = 3 'segundos (ex: 3, 5, 10)
-    cn.CommandTimeout = 3
+    cn.ConnectionTimeout = 2 'segundos (ex: 3, 5, 10)
 
     cn.ConnectionString = _
         "Provider=SQLOLEDB;" & _

@@ -1498,7 +1498,7 @@ Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
             Exit Sub 'Sai da sub
         End If
         
-        AvancarComEnterKD KeyAscii, mskDataPedido 'Se tudo deu certo, avança para o próximo campo
+        mskDataPedido.SetFocus 'Se tudo deu certo, avança para o próximo campo
     End If
     
     ' Só números

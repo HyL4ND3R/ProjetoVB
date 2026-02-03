@@ -131,7 +131,7 @@ Begin VB.Form frmRelPedidos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   155385857
+      Format          =   155254785
       CurrentDate     =   46051
    End
    Begin MSComCtl2.DTPicker dtpDataFinal 
@@ -152,7 +152,7 @@ Begin VB.Form frmRelPedidos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   155385857
+      Format          =   155254785
       CurrentDate     =   46051
    End
    Begin VB.Label lblCliente 
@@ -233,6 +233,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+Private Sub Form_Load()
+    dtpDataInicial.Value = Date
+    dtpDataFinal.Value = Date
+End Sub
 
 
 Private Sub cmdVisualizar_Click()

@@ -666,9 +666,20 @@ Private Sub cboTipoDocumento_Click()
 End Sub
 
 Private Sub mskDocumento_KeyPress(KeyAscii As Integer)
+    
+    If KeyAscii = vbKeyBack Then Exit Sub
+    
     If KeyAscii = vbKeyReturn Then 'Verifica se é enter
         KeyAscii = 0 'Cancela o Enter, sem beep do windws
         txtTelefone.SetFocus
+    End If
+    
+    ' Somente numeros para CNPJ e CPF
+    If cboTipoDocumento.ListIndex <> tdcOutro Then
+        If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+            KeyAscii = 0
+            Exit Sub
+        End If
     End If
 End Sub
 

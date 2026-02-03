@@ -57,10 +57,10 @@ Public Property Let DataPedido(ByVal v As Date)
 End Property
 
 Public Property Get ValorTotal() As Currency
-    Total = mTotal
+    ValorTotal = mValorTotal
 End Property
 
 Public Property Let ValorTotal(ByVal v As Currency)
-    mTotal = v
+    mValorTotal = v
 End Property
 
