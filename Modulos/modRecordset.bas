@@ -1,4 +1,6 @@
 Attribute VB_Name = "modRecordset"
+Option Explicit
+
 Public rsOperadorLogado As ADODB.Recordset 'Usado para o operadorLogado
 Public rsOperador As ADODB.Recordset 'Tabela Operador
 Public rsCliente As ADODB.Recordset 'Tabela Cliente
@@ -21,6 +23,90 @@ Public Sub CarregarOperadores()
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
+
+Public Function InserirOperador(operador As cOperador) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "INSERT INTO Operador (Nome, Senha, Admin, Inativo) Values (?,?,?,?)"
+        
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, operador.Nome)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, operador.Senha)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Admin)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Inativo)
+        
+        .Execute
+    End With
+    
+    InserirOperador = True
+    Exit Function
+    
+Erro:
+    InserirOperador = False
+End Function
+
+Public Function AlterarOperador(operador As cOperador) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "UPDATE Operador set Nome = ?," & _
+            "Senha = ?," & _
+            "Admin = ?," & _
+            "Inativo = ? " & _
+            "WHERE Codigo = ?"
+        
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, operador.Nome)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, operador.Senha)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Admin)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Inativo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , operador.codigo)
+        
+        .Execute
+    End With
+    
+    AlterarOperador = True
+    Exit Function
+    
+Erro:
+    AlterarOperador = False
+End Function
+
+Public Function ExcluirOperador(codigo As Long) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "DELETE FROM Operador WHERE Codigo = "
+        
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
+        
+        .Execute
+    End With
+    
+    ExcluirOperador = True
+    Exit Function
+    
+Erro:
+    ExcluirOperador = False
+End Function
+
 '-------------CLIENTES------------------------------------------------------------------------------------------------------
 Public Sub CarregarClientes()
 
@@ -45,6 +131,94 @@ Public Sub BuscarClientePorCodigo(CodCliente As Integer)
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
+
+Public Function InserirCliente(cliente As cCliente) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+                "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) " & _
+                "VALUES (?,?,?,?,?)"
+        
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Nome)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , cliente.TipoDocumento)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Documento)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Telefone)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , cliente.Inativo)
+        
+        .Execute
+    End With
+    
+    InserirCliente = True
+    Exit Function
+    
+Erro:
+    InserirCliente = False
+End Function
+
+Public Function AlterarCliente(cliente As cCliente) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+                "UPDATE Cliente set Nome = ?, " & _
+                "TipoDocumento = ?, " & _
+                "Documento = ?, " & _
+                "Telefone = ?, " & _
+                "Inativo = ? " & _
+                "WHERE Codigo = ? "
+        
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Nome)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , cliente.TipoDocumento)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Documento)
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Telefone)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , cliente.Inativo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , cliente.codigo)
+        
+        .Execute
+    End With
+    
+    InserirCliente = True
+    Exit Function
+    
+Erro:
+    InserirCliente = False
+End Function
+
+Public Function ExcluirCliente(codigo As Long) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "DELETE FROM Cliente WHERE Codigo = "
+        
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
+        
+        .Execute
+    End With
+    
+    ExcluirCliente = True
+    Exit Function
+    
+Erro:
+    ExcluirCliente = False
+End Function
+
 '-------------PRODUTOS------------------------------------------------------------------------------------------------------
 Public Sub CarregarProdutos()
 
@@ -67,6 +241,88 @@ Public Sub BuscarProdutoPorCodigo(CodCliente As Integer)
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
+
+Public Function InserirProduto(produto As cProduto) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+                "INSERT INTO Produto (Nome, Valor, Inativo) " & _
+                "VALUES (?,?,?)"
+        
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, produto.Nome)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , produto.Valor)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.Inativo)
+        
+        .Execute
+    End With
+    
+    InserirProduto = True
+    Exit Function
+    
+Erro:
+    InserirProduto = False
+End Function
+
+Public Function AlterarProduto(produto As cProduto) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+                "UPDATE Produto SET Nome = ?, " & _
+                "Valor = ?, " & _
+                "Inativo = ? " & _
+                "WHERE Codigo = ?"
+        
+        .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, produto.Nome)
+        .Parameters.Append .CreateParameter(, adDouble, adParamInput, , produto.Valor)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.Inativo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.codigo)
+        
+        .Execute
+    End With
+    
+    AlterarProduto = True
+    Exit Function
+    
+Erro:
+    AlterarProduto = False
+End Function
+
+Public Function ExcluirProduto(codigo As Long) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "DELETE FROM Produto WHERE Codigo = "
+        
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
+        
+        .Execute
+    End With
+    
+    ExcluirProduto = True
+    Exit Function
+    
+Erro:
+    ExcluirProduto = False
+End Function
+
 '-------------PEDIDOS------------------------------------------------------------------------------------------------------
 Public Sub CarregarPedidos()
 
@@ -120,14 +376,20 @@ End Sub
 Public Function InserirPedido(pedido As cPedido)
     On Error GoTo Erro
     
-    Dim Sql As String
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
     
-    Sql = "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (" & _
-            pedido.Codigo & ", " & _
-            pedido.ClienteCodigo & ", " & _
-            "'" & Format(pedido.DataPedido, "yyyy-MM-dd") & "') "
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (?,?,?)"
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.ClienteCodigo)
+        .Parameters.Append .CreateParameter(, adDate, adParamInput, , pedido.DataPedido)
+        .Execute
+    End With
     
-    Conn.Execute Sql
     InserirPedido = True
     Exit Function
     
@@ -138,15 +400,24 @@ End Function
 Public Function AlterarPedido(pedido As cPedido) As Boolean
     On Error GoTo Erro
 
-    Dim Sql As String
-
-    Sql = "UPDATE Pedido SET " & _
-          "Codigo = " & pedido.Codigo & ", " & _
-          "ClienteCodigo = " & pedido.ClienteCodigo & ", " & _
-          "Data = '" & Format(pedido.DataPedido, "yyyy-MM-dd") & "' " & _
-          "WHERE Controle = " & pedido.Controle
-
-    Conn.Execute Sql
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "UPDATE Pedido SET " & _
+            "Codigo = ? ," & _
+            "ClienteCodigo = ? ," & _
+            "Data = ? " & _
+            "WHERE Controle = ?"
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.ClienteCodigo)
+        .Parameters.Append .CreateParameter(, adDate, adParamInput, , pedido.DataPedido)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Controle)
+        .Execute
+    End With
 
     AlterarPedido = True
     Exit Function
@@ -175,11 +446,10 @@ Public Function BuscaProximoCodItemPedido(ByVal ControlePedido As Long) As Boole
 
     rsPedidoItemCod.CursorLocation = adUseClient
     rsPedidoItemCod.Open cmd, , adOpenStatic, adLockReadOnly
-
-    Set BuscarItensPedido = rsPedidoItemCod
     
     BuscaProximoCodItemPedido = True
     Exit Function
+    
 Erro:
     BuscaProximoCodItemPedido = False
 
@@ -217,30 +487,6 @@ Public Function InserirItemPedido(itemPedido As cPedidoItem) As Boolean
 
 Erro:
     InserirItemPedido = False
-End Function
-
-
-Public Function AlterarItemPedidoxxxx(itemPedido As cPedidoItem) As Boolean
-    On Error GoTo Erro
-    
-    Dim Sql As String
-    
-    Sql = "UPDATE PedidoItem SET " & _
-            "Item = " & itemPedido.Item & ", " & _
-            "ProdutoCodigo = " & itemPedido.ProdutoCodigo & ", " & _
-            "Descricao = '" & itemPedido.Descricao & "', " & _
-            "Quantidade = " & itemPedido.Qtde & ", " & _
-            "ValorUn = " & itemPedido.ValorUn & ", " & _
-            "ValorTotal = " & itemPedido.ValorTotal & _
-            "Where Controle = " & itemPedido.Controle
-    
-    Conn.Execute Sql
-    
-    AlterarItemPedidoxxxx = True
-    Exit Function
-    
-Erro:
-    AlterarItemPedidoxxxx = False
 End Function
 
 Public Function AlterarItemPedido(itemPedido As cPedidoItem) As Boolean

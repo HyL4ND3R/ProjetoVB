@@ -412,7 +412,7 @@ Private Sub PreencherCampos()
 
     If rsCliente.EOF Or rsCliente.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
 
-    txtCodigo.Text = rsCliente!Codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtCodigo.Text = rsCliente!codigo 'Atribuição de valor do RecordSet para o TextBox
     txtNome.Text = rsCliente!Nome
     
     Dim TipoDocumentoBanco As Integer
@@ -450,13 +450,34 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 '-------------SALVAR
         Case "salvar"
-            
+
             If Not (ValidaCampos) Then Exit Sub
+            
+            Dim cliente As cCliente
             
             If Not SalvarCliente Then
                 MsgBox "Erro ao Salvar o Cliente!", vbOKOnly
                 Exit Sub
             End If
+            
+            If ModoAtual = mfAlteracao Then
+                cliente.Nome = txtNome.Text
+                cliente.TipoDocumento = cboTipoDocumento.ListIndex
+                cliente.Documento = mskDocumento.Text
+                cliente.Telefone = txtTelefone.Text
+                cliente.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+                
+'------------------------------------------------------------------------------------------------------------------------
+                
+            Else
+                Sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
+                    "'" & txtNome.Text & "', " & _
+                    "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
+                    "'" & mskDocumento.Text & "', " & _
+                    "'" & txtTelefone.Text & "', " & _
+                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+            End If
+            
             
             CarregarClientes
             
