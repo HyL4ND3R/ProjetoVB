@@ -71,7 +71,7 @@ Public Function AlterarOperador(operador As cOperador) As Boolean
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, operador.Senha)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Admin)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Inativo)
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , operador.Codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , operador.codigo)
         
         .Execute
     End With
@@ -83,7 +83,7 @@ Erro:
     AlterarOperador = False
 End Function
 
-Public Function ExcluirOperador(Codigo As Long) As Boolean
+Public Function ExcluirOperador(codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -95,7 +95,7 @@ Public Function ExcluirOperador(Codigo As Long) As Boolean
         .CommandText = _
             "DELETE FROM Operador WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
         
         .Execute
     End With
@@ -121,7 +121,33 @@ Public Sub CarregarClientes()
 
 End Sub
 
+Public Sub CarregarClientesAtivos()
+
+    Set rsCliente = New ADODB.Recordset
+
+    rsCliente.CursorLocation = adUseClient
+    rsCliente.Open _
+        "SELECT Codigo, Nome, TipoDocumento, " & _
+        "Case TipoDocumento When 0 Then 'CPF' When 1 Then 'CNPJ' ELSE 'Outros' End as TipoDocumentoExtenso, " & _
+        "Documento, Telefone, Inativo FROM Cliente " & _
+        "WHERE Inativo = 0 " & _
+        "ORDER BY Codigo", _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
 Public Sub BuscarClientePorCodigo(CodCliente As Integer)
+    
+    Set rsClienteCod = New ADODB.Recordset
+    
+    rsClienteCod.CursorLocation = adUseClient
+    rsClienteCod.Open _
+        "SELECT * FROM Cliente WHERE Codigo = " & CodCliente, _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
+Public Sub BuscarClienteAtivoPorCodigo(CodCliente As Integer)
     
     Set rsClienteCod = New ADODB.Recordset
     
@@ -183,7 +209,7 @@ Public Function AlterarCliente(cliente As cCliente) As Boolean
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Documento)
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Telefone)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , cliente.Inativo)
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , cliente.Codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , cliente.codigo)
         
         .Execute
     End With
@@ -195,7 +221,7 @@ Erro:
     AlterarCliente = False
 End Function
 
-Public Function ExcluirCliente(Codigo As Long) As Boolean
+Public Function ExcluirCliente(codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -207,7 +233,7 @@ Public Function ExcluirCliente(Codigo As Long) As Boolean
         .CommandText = _
             "DELETE FROM Cliente WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
         
         .Execute
     End With
@@ -231,13 +257,38 @@ Public Sub CarregarProdutos()
 
 End Sub
 
-Public Sub BuscarProdutoPorCodigo(CodCliente As Integer)
+Public Sub CarregarProdutosAtivos()
+
+    Set rsProduto = New ADODB.Recordset
+
+    rsProduto.CursorLocation = adUseClient
+    rsProduto.Open _
+        "SELECT Codigo, Nome, Valor, Inativo FROM Produto " & _
+        "WHERE Inativo = 0 " & _
+        "ORDER BY Codigo", _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
+Public Sub BuscarProdutoPorCodigo(codProduto As Integer)
     
     Set rsProdutoCod = New ADODB.Recordset
     
     rsProdutoCod.CursorLocation = adUseClient
     rsProdutoCod.Open _
-        "SELECT * FROM Produto WHERE Codigo = " & CodCliente, _
+        "SELECT * FROM Produto WHERE Codigo = " & codProduto, _
+        Conn, adOpenStatic, adLockReadOnly
+
+End Sub
+
+Public Sub BuscarProdutoAtivoPorCodigo(CodCliente As Integer)
+    
+    Set rsProdutoCod = New ADODB.Recordset
+    
+    rsProdutoCod.CursorLocation = adUseClient
+    rsProdutoCod.Open _
+        "SELECT * FROM Produto WHERE Codigo = " & CodCliente & ", " & _
+        "AND Inativo = 0", _
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
@@ -287,7 +338,7 @@ Public Function AlterarProduto(produto As cProduto) As Boolean
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, produto.Nome)
         .Parameters.Append .CreateParameter(, adDouble, adParamInput, , produto.Valor)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.Inativo)
-        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.Codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.codigo)
         
         .Execute
     End With
@@ -299,7 +350,7 @@ Erro:
     AlterarProduto = False
 End Function
 
-Public Function ExcluirProduto(Codigo As Long) As Boolean
+Public Function ExcluirProduto(codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -311,7 +362,7 @@ Public Function ExcluirProduto(Codigo As Long) As Boolean
         .CommandText = _
             "DELETE FROM Produto WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
         
         .Execute
     End With
@@ -384,7 +435,7 @@ Public Function InserirPedido(pedido As cPedido)
         .CommandType = adCmdText
         .CommandText = _
             "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (?,?,?)"
-        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.codigo)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.ClienteCodigo)
         .Parameters.Append .CreateParameter(, adDate, adParamInput, , pedido.DataPedido)
         .Execute
@@ -412,7 +463,7 @@ Public Function AlterarPedido(pedido As cPedido) As Boolean
             "ClienteCodigo = ? ," & _
             "Data = ? " & _
             "WHERE Controle = ?"
-        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.codigo)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.ClienteCodigo)
         .Parameters.Append .CreateParameter(, adDate, adParamInput, , pedido.DataPedido)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Controle)
@@ -426,7 +477,7 @@ Erro:
     AlterarPedido = False
 End Function
 
-Public Function ExcluirPedido(Codigo As Long) As Boolean
+Public Function ExcluirPedido(codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -438,7 +489,7 @@ Public Function ExcluirPedido(Codigo As Long) As Boolean
         .CommandText = _
             "DELETE FROM Pedido WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
         
         .Execute
     End With

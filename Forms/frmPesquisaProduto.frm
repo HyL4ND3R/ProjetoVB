@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form frmPesquisaProduto 
    Caption         =   "Pesquisar Produtos"
    ClientHeight    =   5205
@@ -72,7 +72,7 @@ Private Sub Form_Load()
         
         Do While Not rsProduto.EOF
             .AddItem _
-                rsProduto!Codigo & vbTab & _
+                rsProduto!codigo & vbTab & _
                 rsProduto!Nome & vbTab & _
                 rsProduto!Valor & vbTab & _
                 IIf(rsProduto!Inativo = 1, "Sim", "Não")
