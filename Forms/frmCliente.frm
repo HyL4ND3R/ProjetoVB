@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmCliente 
    Caption         =   "Cadastro de Clientes"
    ClientHeight    =   8100
@@ -322,6 +322,10 @@ Private CodigoAtual As Long
 
 Private Sub Form_Load()
     
+    txtCodigo.MaxLength = 9
+    txtNome.MaxLength = 200
+    txtTelefone.MaxLength = 17
+    
     popularComboTipoDocumento
     CarregarClientes
 
@@ -411,7 +415,7 @@ Private Sub PreencherCampos()
 
     If rsCliente.EOF Or rsCliente.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
 
-    txtCodigo.Text = rsCliente!Codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtCodigo.Text = rsCliente!codigo 'Atribuição de valor do RecordSet para o TextBox
     txtNome.Text = rsCliente!Nome
     
     Dim TipoDocumentoBanco As Integer
@@ -569,7 +573,7 @@ Private Function SalvarCliente() As Boolean
     Set cliente = New cCliente
     
     If ModoAtual = mfAlteracao Then
-        cliente.Codigo = CLng(txtCodigo.Text)
+        cliente.codigo = CLng(txtCodigo.Text)
         cliente.Nome = txtNome.Text
         cliente.TipoDocumento = cboTipoDocumento.ListIndex
         cliente.Documento = mskDocumento.Text

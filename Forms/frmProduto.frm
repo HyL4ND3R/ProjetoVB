@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmProduto 
    Caption         =   "Cadastro de Produtos"
    ClientHeight    =   8115
@@ -256,6 +256,10 @@ Private ModoAtual As eModoFormulario
 Private CodigoAtual As Long
 
 Private Sub Form_Load()
+
+    txtCodigo.MaxLength = 9
+    txtNome.MaxLength = 200
+    txtValor.MaxLength = 10
     
     CarregarProdutos
 
@@ -337,7 +341,7 @@ Private Sub PreencherCampos()
 
     If rsProduto.EOF Or rsProduto.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
 
-    txtCodigo.Text = rsProduto!Codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtCodigo.Text = rsProduto!codigo 'Atribuição de valor do RecordSet para o TextBox
     txtNome.Text = rsProduto!Nome
     txtValor.Text = Format(rsProduto!Valor, "0.00")
     chkInativo.Value = IIf(rsProduto!Inativo = 1, vbChecked, vbUnchecked)
@@ -561,7 +565,7 @@ Private Function SalvarProduto() As Boolean
     Set produto = New cProduto
     
     If ModoAtual = mfAlteracao Then
-        produto.Codigo = CLng(txtCodigo.Text)
+        produto.codigo = CLng(txtCodigo.Text)
         produto.Nome = txtNome.Text
         produto.Valor = CDbl(txtValor.Text)
         produto.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)

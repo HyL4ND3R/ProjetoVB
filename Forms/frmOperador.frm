@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmOperador 
    Caption         =   "Cadastro de Operadores"
    ClientHeight    =   7965
@@ -276,6 +276,10 @@ Private CodigoAtual As Long
 
 Private Sub Form_Load()
     
+    txtCodigo.MaxLength = 9
+    txtNome.MaxLength = 200
+    txtSenha.MaxLength = 15
+    
     CarregarOperadores
 
     If Not rsOperador.EOF Then 'Se não esta no fim da lista
@@ -358,7 +362,7 @@ Private Sub PreencherCampos()
 
     If rsOperador.EOF Or rsOperador.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
 
-    txtCodigo.Text = rsOperador!Codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtCodigo.Text = rsOperador!codigo 'Atribuição de valor do RecordSet para o TextBox
     txtNome.Text = rsOperador!Nome
     txtSenha.Text = rsOperador!Senha
     chkAdm.Value = IIf(rsOperador!Admin = 1, vbChecked, vbUnchecked) 'Atribuição de valor do Recorset para o CheckBox
@@ -568,7 +572,7 @@ Private Function SalvarOperador() As Boolean
     Set operador = New cOperador
     
     If ModoAtual = mfAlteracao Then
-        operador.Codigo = CLng(txtCodigo.Text)
+        operador.codigo = CLng(txtCodigo.Text)
         operador.Nome = txtNome.Text
         operador.Senha = txtSenha.Text
         operador.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)

@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -592,6 +592,15 @@ Dim ControlePedido As Long
 Dim ControlePedidoItem As Long
 
 Private Sub Form_Load()
+
+    txtCodigo.MaxLength = 9
+    txtCodCliente.MaxLength = 9
+    txtNomeCliente.MaxLength = 200
+    txtCodProduto.MaxLength = 9
+    txtNomeProduto.MaxLength = 200
+    txtQtde.MaxLength = 10
+    txtValorUn.MaxLength = 10
+    txtTotalItem.MaxLength = 20
     
     Set pedido = New cPedido
     
@@ -706,7 +715,7 @@ End Sub
 Private Sub SalvarPedido()
     If ModoAtualPedido = mfAlteracao Then
         pedido.Controle = VerificaNull(ControlePedido, 0)
-        pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        pedido.codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
         pedido.DataPedido = Format(mskDataPedido.Text, Date)
         If (Not AlterarPedido(pedido)) Then
@@ -715,7 +724,7 @@ Private Sub SalvarPedido()
         End If
     Else
         pedido.Controle = VerificaNull(ControlePedido, 0)
-        pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+        pedido.codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
         pedido.DataPedido = mskDataPedido.Text
         If (Not InserirPedido(pedido)) Then
@@ -1017,7 +1026,7 @@ Private Sub PreencherCampos()
     End If
 
     ControlePedido = rsPedido!Controle
-    txtCodigo.Text = rsPedido!Codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtCodigo.Text = rsPedido!codigo 'Atribuição de valor do RecordSet para o TextBox
     txtCodCliente.Text = rsPedido!ClienteCodigo
     txtNomeCliente.Text = rsPedido!ClienteNome
     
@@ -1036,7 +1045,7 @@ End Sub
 Private Sub PreencherClientePedido()
     If rsCliente.EOF Or rsCliente.BOF Then Exit Sub
     
-    txtCodCliente.Text = rsCliente!Codigo
+    txtCodCliente.Text = rsCliente!codigo
     txtNomeCliente.Text = rsCliente!Nome
     
 End Sub
@@ -1118,7 +1127,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
         Case "novo"
             
             BuscarProximoCodPedido
-            txtCodigo.Text = rsProximoCodigo!Codigo
+            txtCodigo.Text = rsProximoCodigo!codigo
             txtCodCliente.Text = ""
             txtNomeCliente.Text = ""
             
@@ -1143,7 +1152,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
             If ModoAtualPedido = mfAlteracao Then
                 pedido.Controle = VerificaNull(ControlePedido, 0)
-                pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+                pedido.codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
                 pedido.DataPedido = mskDataPedido.Text
                 If (Not AlterarPedido(pedido)) Then
@@ -1152,7 +1161,7 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
                 End If
             Else
                 pedido.Controle = VerificaNull(ControlePedido, 0)
-                pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
+                pedido.codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
                 pedido.ClienteCodigo = CLng(txtCodCliente.Text)
                 pedido.DataPedido = mskDataPedido.Text
                 If (Not InserirPedido(pedido)) Then
@@ -1328,7 +1337,7 @@ Private Sub cmdListaProduto_Click()
 End Sub
 
 Private Sub PreencherCamposItemInclusao()
-    txtCodProduto.Text = rsProduto!Codigo
+    txtCodProduto.Text = rsProduto!codigo
     txtNomeProduto.Text = rsProduto!Nome
     txtQtde.Text = 1
     txtValorUn.Text = rsProduto!Valor
@@ -1502,10 +1511,10 @@ Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
             Exit Sub 'Sai da Sub
         End If 'Se não
         
-        BuscarClientePorCodigo CLng(txtCodCliente.Text) 'Busca o Cliente pelo Codigo
+        BuscarClienteAtivoPorCodigo CLng(txtCodCliente.Text) 'Busca o Cliente pelo Codigo
         
         If Not rsClienteCod.BOF Or Not rsClienteCod.EOF Then 'Se a lista não esta vazia
-            txtCodCliente.Text = rsClienteCod!Codigo 'Atribui o Codigo ao Campo
+            txtCodCliente.Text = rsClienteCod!codigo 'Atribui o Codigo ao Campo
             txtNomeCliente.Text = rsClienteCod!Nome 'Atribui o Nome ao Campo
         Else 'Se a Lista esta vazia
             MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
@@ -1571,10 +1580,10 @@ Private Sub txtCodProduto_KeyPress(KeyAscii As Integer)
             Exit Sub 'Sai da Sub
         End If 'Se não
         
-        BuscarProdutoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
+        BuscarProdutoAtivoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
         
         If Not rsProdutoCod.BOF Or Not rsProdutoCod.EOF Then 'Se a lista não esta vazia
-            txtCodProduto.Text = rsProdutoCod!Codigo 'Atribui o Codigo ao Campo
+            txtCodProduto.Text = rsProdutoCod!codigo 'Atribui o Codigo ao Campo
             txtNomeProduto.Text = rsProdutoCod!Nome 'Atribui o Nome ao Campo
         Else 'Se a Lista esta vazia
             MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso

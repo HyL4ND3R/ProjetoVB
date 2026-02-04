@@ -204,6 +204,12 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
+
+    txtBanco.MaxLength = 15
+    txtSenha.MaxLength = 30
+    txtServidor.MaxLength = 50
+    txtUsuario.MaxLength = 10
+
     Dim arqINI As String
 
     arqINI = App.Path & "\config.ini"

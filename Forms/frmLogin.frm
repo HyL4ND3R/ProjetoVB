@@ -80,7 +80,14 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub Form_Load()
+    txtCodigo.MaxLength = 5
+    txtSenha.MaxLength = 15
+End Sub
+ 
  Private Sub cmdLogin_Click()
+ 
+    If Not ValidaCampos Then Exit Sub
  
     If Not AbrirConexao Then
         MsgBox "Erro ao conectar no banco de dados.", vbCritical
@@ -97,20 +104,25 @@ Attribute VB_Exposed = False
     End If
 
     Set rsOperadorLogado = New ADODB.Recordset
-
     rsOperadorLogado.CursorLocation = adUseClient
-
-    If Trim(txtCodigo.Text) = "" Or Trim(txtSenha.Text) = "" Then
-        MsgBox "Informe usuário e senha.", vbExclamation
-        Exit Sub
-    End If
-
-    rsOperadorLogado.Open _
-        "SELECT * FROM Operador " & _
-          "WHERE Codigo = '" & txtCodigo.Text & "' " & _
-          "AND Senha = '" & txtSenha.Text & "' " & _
-          "AND Inativo = 0", _
-        Conn, adOpenStatic, adLockReadOnly
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "SELECT * FROM Operador " & _
+            "WHERE Codigo = ? " & _
+            "AND Senha = ? " & _
+            "AND Inativo = 0"
+    End With
+    
+    cmd.Parameters.Append cmd.CreateParameter(, adBigInt, adParamInput, , CLng(txtCodigo.Text))
+    cmd.Parameters.Append cmd.CreateParameter(, adVarChar, adParamInput, 255, txtSenha.Text)
+    
+    Set rsOperadorLogado = cmd.Execute
 
     If Not rsOperadorLogado.EOF Then
         Unload Me
@@ -118,6 +130,7 @@ Attribute VB_Exposed = False
         MDIFrmPrincipal.Show
     Else
         MsgBox "Usuário ou senha inválidos.", vbCritical
+        txtCodigo.SetFocus
     End If
 
     'rsOperadorLogado.Close
@@ -133,9 +146,9 @@ End Sub
 
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
 
-    If KeyAscii = vbKeyBack Then Exit Sub
+    If KeyAscii = vbKeyBack Then Exit Sub 'BackSpace
     
-    If (KeyAscii = vbKeyReturn) Then
+    If (KeyAscii = vbKeyReturn) Then 'Enter
         KeyAscii = 0
         txtSenha.SetFocus
     End If
@@ -158,3 +171,23 @@ Private Sub txtSenha_KeyPress(KeyAscii As Integer)
     End If
     
 End Sub
+
+Private Function ValidaCampos() As Boolean
+    
+    If Not IsNumeric(txtCodigo.Text) Then
+        MsgBox "Código Inválido!", vbInformation
+        txtCodigo.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    If Trim(txtSenha.Text) = "" Then
+        MsgBox "Senha Inválida!", vbInformation
+        txtSenha.SetFocus
+        ValidaCampos = False
+        Exit Function
+    End If
+    
+    ValidaCampos = True
+    
+End Function
