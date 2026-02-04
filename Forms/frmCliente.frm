@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmCliente 
    Caption         =   "Cadastro de Clientes"
    ClientHeight    =   8100
@@ -88,8 +88,8 @@ Begin VB.Form frmCliente
       EndProperty
       Height          =   390
       Left            =   2160
+      Style           =   2  'Dropdown List
       TabIndex        =   3
-      Text            =   "Combo1"
       Top             =   2520
       Width           =   1215
    End
@@ -316,7 +316,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Private ModoAtual As eModoFormulario
 Private TipoDocumento As eTipoDocumentoCliente
 Private CodigoAtual As Long
@@ -412,7 +411,7 @@ Private Sub PreencherCampos()
 
     If rsCliente.EOF Or rsCliente.BOF Then Exit Sub 'Se a lista não tem registros pula fora da Sub
 
-    txtCodigo.Text = rsCliente!codigo 'Atribuição de valor do RecordSet para o TextBox
+    txtCodigo.Text = rsCliente!Codigo 'Atribuição de valor do RecordSet para o TextBox
     txtNome.Text = rsCliente!Nome
     
     Dim TipoDocumentoBanco As Integer
@@ -453,31 +452,10 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
             If Not (ValidaCampos) Then Exit Sub
             
-            Dim cliente As cCliente
-            
             If Not SalvarCliente Then
                 MsgBox "Erro ao Salvar o Cliente!", vbOKOnly
                 Exit Sub
             End If
-            
-            If ModoAtual = mfAlteracao Then
-                cliente.Nome = txtNome.Text
-                cliente.TipoDocumento = cboTipoDocumento.ListIndex
-                cliente.Documento = mskDocumento.Text
-                cliente.Telefone = txtTelefone.Text
-                cliente.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
-                
-'------------------------------------------------------------------------------------------------------------------------
-                
-            Else
-                Sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
-                    "'" & txtNome.Text & "', " & _
-                    "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
-                    "'" & mskDocumento.Text & "', " & _
-                    "'" & txtTelefone.Text & "', " & _
-                    IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
-            End If
-            
             
             CarregarClientes
             
@@ -503,16 +481,24 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             If rsCliente.EOF Or rsCliente.BOF Then Exit Sub
             
+            If Not IsNumeric(txtCodigo.Text) Then
+                MsgBox "Código Inválido", vbInformation
+                Exit Sub
+            End If
+            
             'Mensagem de confirmação, se clicar no Não, cai fora da sub
             If MsgBox("Deseja realmente excluir este Cliente?", _
                       vbQuestion + vbYesNo, _
                       "Confirmação") = vbNo Then Exit Sub
-
+            
             Dim codigoExcluir As Long
             codigoExcluir = CLng(txtCodigo.Text)
-        
-            Conn.Execute "DELETE FROM Cliente WHERE Codigo = " & codigoExcluir
-        
+            
+            If Not ExcluirCliente(codigoExcluir) Then
+                MsgBox "Erro ao Excluir o Cliente!", vbInformation
+                Exit Sub
+            End If
+            
             CarregarClientes
         
             If Not rsCliente.EOF Then
@@ -579,26 +565,31 @@ End Sub
 Private Function SalvarCliente() As Boolean
     On Error GoTo Erro
     
-    Dim Sql As String
+    Dim cliente As cCliente
+    Set cliente = New cCliente
     
     If ModoAtual = mfAlteracao Then
-        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-        Sql = "UPDATE Cliente set Nome = " & "'" & txtNome.Text & "', " & _
-            "TipoDocumento = " & "'" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & "', " & _
-            "Documento = '" & mskDocumento.Text & "', " & _
-            "Telefone = '" & txtTelefone.Text & "', " & _
-            "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
-            "WHERE Codigo = " & txtCodigo.Text
+        cliente.Codigo = CLng(txtCodigo.Text)
+        cliente.Nome = txtNome.Text
+        cliente.TipoDocumento = cboTipoDocumento.ListIndex
+        cliente.Documento = mskDocumento.Text
+        cliente.Telefone = txtTelefone.Text
+        cliente.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+        If Not AlterarCliente(cliente) Then
+            MsgBox "Erro ao Alterar o Cliente!", vbOKOnly
+            Exit Function
+        End If
     Else
-        Sql = "INSERT INTO Cliente (Nome, TipoDocumento, Documento, Telefone, Inativo) VALUES (" & _
-            "'" & txtNome.Text & "', " & _
-            "" & cboTipoDocumento.ItemData(cboTipoDocumento.ListIndex) & ", " & _
-            "'" & mskDocumento.Text & "', " & _
-            "'" & txtTelefone.Text & "', " & _
-            IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+        cliente.Nome = txtNome.Text
+        cliente.TipoDocumento = cboTipoDocumento.ListIndex
+        cliente.Documento = mskDocumento.Text
+        cliente.Telefone = txtTelefone.Text
+        cliente.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+        If Not InserirCliente(cliente) Then
+            MsgBox "Erro ao Inserir o Cliente!", vbOKOnly
+            Exit Function
+        End If
     End If
-
-    Conn.Execute Sql
     
     SalvarCliente = True
     Exit Function
@@ -641,6 +632,16 @@ Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
         End If
     End If
     
+    If InStr("0123456789", Chr(KeyAscii)) = 0 Then
+        KeyAscii = 0
+        Exit Sub
+    End If
+End Sub
+
+Private Sub txtCodigo_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyF4 Then
+        cmdListaCliente_Click
+    End If
 End Sub
 
 'Clique do txtNome
@@ -648,10 +649,6 @@ Private Sub txtNome_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Then 'Verifica se é enter
         KeyAscii = 0 'Cancela o Enter, sem beep do windws
         cboTipoDocumento.SetFocus
-    End If
-    
-    If KeyAscii = vbKeyF4 Then
-        cmdListaCliente_Click
     End If
     
 End Sub
@@ -762,12 +759,20 @@ Private Sub popularComboTipoDocumento() 'Sub para popular o ComboBox
     cboTipoDocumento.ItemData(cboTipoDocumento.NewIndex) = tdcCNPJ
     cboTipoDocumento.AddItem "Outro"
     cboTipoDocumento.ItemData(cboTipoDocumento.NewIndex) = tdcOutro
-
+    
 End Sub
 
 
 'Função para validar campos
 Private Function ValidaCampos()
+    
+    If ModoAtual = mfAlteracao Then
+        If Not IsNumeric(txtCodigo.Text) Then
+            txtNome.SetFocus
+            ValidaCampos = False
+            Exit Function
+        End If
+    End If
     
     If Trim(txtNome.Text = "") Then
         MsgBox "Nome Inválido"

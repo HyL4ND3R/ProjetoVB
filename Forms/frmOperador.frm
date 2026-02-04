@@ -61,7 +61,7 @@ Begin VB.Form frmOperador
          EndProperty
       EndProperty
    End
-   Begin MSComctlLib.Toolbar Toolbar1 
+   Begin MSComctlLib.Toolbar Toolbar 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
@@ -271,7 +271,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Private ModoAtual As eModoFormulario
 Private CodigoAtual As Long
 
@@ -289,15 +288,15 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub modoInclusao()
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
     cmdListaOperador.Enabled = False 'Habilitar/Desabilitar commandButton
@@ -311,15 +310,15 @@ Private Sub modoInclusao()
 End Sub
 
 Private Sub modoAlteracao()
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
     cmdListaOperador.Enabled = False 'Habilitar/Desabilitar commandButton
@@ -333,15 +332,15 @@ Private Sub modoAlteracao()
 End Sub
 
 Private Sub modoConsulta()
-    Toolbar1.Buttons("novo").Enabled = True
-    Toolbar1.Buttons("salvar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = True
-    Toolbar1.Buttons("desfazer").Enabled = False
-    Toolbar1.Buttons("primeiro").Enabled = True
-    Toolbar1.Buttons("anterior").Enabled = True
-    Toolbar1.Buttons("proximo").Enabled = True
-    Toolbar1.Buttons("ultimo").Enabled = True
+    Toolbar.Buttons("novo").Enabled = True
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = True
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = True
+    Toolbar.Buttons("anterior").Enabled = True
+    Toolbar.Buttons("proximo").Enabled = True
+    Toolbar.Buttons("ultimo").Enabled = True
     txtCodigo.Enabled = True
     txtCodigo.BackColor = vbWindowBackground
     cmdListaOperador.Enabled = True
@@ -368,7 +367,7 @@ Private Sub PreencherCampos()
 End Sub
 
 
-Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
 '-------------NOVO
@@ -422,7 +421,10 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             Dim codigoExcluir As Long
             codigoExcluir = CLng(txtCodigo.Text)
         
-            Conn.Execute "DELETE FROM Operador WHERE Codigo = " & codigoExcluir
+            If Not ExcluirOperador(codigoExcluir) Then
+                MsgBox "Erro ao Excluir o Operador", vbInformation
+                Exit Sub
+            End If
         
             CarregarOperadores
         
@@ -469,6 +471,12 @@ Private Sub Form_Unload(Cancel As Integer) 'No Unload do formulario fecha o reco
     If Not rsOperador Is Nothing Then 'Se ele não for nada (se existir)
         If rsOperador.State = adStateOpen Then rsOperador.Close 'Se esta aberto, fecha
         Set rsOperador = Nothing 'Seta como nada
+    End If
+End Sub
+
+Private Sub txtCodigo_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyF4 Then
+        cmdListaOperador_Click
     End If
 End Sub
 
@@ -556,24 +564,28 @@ End Sub
 Private Function SalvarOperador() As Boolean
     On Error GoTo Erro
     
-    Dim Sql As String
+    Dim operador As cOperador
+    Set operador = New cOperador
     
     If ModoAtual = mfAlteracao Then
-        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-        Sql = "UPDATE Operador set Nome = " & "'" & txtNome.Text & "', " & _
-            "Senha = " & "'" & txtSenha.Text & "', " & _
-            "Admin = " & IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
-            "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
-            "WHERE Codigo = " & txtCodigo.Text
+        operador.Codigo = CLng(txtCodigo.Text)
+        operador.Nome = txtNome.Text
+        operador.Senha = txtSenha.Text
+        operador.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+        If Not AlterarOperador(operador) Then
+            MsgBox "Erro ao Alterar o Operador!", vbOKOnly
+            Exit Function
+        End If
     Else
-        Sql = "INSERT INTO Operador (Nome, Senha, Admin, Inativo) VALUES (" & _
-            "'" & txtNome.Text & "', " & _
-            "'" & txtSenha.Text & "', " & _
-            IIf(chkAdm.Value = vbChecked, 1, 0) & ", " & _
-            IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+        operador.Nome = txtNome.Text
+        operador.Senha = txtSenha.Text
+        operador.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+        If Not InserirOperador(operador) Then
+            MsgBox "Erro ao Inserir o Operador!", vbOKOnly
+            Exit Function
+        End If
     End If
-
-    Conn.Execute Sql
+    
     SalvarOperador = True
     Exit Function
     

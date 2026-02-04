@@ -130,11 +130,13 @@ Private Sub lblConfigBanco_MouseDown(Button As Integer, Shift As Integer, X As S
     End If
 End Sub
 
+
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
 
     If KeyAscii = vbKeyBack Then Exit Sub
     
     If (KeyAscii = vbKeyReturn) Then
+        KeyAscii = 0
         txtSenha.SetFocus
     End If
     
@@ -151,6 +153,7 @@ Private Sub txtSenha_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyBack Then Exit Sub
     
     If (KeyAscii = vbKeyReturn) Then
+        KeyAscii = 0
         cmdLogin.SetFocus
     End If
     

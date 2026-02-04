@@ -71,7 +71,7 @@ Public Function AlterarOperador(operador As cOperador) As Boolean
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, operador.Senha)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Admin)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , operador.Inativo)
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , operador.codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , operador.Codigo)
         
         .Execute
     End With
@@ -83,7 +83,7 @@ Erro:
     AlterarOperador = False
 End Function
 
-Public Function ExcluirOperador(codigo As Long) As Boolean
+Public Function ExcluirOperador(Codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -93,9 +93,9 @@ Public Function ExcluirOperador(codigo As Long) As Boolean
         .ActiveConnection = Conn
         .CommandType = adCmdText
         .CommandText = _
-            "DELETE FROM Operador WHERE Codigo = "
+            "DELETE FROM Operador WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
         
         .Execute
     End With
@@ -183,19 +183,19 @@ Public Function AlterarCliente(cliente As cCliente) As Boolean
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Documento)
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, cliente.Telefone)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , cliente.Inativo)
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , cliente.codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , cliente.Codigo)
         
         .Execute
     End With
     
-    InserirCliente = True
+    AlterarCliente = True
     Exit Function
     
 Erro:
-    InserirCliente = False
+    AlterarCliente = False
 End Function
 
-Public Function ExcluirCliente(codigo As Long) As Boolean
+Public Function ExcluirCliente(Codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -205,9 +205,9 @@ Public Function ExcluirCliente(codigo As Long) As Boolean
         .ActiveConnection = Conn
         .CommandType = adCmdText
         .CommandText = _
-            "DELETE FROM Cliente WHERE Codigo = "
+            "DELETE FROM Cliente WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
         
         .Execute
     End With
@@ -287,7 +287,7 @@ Public Function AlterarProduto(produto As cProduto) As Boolean
         .Parameters.Append .CreateParameter(, adVarChar, adParamInput, 255, produto.Nome)
         .Parameters.Append .CreateParameter(, adDouble, adParamInput, , produto.Valor)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.Inativo)
-        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , produto.Codigo)
         
         .Execute
     End With
@@ -299,7 +299,7 @@ Erro:
     AlterarProduto = False
 End Function
 
-Public Function ExcluirProduto(codigo As Long) As Boolean
+Public Function ExcluirProduto(Codigo As Long) As Boolean
     On Error GoTo Erro
     
     Dim cmd As ADODB.Command
@@ -309,9 +309,9 @@ Public Function ExcluirProduto(codigo As Long) As Boolean
         .ActiveConnection = Conn
         .CommandType = adCmdText
         .CommandText = _
-            "DELETE FROM Produto WHERE Codigo = "
+            "DELETE FROM Produto WHERE Codigo = ?"
         
-        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , codigo)
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
         
         .Execute
     End With
@@ -384,7 +384,7 @@ Public Function InserirPedido(pedido As cPedido)
         .CommandType = adCmdText
         .CommandText = _
             "Insert into Pedido (Codigo, ClienteCodigo, Data) Values (?,?,?)"
-        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Codigo)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.ClienteCodigo)
         .Parameters.Append .CreateParameter(, adDate, adParamInput, , pedido.DataPedido)
         .Execute
@@ -412,7 +412,7 @@ Public Function AlterarPedido(pedido As cPedido) As Boolean
             "ClienteCodigo = ? ," & _
             "Data = ? " & _
             "WHERE Controle = ?"
-        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.codigo)
+        .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Codigo)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.ClienteCodigo)
         .Parameters.Append .CreateParameter(, adDate, adParamInput, , pedido.DataPedido)
         .Parameters.Append .CreateParameter(, adInteger, adParamInput, , pedido.Controle)
@@ -424,6 +424,30 @@ Public Function AlterarPedido(pedido As cPedido) As Boolean
 
 Erro:
     AlterarPedido = False
+End Function
+
+Public Function ExcluirPedido(Codigo As Long) As Boolean
+    On Error GoTo Erro
+    
+    Dim cmd As ADODB.Command
+    Set cmd = New ADODB.Command
+    
+    With cmd
+        .ActiveConnection = Conn
+        .CommandType = adCmdText
+        .CommandText = _
+            "DELETE FROM Pedido WHERE Codigo = ?"
+        
+        .Parameters.Append .CreateParameter(, adBigInt, adParamInput, , Codigo)
+        
+        .Execute
+    End With
+    
+    ExcluirPedido = True
+    Exit Function
+    
+Erro:
+    ExcluirPedido = False
 End Function
 
 Public Function BuscaProximoCodItemPedido(ByVal ControlePedido As Long) As Boolean

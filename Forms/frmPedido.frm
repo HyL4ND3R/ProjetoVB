@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form frmPedido 
    Caption         =   "Pedido"
    ClientHeight    =   11130
@@ -717,7 +717,7 @@ Private Sub SalvarPedido()
         pedido.Controle = VerificaNull(ControlePedido, 0)
         pedido.Codigo = CLng(txtCodigo.Text) 'Conversão de Texto para Long
         pedido.ClienteCodigo = CLng(txtCodCliente.Text)
-        pedido.DataPedido = Format(mskDataPedido.Text, Date)
+        pedido.DataPedido = mskDataPedido.Text
         If (Not InserirPedido(pedido)) Then
             MsgBox "Erro ao Inserir o Registro!"
             Exit Sub
@@ -1129,6 +1129,9 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             
             txtValorTotal.Text = ""
             
+            grdItensPedido.Rows = 1
+            grdItensPedido.Clear
+            
             ModoInclusaoPedido
 
 '-------------SALVAR-----------------------------------------------------------------
@@ -1186,9 +1189,14 @@ Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
             If MsgBox("Deseja realmente excluir este Registro?", _
                       vbQuestion + vbYesNo, _
                       "Confirmação") = vbNo Then Exit Sub
-
-                  
-            Conn.Execute "DELETE FROM Pedido WHERE Controle = " & ControlePedido
+            
+            Dim codigoExcluir As Long
+            codigoExcluir = CLng(txtCodigo.Text)
+            
+            If Not ExcluirPedido(codigoExcluir) Then
+                MsgBox "Erro ao excluir o Operador!", vbInformation
+                Exit Sub
+            End If
         
             CarregarPedidos
         
@@ -1400,6 +1408,13 @@ Private Function ValidaCamposItem()
         Exit Function
     End If
     
+    If Trim(txtNomeProduto.Text) = "" Then
+        MsgBox "Nome Produto inválido"
+        txtNomeProduto.SetFocus
+        ValidaCamposItem = False
+        Exit Function
+    End If
+    
     If Not IsNumeric(txtQtde.Text) Then
         MsgBox "Quantidade inválida"
         txtQtde.SetFocus
@@ -1417,7 +1432,7 @@ Private Function ValidaCamposItem()
         txtValorUn.SetFocus
         ValidaCamposItem = False
         Exit Function
-    ElseIf CLng(txtValorUn.Text) = 0 Then
+    ElseIf CDbl(txtValorUn.Text) = 0 Then
         MsgBox "Valor Inválido inválido"
         txtValorUn.SetFocus
         ValidaCamposItem = False
@@ -1517,6 +1532,8 @@ Private Sub mskDataPedido_KeyPress(KeyAscii As Integer)
         
         KeyAscii = 0 'Limpa o Teclado
         
+        If Not ValidaCamposPedido Then Exit Sub
+        
         If MsgBox("Confirma Dados?", _
             vbQuestion + vbYesNo, _
             "Confirmação") = vbNo Then 'Faz a pergunta, se não confirmar pula fora
@@ -1525,6 +1542,18 @@ Private Sub mskDataPedido_KeyPress(KeyAscii As Integer)
         End If
         
         SalvarPedido
+        
+        CarregarPedidos
+            
+        If ModoAtualPedido = mfAlteracao Then
+            rsPedido.Find "Codigo = " & CodigoAtual
+        Else
+            If Not rsPedido.EOF Then rsPedido.MoveLast
+        End If
+        
+        PreencherCampos
+        ModoConsultaPedido
+        
     End If
 End Sub
 

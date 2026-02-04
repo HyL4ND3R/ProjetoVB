@@ -22,11 +22,11 @@ Private mInativo As Integer
 
 ' --- Propriedades ---
 
-Public Property Get codigo() As Long
-    codigo = mCodigo
+Public Property Get Codigo() As Long
+    Codigo = mCodigo
 End Property
 
-Public Property Let codigo(ByVal v As Long)
+Public Property Let Codigo(ByVal v As Long)
     mCodigo = v
 End Property
 

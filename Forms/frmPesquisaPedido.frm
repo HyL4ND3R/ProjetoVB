@@ -101,3 +101,11 @@ Private Sub Selecionar()
     CodigoSelecionado = CLng(grdPedido.TextMatrix(grdPedido.Row, 0))
     Unload Me
 End Sub
+
+Private Sub grdPedido_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyEscape Then
+        KeyCode = 0
+        Unload Me
+        Exit Sub
+    End If
+End Sub

@@ -87,7 +87,7 @@ Begin VB.Form frmProduto
       Top             =   1020
       Width           =   1095
    End
-   Begin MSComctlLib.Toolbar Toolbar1 
+   Begin MSComctlLib.Toolbar Toolbar 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
@@ -252,7 +252,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Private ModoAtual As eModoFormulario
 Private CodigoAtual As Long
 
@@ -270,15 +269,15 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub modoInclusao()
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
     cmdListaProduto.Enabled = False 'Habilitar/Desabilitar commandButton
@@ -292,15 +291,15 @@ Private Sub modoInclusao()
 End Sub
 
 Private Sub modoAlteracao()
-    Toolbar1.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
-    Toolbar1.Buttons("salvar").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = False
-    Toolbar1.Buttons("desfazer").Enabled = True
-    Toolbar1.Buttons("primeiro").Enabled = False
-    Toolbar1.Buttons("anterior").Enabled = False
-    Toolbar1.Buttons("proximo").Enabled = False
-    Toolbar1.Buttons("ultimo").Enabled = False
+    Toolbar.Buttons("novo").Enabled = False 'Habilitar/Desabilitar botão da toolbar
+    Toolbar.Buttons("salvar").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = False
+    Toolbar.Buttons("desfazer").Enabled = True
+    Toolbar.Buttons("primeiro").Enabled = False
+    Toolbar.Buttons("anterior").Enabled = False
+    Toolbar.Buttons("proximo").Enabled = False
+    Toolbar.Buttons("ultimo").Enabled = False
     txtCodigo.Enabled = False 'Habilitar/Desabilitar txt
     txtCodigo.BackColor = &H8000000F 'cor cinza padrão do sistema
     cmdListaProduto.Enabled = False 'Habilitar/Desabilitar commandButton
@@ -313,15 +312,15 @@ Private Sub modoAlteracao()
 End Sub
 
 Private Sub modoConsulta()
-    Toolbar1.Buttons("novo").Enabled = True
-    Toolbar1.Buttons("salvar").Enabled = False
-    Toolbar1.Buttons("excluir").Enabled = True
-    Toolbar1.Buttons("alterar").Enabled = True
-    Toolbar1.Buttons("desfazer").Enabled = False
-    Toolbar1.Buttons("primeiro").Enabled = True
-    Toolbar1.Buttons("anterior").Enabled = True
-    Toolbar1.Buttons("proximo").Enabled = True
-    Toolbar1.Buttons("ultimo").Enabled = True
+    Toolbar.Buttons("novo").Enabled = True
+    Toolbar.Buttons("salvar").Enabled = False
+    Toolbar.Buttons("excluir").Enabled = True
+    Toolbar.Buttons("alterar").Enabled = True
+    Toolbar.Buttons("desfazer").Enabled = False
+    Toolbar.Buttons("primeiro").Enabled = True
+    Toolbar.Buttons("anterior").Enabled = True
+    Toolbar.Buttons("proximo").Enabled = True
+    Toolbar.Buttons("ultimo").Enabled = True
     txtCodigo.Enabled = True
     txtCodigo.BackColor = vbWindowBackground&
     cmdListaProduto.Enabled = True
@@ -345,7 +344,7 @@ Private Sub PreencherCampos()
 
 End Sub
 
-Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+Private Sub Toolbar_ButtonClick(ByVal Button As MSComctlLib.Button)
 
     Select Case Button.Key
     
@@ -399,7 +398,10 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             Dim codigoExcluir As Long
             codigoExcluir = CLng(txtCodigo.Text)
         
-            Conn.Execute "DELETE FROM Produto WHERE Codigo = " & codigoExcluir
+            If Not ExcluirProduto(codigoExcluir) Then
+                MsgBox "Erro ao Excluir o Produto!", vbInformation
+                Exit Sub
+            End If
         
             CarregarProdutos
         
@@ -555,22 +557,28 @@ End Sub
 Private Function SalvarProduto() As Boolean
     On Error GoTo Erro
     
-    Dim Sql As String
+    Dim produto As cProduto
+    Set produto = New cProduto
     
     If ModoAtual = mfAlteracao Then
-        CodigoAtual = CLng(txtCodigo.Text) 'Conversão de Texto para Long
-        Sql = "UPDATE Produto set Nome = " & "'" & txtNome.Text & "', " & _
-            "Valor = '" & CDbl(txtValor.Text) & "', " & _
-            "Inativo = " & IIf(chkInativo.Value = vbChecked, 1, 0) & " " & _
-            "WHERE Codigo = " & txtCodigo.Text
+        produto.Codigo = CLng(txtCodigo.Text)
+        produto.Nome = txtNome.Text
+        produto.Valor = CDbl(txtValor.Text)
+        produto.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+        If Not AlterarProduto(produto) Then
+            MsgBox "Erro ao Alterar o Produto!", vbOKOnly
+            Exit Function
+        End If
     Else
-        Sql = "INSERT INTO Produto (Nome, Valor, Inativo) VALUES (" & _
-            "'" & txtNome.Text & "', " & _
-            "'" & CDbl(txtValor.Text) & "', " & _
-            IIf(chkInativo.Value = vbChecked, 1, 0) & ")"
+        produto.Nome = txtNome.Text
+        produto.Valor = CDbl(txtValor.Text)
+        produto.Inativo = IIf(chkInativo.Value = vbChecked, 1, 0)
+        If Not InserirProduto(produto) Then
+            MsgBox "Erro ao Inserir o Produto!", vbOKOnly
+            Exit Function
+        End If
     End If
-
-    Conn.Execute Sql
+   
     SalvarProduto = True
     Exit Function
     

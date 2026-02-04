@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmPesquisaOperador 
    Caption         =   "Pesquisa Operadores"
    ClientHeight    =   5220
@@ -91,4 +91,12 @@ Private Sub Selecionar()
 
     CodigoSelecionado = CLng(grdOperador.TextMatrix(grdOperador.Row, 0))
     Unload Me
+End Sub
+
+Private Sub grdOperador_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyEscape Then
+        KeyCode = 0
+        Unload Me
+        Exit Sub
+    End If
 End Sub

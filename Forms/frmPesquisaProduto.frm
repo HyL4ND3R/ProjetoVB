@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmPesquisaProduto 
    Caption         =   "Pesquisar Produtos"
    ClientHeight    =   5205
@@ -74,7 +74,7 @@ Private Sub Form_Load()
             .AddItem _
                 rsProduto!Codigo & vbTab & _
                 rsProduto!Nome & vbTab & _
-                rsProduto!valor & vbTab & _
+                rsProduto!Valor & vbTab & _
                 IIf(rsProduto!Inativo = 1, "Sim", "Não")
             rsProduto.MoveNext
         Loop
@@ -100,6 +100,10 @@ Private Sub Selecionar()
     Unload Me
 End Sub
 
-
-
-
+Private Sub grdProduto_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyEscape Then
+        KeyCode = 0
+        Unload Me
+        Exit Sub
+    End If
+End Sub
