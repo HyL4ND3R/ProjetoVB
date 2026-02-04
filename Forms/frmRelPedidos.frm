@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmRelPedidos 
    Caption         =   "Relatório De Pedidos"
    ClientHeight    =   4050
@@ -131,7 +131,7 @@ Begin VB.Form frmRelPedidos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   153354241
+      Format          =   104857601
       CurrentDate     =   46051
    End
    Begin MSComCtl2.DTPicker dtpDataFinal 
@@ -152,7 +152,7 @@ Begin VB.Form frmRelPedidos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   153354241
+      Format          =   104857601
       CurrentDate     =   46051
    End
    Begin VB.Label lblCliente 
@@ -258,7 +258,7 @@ Private Sub cmdVisualizar_Click()
             "From pedido " & _
             "Inner join Cliente on Pedido.ClienteCodigo = Cliente.Codigo " & _
             "Left join PedidoItem  on PedidoItem.ControlePedido = Pedido.Controle " & _
-            "Where FORMAT(Pedido.Data,'dd/MM/yyyy') Between '" & dtpDataInicial.Value & "' and '" & dtpDataFinal.Value & "'"
+            "Where Pedido.Data Between '" & Format(dtpDataInicial.Value, "yyyy-MM-dd") & "' and '" & Format(dtpDataFinal.Value, "yyyy-MM-dd") & "'"
             
     If Trim(txtCodCliente.Text <> "") Then
         Sql = Sql & " And Pedido.ClienteCodigo = " & txtCodCliente.Text
@@ -330,7 +330,7 @@ Private Sub txtCodCliente_KeyPress(KeyAscii As Integer)
             BuscarClientePorCodigo CLng(txtCodCliente.Text) 'Busca o Cliente pelo Codigo
             
             If Not rsClienteCod.BOF Or Not rsClienteCod.EOF Then 'Se a lista não esta vazia
-                txtCodCliente.Text = rsClienteCod!Codigo 'Atribui o Codigo ao Campo
+                txtCodCliente.Text = rsClienteCod!codigo 'Atribui o Codigo ao Campo
                 txtNomeCliente.Text = rsClienteCod!Nome 'Atribui o Nome ao Campo
             Else 'Se a Lista esta vazia
                 MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
@@ -369,7 +369,7 @@ Private Sub txtCodProduto_KeyPress(KeyAscii As Integer)
             BuscarProdutoPorCodigo CLng(txtCodProduto.Text) 'Busca o Produto pelo Codigo
             
             If Not rsProdutoCod.BOF Or Not rsProdutoCod.EOF Then 'Se a lista não esta vazia
-                txtCodProduto.Text = rsProdutoCod!Codigo 'Atribui o Codigo ao Campo
+                txtCodProduto.Text = rsProdutoCod!codigo 'Atribui o Codigo ao Campo
                 txtNomeProduto.Text = rsProdutoCod!Nome 'Atribui o Nome ao Campo
             Else 'Se a Lista esta vazia
                 MsgBox "Código não Encontrado", vbOKOnly 'Mensagem de aviso
@@ -425,12 +425,12 @@ Private Sub cmdListaProduto_Click()
 End Sub
 
 Private Sub PreencherCliente()
-    txtCodCliente.Text = rsCliente!Codigo
+    txtCodCliente.Text = rsCliente!codigo
     txtNomeCliente.Text = rsCliente!Nome
 End Sub
 
 Private Sub PreencherProduto()
-    txtCodProduto.Text = rsProduto!Codigo
+    txtCodProduto.Text = rsProduto!codigo
     txtNomeProduto.Text = rsProduto!Nome
 End Sub
 
