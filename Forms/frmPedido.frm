@@ -590,8 +590,23 @@ Dim pedido As cPedido
 Dim pedidoItem As cPedidoItem
 Dim ControlePedido As Long
 Dim ControlePedidoItem As Long
+Private CtrlATextos As Collection
 
 Private Sub Form_Load()
+
+    'Ajuste para todos os campos aceitarem ControlA
+    Dim c As Control
+    Dim h As cControlA
+    
+    Set CtrlATextos = New Collection
+    
+    For Each c In Me.Controls
+        If TypeOf c Is TextBox Then
+            Set h = New cControlA
+            Set h.Txt = c
+            CtrlATextos.Add h
+        End If
+    Next
 
     txtCodigo.MaxLength = 9
     txtCodCliente.MaxLength = 9

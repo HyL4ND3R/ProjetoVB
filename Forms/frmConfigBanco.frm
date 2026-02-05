@@ -203,7 +203,23 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private CtrlATextos As Collection
+
 Private Sub Form_Load()
+
+    'Ajuste para todos os campos aceitarem ControlA
+    Dim c As Control
+    Dim h As cControlA
+    
+    Set CtrlATextos = New Collection
+    
+    For Each c In Me.Controls
+        If TypeOf c Is TextBox Then
+            Set h = New cControlA
+            Set h.Txt = c
+            CtrlATextos.Add h
+        End If
+    Next
 
     txtBanco.MaxLength = 15
     txtSenha.MaxLength = 30

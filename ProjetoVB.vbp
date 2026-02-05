@@ -36,6 +36,7 @@ Form=Forms\frmConfigBanco.frm
 Class=cOperador; Classes\cOperador.cls
 Class=cCliente; Classes\cCliente.cls
 Class=cProduto; Classes\cProduto.cls
+Class=cControlA; Classes\cControlA.cls
 IconForm="frmLogin"
 Startup="frmLogin"
 HelpFile=""
