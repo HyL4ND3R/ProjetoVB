@@ -1311,6 +1311,7 @@ End Sub
 Private Sub cmdListaCliente_Click()
     Dim f As New frmPesquisaCliente
 
+    f.SomenteAtivos = True
     f.Show vbModal
 
     If f.CodigoSelecionado > 0 Then
@@ -1325,6 +1326,7 @@ End Sub
 Private Sub cmdListaProduto_Click()
     Dim f As New frmPesquisaProduto
 
+    f.SomenteAtivos = True
     f.Show vbModal
 
     If f.CodigoSelecionado > 0 Then

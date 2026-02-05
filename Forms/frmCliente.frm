@@ -177,6 +177,8 @@ Begin VB.Form frmCliente
             ImageIndex      =   9
          EndProperty
          BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
+            Object.Visible         =   0   'False
             Key             =   "visualizar"
             ImageIndex      =   10
          EndProperty

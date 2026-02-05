@@ -53,10 +53,19 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Public CodigoSelecionado As Long
-
+Public SomenteAtivos As Boolean
 
 Private Sub Form_Load()
-    CarregarProdutos
+
+    If SomenteAtivos = Empty Or SomenteAtivos = Null Then
+        SomenteAtivos = False
+    End If
+
+    If SomenteAtivos Then
+        CarregarProdutosAtivos
+    Else
+        CarregarProdutos
+    End If
 
     With grdProduto
         .Rows = 1

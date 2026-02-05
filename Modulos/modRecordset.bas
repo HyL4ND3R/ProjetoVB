@@ -153,7 +153,9 @@ Public Sub BuscarClienteAtivoPorCodigo(CodCliente As Integer)
     
     rsClienteCod.CursorLocation = adUseClient
     rsClienteCod.Open _
-        "SELECT * FROM Cliente WHERE Codigo = " & CodCliente, _
+        "SELECT * FROM Cliente " & _
+        "WHERE Codigo = " & CodCliente & _
+        "AND Inativo = 0", _
         Conn, adOpenStatic, adLockReadOnly
 
 End Sub
@@ -287,7 +289,7 @@ Public Sub BuscarProdutoAtivoPorCodigo(CodCliente As Integer)
     
     rsProdutoCod.CursorLocation = adUseClient
     rsProdutoCod.Open _
-        "SELECT * FROM Produto WHERE Codigo = " & CodCliente & ", " & _
+        "SELECT * FROM Produto WHERE Codigo = " & CodCliente & _
         "AND Inativo = 0", _
         Conn, adOpenStatic, adLockReadOnly
 

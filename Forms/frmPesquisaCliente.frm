@@ -53,9 +53,19 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Public CodigoSelecionado As Long
+Public SomenteAtivos As Boolean
 
 Private Sub Form_Load()
-    CarregarClientes
+    
+    If SomenteAtivos = Empty Or SomenteAtivos = Null Then
+        SomenteAtivos = False
+    End If
+    
+    If SomenteAtivos Then
+        CarregarClientesAtivos
+    Else
+        CarregarClientes
+    End If
 
     With grdCliente
         .Rows = 1
