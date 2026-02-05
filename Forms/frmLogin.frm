@@ -90,12 +90,15 @@ End Sub
     If Not ValidaCampos Then Exit Sub
  
     If Not AbrirConexao Then
+        
         MsgBox "Erro ao conectar no banco de dados.", vbCritical
         frmConfigBanco.Show vbModal
+        
         If Not AbrirConexao Then
             MsgBox "Conexão não configurada. O sistema será fechado."
             End
         End If
+        
     End If
     
     If Not rsOperadorLogado Is Nothing Then 'Se ele não for nada (se existir)

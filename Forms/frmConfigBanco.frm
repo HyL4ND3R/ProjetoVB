@@ -262,3 +262,31 @@ Private Sub cmdSalvar_Click()
     MsgBox "Configurações salvas!", vbInformation
     Unload Me
 End Sub
+
+Private Sub txtServidor_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        KeyAscii = 0
+        txtBanco.SetFocus
+    End If
+End Sub
+
+Private Sub txtBanco_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        KeyAscii = 0
+        txtUsuario.SetFocus
+    End If
+End Sub
+
+Private Sub txtUsuario_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        KeyAscii = 0
+        txtSenha.SetFocus
+    End If
+End Sub
+
+Private Sub txtSenha_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        KeyAscii = 0
+        cmdSalvar.SetFocus
+    End If
+End Sub
