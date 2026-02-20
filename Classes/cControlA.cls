@@ -23,4 +23,3 @@ Private Sub Txt_KeyDown(KeyCode As Integer, Shift As Integer)
         KeyCode = 0
     End If
 End Sub
-
