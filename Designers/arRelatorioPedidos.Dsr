@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {9EB8768B-CDFA-44DF-8F3E-857A8405E1DB} arRelatorioPedidos 
    Caption         =   "Impressao"
-   ClientHeight    =   15615
-   ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   28560
+   ClientHeight    =   12375
+   ClientLeft      =   225
+   ClientTop       =   570
+   ClientWidth     =   12720
    StartUpPosition =   3  'Windows Default
    _ExtentX        =   50377
    _ExtentY        =   27543
@@ -106,10 +106,10 @@ Private Sub Detail_Format()
 End Sub
 
 Private Sub PageFooter_Format()
-    
-    fldOperador = "Operador: " & rsOperadorLogado!Codigo & " - " & rsOperadorLogado!Nome & ", Emitido em: " & _
+     fldOperador = "Operador: " & rsOperadorLogado!codigo & " - " & rsOperadorLogado!Nome & ", Emitido em: " & _
                     Format(Date, "dd/MM/yyyy") & " as " & Left(Time, 5)
     fldPagina = "Página: " & Format(pageNumber, "###000")
+   
     
 End Sub
 

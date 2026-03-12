@@ -5,7 +5,7 @@ Begin VB.MDIForm MDIFrmPrincipal
    ClientHeight    =   8610
    ClientLeft      =   225
    ClientTop       =   570
-   ClientWidth     =   18090
+   ClientWidth     =   12720
    LinkTopic       =   "MDIForm1"
    StartUpPosition =   2  'CenterScreen
    Begin VB.Menu mnuTeste 
